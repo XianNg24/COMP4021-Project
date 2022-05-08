@@ -39,6 +39,12 @@ const Sprite = function (ctx, x, y) {
     // This is the updated time of the current sprite image.
     // It is used to determine the timing to switch to the next sprite image.
     let lastUpdate = 0;
+
+    // This is to determine if it is player
+    let isPlayer = false;
+
+    // This give a player name
+    let player = { name: 'player', x: 0.2, y: 0 };
   
     // This function uses a new sprite sheet in the image object.
     // - `spriteSheet` - The source of the sprite sheet (URL)
@@ -89,6 +95,17 @@ const Sprite = function (ctx, x, y) {
       shadowScale = value;
       return this;
     };
+
+    // This function sets the player name
+    //   -  `value.name` - The name of player
+    //   -  `value.x` - The x scaling factor for display
+    //   -  `value.y` - The y scaling factor for display
+    const setName = function (value) {
+        isPlayer = true;
+        player = value;
+        
+        return this;
+    }
   
     // This function gets the display size of the sprite.
     const getDisplaySize = function () {
@@ -143,6 +160,28 @@ const Sprite = function (ctx, x, y) {
       ctx.restore();
     };
   
+    // This function draws name above the sprite.
+    const drawName = function () {
+      /* Save the settings */
+      ctx.save();
+  
+      /* Get the display size of the sprite */
+      const size = getDisplaySize();
+  
+      /* Find the scaled width and height of the name */
+      const shadowWidth = size.width;
+      const shadowHeight = size.height;
+  
+      /* Draw a semi-transparent oval */
+      ctx.strokeStyle = "yellow";
+      ctx.globalAlpha = 0.6;
+      ctx.font = "20px Arial";
+      ctx.fillText(player.name, x - size.width / 2 + size.width * player.x, y - size.height / 2 + size.height * player.y)
+  
+      /* Restore saved settings */
+      ctx.restore();
+    };
+  
     // This function draws the sprite.
     const drawSprite = function () {
       /* Save the settings */
@@ -181,6 +220,7 @@ const Sprite = function (ctx, x, y) {
     // This function draws the shadow and the sprite.
     const draw = function () {
       if (isReady()) {
+        if (isPlayer) drawName();
         drawShadow();
         drawSprite();
       }
@@ -216,6 +256,7 @@ const Sprite = function (ctx, x, y) {
       setSequence: setSequence,
       setScale: setScale,
       setShadowScale: setShadowScale,
+      setName: setName,
       getDisplaySize: getDisplaySize,
       getBoundingBox: getBoundingBox,
       isReady: isReady,
