@@ -34,6 +34,7 @@ const Authentication = (function() {
                 if(json.status == "success"){
                     user = json.user;   
                     if(onSuccess) onSuccess();
+                    document.getElementById("game-title").style.visibility = "visible";
                 }
                 else{
                     if(onError) onError(json.error);

@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
+@import url('http://fonts.cdnfonts.com/css/games');
 :root {
     --material-icons-color: black;
     --field-color: gray;
@@ -6,8 +7,8 @@
     --field-background-hover: #eee;
     --input-background: #eee;
     --overlay-background: rgba(245, 158, 114, 0.8);
-    --overlay-caption-color: #eb4a40;
-    --overlay-content-background: linear-gradient(white, #fde0c5);
+    --overlay-caption-color: #e88923;
+    --overlay-content-background: linear-gradient(rgb(17, 16, 16), rgb(60, 59, 57));
 
     --header-background: linear-gradient(to right, #eb4a40, #f59e72);
     --main-panel-background: linear-gradient(white, #fde0c5);
@@ -20,15 +21,15 @@
     --font-color: black;
     --date-color: gray;
 
-    --register-form-background: linear-gradient(#fde0c5, #facba6);
-    --warning-color: red;
+    --register-form-background: linear-gradient(#2f2e2d, #5d5c5b);
+    --warning-color: rgb(206, 59, 98);
 
     --button-color: white;
-    --button-background: #f2855d;
-    --button-background-hover: #f8b58b;
+    --button-background: #ebb434;
+    --button-background-hover: #e87110;
 }
 * {
-    font-family: "Abel", sans-serif;
+    font-family: 'Games', sans-serif;
     color: var(--font-color);
     box-sizing: border-box;
 }
@@ -68,7 +69,7 @@ body {
     position: fixed;
     left: 0; top: 0;
     width: 100%; height: 100%;
-    background: var(--overlay-background);
+    /* background: var(--overlay-background); */
 }
 .overlay .caption {
     font-size: 120%;
@@ -76,6 +77,11 @@ body {
 }
 .overlay .content {
     background: var(--overlay-content-background);
+    opacity: 0.9;
+    border-style: inset;
+    border-width: 2mm;
+    /* display: inline-block; */
+    display: block;
 }
 .warning {
     font-weight: bold;
@@ -87,17 +93,29 @@ form input, form select {
     width: 100%;
 }
 input, select {
-    font-size: 1rem;
+    /* font-size: 1rem;
     background: var(--input-background);
     border: none;
     border-radius: 20px;
-    padding: 10px 15px;
+    padding: 10px 15px; */
+    width: 250px;
+	height: 30px;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.6);
+	border-radius: 2px;
+	color: #fff;
+	font-family: 'Games', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 4px;
+    border-style: inset;
+    border-width: 1mm;
 }
 input::placeholder, select {
     color: gray;
 }
 button {
-    font-weight: bold;
+    /* font-weight: bold; */
     height: 40px;
     border: 1px solid black;
     color: var(--button-color);
@@ -106,6 +124,7 @@ button {
     padding: 0 20px;
     transition: 1s background;
     cursor: pointer;
+    font-size: 20px;
 }
 button:hover {
     background: var(--button-background-hover);
@@ -166,7 +185,7 @@ button.icon:active {
     padding: 0 20px;
 }
 #title {
-    font-family: Abel, sans-serif;
+    font-family: 'Games', sans-serif;
     font-size: 300%;
     text-transform: uppercase;
     color: var(--title-color);
@@ -199,19 +218,19 @@ button.icon:active {
 }
 #chat-area {
     height: 100%;
-    align-items: flex-start;
+    /* align-items: flex-start; */
     justify-content: start;
     gap: 20px;
     overflow-y: auto;
     padding: 10px;
 }
 #chat-typing {
-    font-family: Abel, sans-serif;
+    font-family: 'Games', sans-serif;
     padding-left: 10px;
     font-style: italic;
 }
 .chat-message-panel {
-    align-items: flex-start;
+    /* align-items: flex-start; */
     padding: 0;
 }
 .chat-message {
@@ -241,11 +260,11 @@ button.icon:active {
 
 /* Signin overlay */
 #signin-form {
-    width: 270px;
+    width: 350px;
     align-self: stretch;
 }
 #register-form {
-    width: 380px;
+    width: 350px;
     background: var(--register-form-background);
     padding: 20px;
 }
@@ -254,4 +273,18 @@ button.icon:active {
 #edit-user-form {
     width: 270px;
     align-self: stretch;
+}
+
+#signin-box {
+    display: "block"
+}
+
+#description-box {
+    width: 500px;
+    height: 300px;
+}
+
+.description {
+    color: white;
+    font-size: 24px;
 }

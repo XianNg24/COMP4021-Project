@@ -23,5 +23,9 @@
   "avatar": "Bat",
   "name": "a bat",
   "password": "$2b$10$fvxVv2LEqYoH2BxW1StmsuvR7hqysJ14Z5VuUmYhb3FDN3p6qIYT."
+ },
+ "test": {
+  "name": "test",
+  "password": "$2b$10$Bh4fTed21Qb/6Nam0Okxeugsmw/2Na15FCfA338FV2T91.He8ZTtK"
  }
 }

@@ -31,7 +31,7 @@ function containWordCharsOnly(text) {
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
-    const { username, avatar, name, password } = req.body;
+    const { username, name, password } = req.body;
 
     //
     // D. Reading the users.json file
@@ -42,7 +42,7 @@ app.post("/register", (req, res) => {
     //
     // E. Checking for the user data correctness
     //
-    if (!username || !avatar || !name || !password){
+    if (!username || !name || !password){
         res.json({ status: "error",
                     error: "Username/avatar/name/password cannot be empty." });
         return;
@@ -61,7 +61,7 @@ app.post("/register", (req, res) => {
     // G. Adding the new user account
     //
     const hash = bcrypt.hashSync(password, 10);
-    users[username] = {avatar, name, password: hash};
+    users[username] = {name, password: hash};
     
     //
     // H. Saving the users.json file
@@ -106,7 +106,7 @@ app.post("/signin", (req, res) => {
     //
     // G. Sending a success response with the user account
     //
-    req.session.user = {username, avatar:users[username].avatar, name:users[username].name};
+    req.session.user = {username, name:users[username].name};
     res.json({ status: "success", user: req.session.user });
 
     // Delete when appropriate
@@ -175,8 +175,8 @@ const onlineUsers = {}
 
 io.on("connection", (socket) => {
     if(socket.request.session.user){
-        const { username, avatar, name} = socket.request.session.user;
-        onlineUsers[username] = { avatar, name };
+        const { username, name} = socket.request.session.user;
+        onlineUsers[username] = { name };
         console.log(onlineUsers);
         io.emit("add user", JSON.stringify(socket.request.session.user));
     }

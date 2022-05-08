@@ -4,9 +4,12 @@
     <title>The Chatroom</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="gem_rush.html" rel="import" />
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
+    <div id="includedContent"></div>
+
     <div id="container" class="col">
         <div id="header" class="row">
             <div id="title">The Chatroom
@@ -39,13 +42,18 @@
         </div>
     </div>
 
-    <div id="signin-overlay" class="overlay row">
-        <div class="content shadow row">
+
+    <div id="signin-overlay" class="overlay row" >
+        <div class="content shadow row" id = "description-box">
+            <div class="description">This is a game description</div>
+        </div>
+
+        <div class="content shadow row" id="signin-box">
             <form id="signin-form" class="col">
                 <div class="caption">SIGN IN WITH YOUR ACCOUNT</div>
                 <div class="spacer-0"></div>
-                <input id="signin-username" placeholder="Enter your username"></input>
-                <input id="signin-password" type="password" placeholder="Enter your password"></input>
+                <input id="signin-username" placeholder="Username"></input>
+                <input id="signin-password" type="password" placeholder="Password"></input>
                 <div class="spacer-0"></div>
                 <button type="submit">Sign In</button>
                 <div id="signin-message" class="warning center"></div>
@@ -55,12 +63,12 @@
             <div class="spacer-0"></div>
 
             <form id="register-form" class="col">
-                <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
+                <div class="caption">REGISTER AN ACCOUNT</div>
                 <div class="spacer-0"></div>
                 <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
-                <select id="register-avatar">
+                <!-- <select id="register-avatar">
                     <option value="">Select your avatar</option>
-                </select>
+                </select> -->
                 <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
                 <input id="register-password" type="password" placeholder="Enter your password"></input>
                 <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
@@ -71,6 +79,7 @@
         </div>
     </div>
 
+
     <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/socket.js"></script>
     <script src="scripts/avatar.js"></script>
@@ -78,6 +87,8 @@
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
     <script>
+    $("#includedContent").load("gem_rush.html"); 
+
     $(document).ready(function() {
         // Initialize the UI
         UI.initialize();
@@ -85,14 +96,19 @@
         // Validate the signin
         Authentication.validate(
             () => {
+
                 SignInForm.hide();
                 UserPanel.update(Authentication.getUser());
                 UserPanel.show();
-
+                
                 Socket.connect();
+
             },
-            () => { SignInForm.show(); }
+            () => { 
+                SignInForm.show();
+            }
         );
+        
     });
 
     function typing(){
