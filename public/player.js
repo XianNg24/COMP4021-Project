@@ -3,7 +3,7 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player = function(ctx, x, y, gameArea) {
+const Player = function(ctx, x, y, gameArea, color) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
@@ -25,7 +25,7 @@ const Player = function(ctx, x, y, gameArea) {
     sprite.setSequence(sequences.idleLeft)
           .setScale(2)
           .setShadowScale({ x: 0.75, y: 0.20 })
-          .useSheet("long_char_blue_1.png");
+          .useSheet(`long_char_${color}_1.png`);
 
     // This is the moving direction, which can be a number from 0 to 4:
     // - `0` - not moving

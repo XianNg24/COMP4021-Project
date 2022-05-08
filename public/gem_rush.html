@@ -152,8 +152,8 @@
         const gameArea = BoundingBox(context, 165, 60, 420, 800);
 
         /* Create the sprites in the game */
-        const player = Player(context, 427, 240, gameArea); // The player
-        const player2 = Player(context, 500, 240, gameArea); // The player
+        const player = Player(context, 427, 240, gameArea, 'green'); // The player
+        const player2 = Player(context, 500, 240, gameArea, 'purple'); // The player
         const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
             Fire(context, 25, 175),
