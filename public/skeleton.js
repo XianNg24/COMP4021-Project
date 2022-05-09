@@ -39,7 +39,7 @@ const Skeleton = function (ctx, x, y) {
         /* Randomize the position */
         while (true) {
             const { x, y } = area.randomPoint();
-            if (x <= 30 || y <= 30 || x >= 770 || y >= 450) {
+            if (x <= 90 || y <= 165 || x >= 770 || y >= 390) {
                 sprite.setXY(x, y);
                 break;
             }
@@ -51,6 +51,7 @@ const Skeleton = function (ctx, x, y) {
     const move = function (playerXY, playerBoundingBox) {
         const skeletonBoundingBox = sprite.getBoundingBox();
         const curr_seq = sprite.getSequence();
+        const speed = 0.5;
 
         if (!skeletonBoundingBox.intersect(playerBoundingBox)) {
             let skeletonXY = sprite.getXY();
@@ -58,18 +59,18 @@ const Skeleton = function (ctx, x, y) {
             if (skeletonXY.x >= playerXY.x) {
                 if (curr_seq != sequences['left_walk'])
                     sprite.setSequence(sequences['left_walk']);
-                skeletonXY.x--;
+                skeletonXY.x = skeletonXY.x - speed;
             }
             else if ((skeletonXY.x < playerXY.x)) {
                 if (curr_seq != sequences['right_walk'])
                     sprite.setSequence(sequences['right_walk']);
-                skeletonXY.x++;
+                skeletonXY.x = skeletonXY.x + speed;
             }
 
             if (skeletonXY.y >= playerXY.y)
-                skeletonXY.y--;
+                skeletonXY.y = skeletonXY.y - speed;
             else if ((skeletonXY.y < playerXY.y))
-                skeletonXY.y++;
+                skeletonXY.y = skeletonXY.y + speed;
 
             sprite.setXY(skeletonXY.x, skeletonXY.y);
         } else {

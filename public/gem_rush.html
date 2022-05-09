@@ -174,6 +174,14 @@
     var player2;
     var context;
     var gameArea;
+    
+    function distance(coord1, coord2) {
+      let a = coord1.x - coord2.x;
+      let b = coord1.y - coord2.y;
+
+      return Math.sqrt( a*a + b*b );
+    }
+
     $(document).ready(function() {
         /* Get the canvas and 2D context */
         const cv = $("canvas").get(0);
@@ -275,14 +283,21 @@
             fires[1].update(now);
             fires[2].update(now);
             fires[3].update(now);
+
             for (let i = 0; i < MAX_SLIME; i++) {
               slime[i].update(now);
-              slime[i].move(player.getXY(), player.getBoundingBox());
+              if(distance(player.getXY(), slime[i].getXY()) > distance(player2.getXY(), slime[i].getXY()))
+                slime[i].move(player2.getXY(), player2.getBoundingBox());
+              else
+                slime[i].move(player.getXY(), player.getBoundingBox());
             }
 
             for (let i = 0; i < MAX_SKELETON; i++) {
               skeleton[i].update(now);
-              skeleton[i].move(player.getXY(), player.getBoundingBox());
+              if(distance(player.getXY(), skeleton[i].getXY()) > distance(player2.getXY(), skeleton[i].getXY()))
+                skeleton[i].move(player2.getXY(), player2.getBoundingBox());
+              else
+                skeleton[i].move(player.getXY(), player.getBoundingBox());
             }
 
             /* TODO */

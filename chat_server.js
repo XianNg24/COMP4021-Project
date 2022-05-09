@@ -43,7 +43,7 @@ app.post("/player", (req, res) => {
     const testData = fs.readFileSync("data/player.json");
     const tests = JSON.parse(testData);
 
-    console.log(tests);
+    //console.log(tests);
 
     res.json({status: "success"});
 });
@@ -182,9 +182,10 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const httpServer = createServer( app );
 const io = new Server(httpServer);
+const port = 8000;
 
 httpServer.listen(8000, () => {
-    console.log("The chat server has started...");
+    console.log(`Server started at http://localhost:${port}`);
 });
 
 io.use((socket, next) => {

@@ -15,7 +15,7 @@ const Slime = function(ctx, x, y) {
 
     // The sprite object is configured for the slime sprite here.
     sprite.setSequence(sequences['jump'])
-          .setScale(3)
+          .setScale(2)
           .setShadowScale({ x: 0.75, y: 0.2 })
           .useSheet("./assets/slime.png");
 
@@ -34,7 +34,7 @@ const Slime = function(ctx, x, y) {
         /* Randomize the position */
         while(true) {
             const {x, y} = area.randomPoint();
-            if(x <= 30 || y <= 30 || x >= 770 || y >= 450) {
+            if(x <= 90 || y <= 165 || x >= 770 || y >= 390) {
                 sprite.setXY(x, y);
                 break;
             }
@@ -45,18 +45,19 @@ const Slime = function(ctx, x, y) {
     // coord is the player coordinate
     const move = function(playerXY, playerBoundingBox) {
         const slimeBoundingBox = sprite.getBoundingBox();
+        const speed = 0.5;
 
         if (!slimeBoundingBox.intersect(playerBoundingBox)) {
             let slimeXY = sprite.getXY();
-            if(slimeXY.x >= playerXY.x)
-                slimeXY.x--;
+            if (slimeXY.x >= playerXY.x)
+                slimeXY.x = slimeXY.x - speed;
             else if ((slimeXY.x < playerXY.x))
-                slimeXY.x++;
-    
-            if(slimeXY.y >= playerXY.y)
-                slimeXY.y--;
+                slimeXY.x = slimeXY.x + speed;
+
+            if (slimeXY.y >= playerXY.y)
+                slimeXY.y = slimeXY.y - speed;
             else if ((slimeXY.y < playerXY.y))
-                slimeXY.y++;
+                slimeXY.y = slimeXY.y + speed;
     
             sprite.setXY(slimeXY.x, slimeXY.y);
         }
