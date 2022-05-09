@@ -1,0 +1,12 @@
+{
+ "player1": {
+  "x": 415,
+  "y": 265,
+  "status": "idleRight"
+ },
+ "player2": {
+  "x": 600,
+  "y": 350,
+  "status": "attackRight"
+ }
+}

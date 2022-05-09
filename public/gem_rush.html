@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Collect the Gems!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P"
+      rel="stylesheet"
+    />
     <style>
-    body {
+      body {
         font-family: "Press Start 2P", sans-serif;
         min-height: 100%;
-    }
-    #game-container {
+      }
+      #game-container {
         position: relative;
-    }
-    canvas, #counter, #game-start, #game-over {
+      }
+      canvas,
+      #counter,
+      #game-start,
+      #game-over {
         position: absolute;
         top: 0px;
         left: 0px;
-    }
-    canvas, #game-start, #game-over {
+      }
+      canvas,
+      #game-start,
+      #game-over {
         border: 1px solid gray;
         /* width: 854px;
         height: 480px; */
@@ -24,26 +32,27 @@
         width: 100vw;
         /* height: absolute; */
         /* width: absolute; */
-    }
-    canvas {
+      }
+      canvas {
         background: url(background.png);
         background-size: cover;
-    }
-    #game-start, #game-over {
+      }
+      #game-start,
+      #game-over {
         background: rgba(1, 1, 1, 0.8);
-    }
-    #counter text {
+      }
+      #counter text {
         font-size: 130%;
         fill: white;
         stroke: black;
         stroke-width: 1px;
-    }
-    #game-start text {
+      }
+      #game-start text {
         font-size: 150%;
         fill: white;
         text-anchor: middle;
-    }
-    #game-start #game-title {
+      }
+      #game-start #game-title {
         font-size: 400%;
         fill: url(#title-fill);
         stroke: black;
@@ -83,11 +92,12 @@
             fill: rgba(72,138,20,0); stroke: rgb(229, 232, 237);
             stroke-dashoffset: 25%; stroke-dasharray: 50% 50%; stroke-width: 2;
         }
-        70%  {fill: rgba(72,138,20,0); stroke: rgb(123, 139, 165); }
-        80%  {fill: rgba(72,138,20,0); stroke: rgb(26, 57, 107); stroke-width: 3; }
         100% {
-            fill: rgba(72,138,204,1); stroke: rgba(54,95,160,0); 
-            stroke-dashoffset: -25%; stroke-dasharray: 50% 0; stroke-width: 0;
+          fill: rgba(72, 138, 204, 1);
+          stroke: rgba(54, 95, 160, 0);
+          stroke-dashoffset: -25%;
+          stroke-dasharray: 50% 0;
+          stroke-width: 0;
         }
     }
     
@@ -103,16 +113,17 @@
     }
 
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="game-container">
-        <canvas width="854px" height="480px"></canvas>
+      <canvas width="854px" height="480px"></canvas>
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-            <text x="10" y="35">
-                TIME:<tspan id="time-remaining">20</tspan>
-            </text>
-        </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+        <text x="10" y="35">
+          TIME:
+          <tspan id="time-remaining">20</tspan>
+        </text>
+      </svg>
 
         <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
             <defs>
@@ -129,24 +140,24 @@
             <text class="player-status" x="50%" y="70%" >Click Here To Start The Game </text>
         </svg>
 
-        <!-- <div class="stage">
-            <div class="dot-elastic"></div>
-        </div> -->
-
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
-            <defs>
-                <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="red" />
-                    <stop offset="0.5" stop-color="yellow" />
-                    <stop offset="1" stop-color="red" />
-                </linearGradient>
-            </defs>
-            <text x="50%" y="50%">
-                Time's up! You have collected
-                <tspan id="final-gems">0</tspan>
-                gem(s).
-            </text>
-        </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        id="game-over"
+        style="display: none"
+      >
+        <defs>
+          <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="red" />
+            <stop offset="0.5" stop-color="yellow" />
+            <stop offset="1" stop-color="red" />
+          </linearGradient>
+        </defs>
+        <text x="50%" y="50%">
+          Time's up! You have collected
+          <tspan id="final-gems">0</tspan>
+          gem(s).
+        </text>
+      </svg>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -168,15 +179,15 @@
 
         /* Create the sounds */
         const sounds = {
-            background: new Audio("background.mp3"),
-            collect: new Audio("collect.mp3"),
-            gameover: new Audio("gameover.mp3")
+          background: new Audio("background.mp3"),
+          collect: new Audio("collect.mp3"),
+          gameover: new Audio("gameover.mp3"),
         };
 
-        const totalGameTime = 20;   // Total game time in seconds
-        const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
-        let gameStartTime = 0;      // The timestamp when the game starts
-        let collectedGems = 0;      // The number of gems collected in the game
+        const totalGameTime = 200; // Total game time in seconds
+        const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
+        let gameStartTime = 0; // The timestamp when the game starts
+        let collectedGems = 0; // The number of gems collected in the game
 
         /* Create the game area */
         gameArea = BoundingBox(context, 165, 60, 420, 800);
@@ -186,31 +197,32 @@
         player2 = Player(context, 500, 240, gameArea, 'purple', "Player2"); // The player
         const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
-            Fire(context, 25, 175),
-            Fire(context, 25, 425),
-            Fire(context, 800, 425),
-            Fire(context, 800, 175)
+          Fire(context, 25, 175),
+          Fire(context, 25, 425),
+          Fire(context, 800, 425),
+          Fire(context, 800, 175),
         ];
 
         /* The main processing of the game */
         function doFrame(now) {
-            if (gameStartTime == 0) gameStartTime = now;
+          if (gameStartTime == 0) gameStartTime = now;
 
-            /* Update the time remaining */
-            const gameTimeSoFar = now - gameStartTime;
-            const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
-            $("#time-remaining").text(timeRemaining);
+          /* Update the time remaining */
+          const gameTimeSoFar = now - gameStartTime;
+          const timeRemaining = Math.ceil(
+            (totalGameTime * 1000 - gameTimeSoFar) / 1000
+          );
+          $("#time-remaining").text(timeRemaining);
 
-
-            /* TODO */
-            /* Handle the game over situation here */
-	        if(timeRemaining <= 0){
-                $("#final-gems").text(collectedGems);
-                sounds.background.pause();
-                $("#game-over").show();
-                sounds.gameover.play();
-                return;
-	        }
+          /* TODO */
+          /* Handle the game over situation here */
+          if (timeRemaining <= 0) {
+            $("#final-gems").text(collectedGems);
+            sounds.background.pause();
+            $("#game-over").show();
+            sounds.gameover.play();
+            return;
+          }
 
             /* Update the sprites */
             gem.update(now);
@@ -234,20 +246,20 @@
                 gem.randomize(gameArea);
 	        }
 
-            /* Clear the screen */
-            context.clearRect(0, 0, cv.width, cv.height);
+          /* Clear the screen */
+          context.clearRect(0, 0, cv.width, cv.height);
 
-            /* Draw the sprites */
-            gem.draw();
-            player.draw();
-            player2.draw();
-            fires[0].draw(now);
-            fires[1].draw(now);
-            fires[2].draw(now);
-            fires[3].draw(now);
+          /* Draw the sprites */
+          gem.draw();
+          player.draw();
+          player2.draw();
+          fires[0].draw(now);
+          fires[1].draw(now);
+          fires[2].draw(now);
+          fires[3].draw(now);
 
-            /* Process the next frame */
-            requestAnimationFrame(doFrame);
+          /* Process the next frame */
+          requestAnimationFrame(doFrame);
         }
 
         /* Handle the start of the game */
@@ -270,32 +282,40 @@
             }
     
 
-            /* Handle the keydown of arrow keys and spacebar */
-            $(document).on("keydown", function(event) {
+          sounds.background.play();
+          gem.randomize(gameArea);
 
+          /* Handle the keydown of arrow keys and spacebar */
+          $(document).on("keydown", function (event) {
+            /* TODO */
+            /* Handle the key down */
+            // if (event.keyCode == 65) player.attackStart()
 
-                /* TODO */
-                /* Handle the key down */
-                if(isPlayer1){
-                    switch(event.keyCode){
-                        case 32: player.speedUp();break;
-                        case 37: player.move(1);Socket.playerMoveEvent(1);break;
-                        case 38: player.move(2);Socket.playerMoveEvent(2);break;
-                        case 39: player.move(3);Socket.playerMoveEvent(3);break;
-                        case 40: player.move(4);Socket.playerMoveEvent(4);break;
-                    }
+            /* TODO */
+            /* Handle the key down */
+            if(isPlayer1){
+                switch(event.keyCode){
+                    case 65: player.attackStart(); break;
+                    case 32: player.speedUp();break;
+                    case 37: player.move(1);Socket.playerMoveEvent(1);break;
+                    case 38: player.move(2);Socket.playerMoveEvent(2);break;
+                    case 39: player.move(3);Socket.playerMoveEvent(3);break;
+                    case 40: player.move(4);Socket.playerMoveEvent(4);break;
                 }
-                else{
-                    switch(event.keyCode){
-                        case 32: player2.speedUp();break;
-                        case 37: player2.move(1);Socket.playerMoveEvent(5);break;
-                        case 38: player2.move(2);Socket.playerMoveEvent(6);break;
-                        case 39: player2.move(3);Socket.playerMoveEvent(7);break;
-                        case 40: player2.move(4);Socket.playerMoveEvent(8);break;
-                    }
+            }
+            else{
+                switch(event.keyCode){
+                    case 65: player.attackStart(); break;
+                    case 32: player2.speedUp();break;
+                    case 37: player2.move(1);Socket.playerMoveEvent(5);break;
+                    case 38: player2.move(2);Socket.playerMoveEvent(6);break;
+                    case 39: player2.move(3);Socket.playerMoveEvent(7);break;
+                    case 40: player2.move(4);Socket.playerMoveEvent(8);break;
                 }
+            }
 
-            });
+          });
+
 
             /* Handle the keyup of arrow keys and spacebar */
             $(document).on("keyup", function(event) {
@@ -324,10 +344,10 @@
 
             });
 
-            /* Start the game */
-            requestAnimationFrame(doFrame);
+          /* Start the game */
+          requestAnimationFrame(doFrame);
         });
-    });
+      });
     </script>
-</body>
+  </body>
 </html>

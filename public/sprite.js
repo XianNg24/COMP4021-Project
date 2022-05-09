@@ -247,6 +247,10 @@ const Sprite = function (ctx, x, y) {
   
       return this;
     };
+
+    const getIndex = function () {
+      return index
+    };
   
     // The methods are returned as an object here.
     return {
@@ -259,6 +263,7 @@ const Sprite = function (ctx, x, y) {
       setName: setName,
       getDisplaySize: getDisplaySize,
       getBoundingBox: getBoundingBox,
+      getIndex: getIndex,
       isReady: isReady,
       draw: draw,
       update: update,
