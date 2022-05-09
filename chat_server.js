@@ -264,6 +264,26 @@ io.on("connection", (socket) => {
             io.emit("initiate player stop", JSON.stringify(message));
         }
     });
+
+    socket.on("player attack start", (type) => {
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("initiate player attack start", JSON.stringify(message));
+        }
+    });
+
+    socket.on("player attack stop", (type) => {
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("initiate player attack stop", JSON.stringify(message));
+        }
+    });
 });
 
 

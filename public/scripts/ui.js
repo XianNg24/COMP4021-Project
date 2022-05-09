@@ -365,7 +365,6 @@ const GamePanel = (function() {
 
         for (const username in onlineUsers) {
             if (username != currentUser.username) {
-                console.log(type)
                 if(type == 1){
                     player.stop(1);
                 }
@@ -394,5 +393,40 @@ const GamePanel = (function() {
         }
     };
 
-    return { initialize, initiatePlayerMove, initiatePlayerStop };
+    const initiatePlayerAttackStart = function(type, onlineUsers) {
+
+        const currentUser = Authentication.getUser();
+
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                if(type == 1){
+                    player.attackStart();
+                }
+                else if(type == 2){
+                    player2.attackStart();
+                }
+            }
+        }
+    };
+
+    const initiatePlayerAttackStop = function(type, onlineUsers) {
+
+        const currentUser = Authentication.getUser();
+
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                if(type == 1){
+                    player.attackStop();
+                }
+                else if(type == 2){
+                    player2.attackStop();
+                }
+            }
+        }
+    };
+
+
+    
+
+    return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, initiatePlayerAttackStop };
 })();

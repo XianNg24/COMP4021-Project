@@ -366,7 +366,7 @@
             /* Handle the key down */
             if(isPlayer1){
                 switch(event.keyCode){
-                    case 65: player.attackStart(); break;
+                    case 65: player.attackStart();Socket.playerAttackStartEvent(1);break;
                     case 32: player.speedUp();break;
                     case 37: player.move(1);Socket.playerMoveEvent(1);break;
                     case 38: player.move(2);Socket.playerMoveEvent(2);break;
@@ -376,7 +376,7 @@
             }
             else{
                 switch(event.keyCode){
-                    case 65: player2.attackStart(); break;
+                    case 65: player2.attackStart();Socket.playerAttackStartEvent(2);break;
                     case 32: player2.speedUp();break;
                     case 37: player2.move(1);Socket.playerMoveEvent(5);break;
                     case 38: player2.move(2);Socket.playerMoveEvent(6);break;
@@ -393,7 +393,7 @@
                 /* Handle the key up */
                 if(isPlayer1){
                     switch(event.keyCode){
-                        case 65: player.attackStop(); break;
+                        case 65: player.attackStop();Socket.playerAttackStopEvent(1);break;
                         case 32: player.slowDown();break;
                         case 37: player.stop(1);Socket.playerStopEvent(1);break;
                         case 38: player.stop(2);Socket.playerStopEvent(2);break;
@@ -403,7 +403,7 @@
                 }
                 else{
                     switch(event.keyCode){
-                        case 65: player2.attackStop(); break;
+                        case 65: player2.attackStop();Socket.playerAttackStopEvent(2);break;
                         case 32: player2.slowDown();break;
                         case 37: player2.stop(1);Socket.playerStopEvent(5);break;
                         case 38: player2.stop(2);Socket.playerStopEvent(6);break;
