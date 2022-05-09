@@ -95,14 +95,8 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   let direction = 0;
 
   // This records the action of player and will be sent to other player.
-  // Can be a number from 0 to 5
-  // - `0` - idling left
-  // - `1` - idling right
-  // - `2` - moving left
-  // - `3` - moving right
-  // - `4` - attacking left
-  // - `5` - attacking right
-  let status = 0;
+  // - ["idleLeft", "idleRight", "moveLeft", "moveRight", "attackLeft", "attackRight"] 
+  let status = "idleLeft";
 
   // This record the direction of character, which can be either 0 or 1:
   // - `0` - face to left
@@ -151,11 +145,11 @@ const Player = function (ctx, x, y, gameArea, color, name) {
         switch (face) {
           case 0:
             sprite.setSequence(sequences.idleLeft);
-            status = 0;
+            status = "idleLeft";
             break;
           case 1:
             sprite.setSequence(sequences.idleRight);
-            status = 1;
+            status = "idleRight";
             break;
         }
       direction = 0;
@@ -166,11 +160,11 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     switch (face) {
       case 0:
         sprite.setSequence(sequences.attackLeft);
-        status = 4;
+        status = "attackLeft";
         break;
       case 1:
         sprite.setSequence(sequences.attackRight);
-        status = 5;
+        status = "attackRight";
         break;
     }
   };
@@ -179,11 +173,11 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     switch (face) {
       case 0:
         sprite.setSequence(sequences.idleLeft);
-        status = 0;
+        status = "idleLeft";
         break;
       case 1:
         sprite.setSequence(sequences.idleRight);
-        status = 1;
+        status = "idleRight";
         break;
     }
     const previous_dir = direction;

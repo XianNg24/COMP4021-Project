@@ -2,11 +2,11 @@
  "player1": {
   "x": 500,
   "y": 240,
-  "status": 0
+  "status": "idleLeft"
  },
  "player2": {
   "x": 600,
   "y": 350,
-  "status": 4
+  "status": "attackRight"
  }
 }
