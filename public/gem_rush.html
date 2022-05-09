@@ -166,6 +166,8 @@
     <script src="player.js"></script>
     <script src="gem.js"></script>
     <script src="fire.js"></script>
+    <script src="slime.js"></script>
+    <script src="skeleton.js"></script>
     <!-- <script src="scripts/socket.js"></script> -->
     <script>
     var player;
@@ -189,6 +191,12 @@
         let gameStartTime = 0; // The timestamp when the game starts
         let collectedGems = 0; // The number of gems collected in the game
 
+        /* Enemy */
+        const MAX_SLIME = 10;
+        const MAX_SKELETON = 10;
+        let slime = new Array(MAX_SLIME);
+        let skeleton = new Array(MAX_SKELETON);
+
         /* Create the game area */
         gameArea = BoundingBox(context, 165, 60, 420, 800);
 
@@ -203,8 +211,31 @@
           Fire(context, 800, 175),
         ];
 
+        // The slime
+        for (let i = 0; i < MAX_SLIME; i++) {
+          slime[i] = Slime(context, 0, 0);
+        }
+
+        // The skeleton
+        for (let i = 0; i < MAX_SKELETON; i++) {
+          skeleton[i] = Skeleton(context, 0, 0);
+        }
+
         /* The main processing of the game */
         function doFrame(now) {
+          /* Randomize enemy position */
+
+          // Slime
+          for (let i = 0; i < MAX_SLIME; i++)
+            if (gameStartTime == 0) {
+              slime[i].randomize(gameArea);
+            }
+
+          // Skeleton
+          for (let i = 0; i < MAX_SKELETON; i++)
+            if (gameStartTime == 0) {
+              skeleton[i].randomize(gameArea);
+            }
           if (gameStartTime == 0) gameStartTime = now;
 
           /* Update the time remaining */
@@ -232,6 +263,15 @@
             fires[1].update(now);
             fires[2].update(now);
             fires[3].update(now);
+            for (let i = 0; i < MAX_SLIME; i++) {
+              slime[i].update(now);
+              slime[i].move(player.getXY(), player.getBoundingBox());
+            }
+
+            for (let i = 0; i < MAX_SKELETON; i++) {
+              skeleton[i].update(now);
+              skeleton[i].move(player.getXY(), player.getBoundingBox());
+            }
 
             /* TODO */
             /* Randomize the gem and collect the gem here */
@@ -257,6 +297,13 @@
           fires[1].draw(now);
           fires[2].draw(now);
           fires[3].draw(now);
+          for (let i = 0; i < MAX_SLIME; i++) {
+            slime[i].draw();
+          }
+
+          for (let i = 0; i < MAX_SKELETON; i++) {
+            skeleton[i].draw();
+          }
 
           /* Process the next frame */
           requestAnimationFrame(doFrame);

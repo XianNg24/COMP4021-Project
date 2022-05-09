@@ -107,6 +107,11 @@ const Sprite = function (ctx, x, y) {
         return this;
     }
   
+    // This function gets the current sprite sequence.
+    const getSequence = function () {
+      return sequence;
+    };
+
     // This function gets the display size of the sprite.
     const getDisplaySize = function () {
       /* Find the scaled width and height of the sprite */
@@ -263,6 +268,7 @@ const Sprite = function (ctx, x, y) {
       setName: setName,
       getDisplaySize: getDisplaySize,
       getBoundingBox: getBoundingBox,
+      getSequence: getSequence,
       getIndex: getIndex,
       isReady: isReady,
       draw: draw,

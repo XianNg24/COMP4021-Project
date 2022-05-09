@@ -263,6 +263,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     attackStart: attackStart,
     attackStop: attackStop,
     getBoundingBox: sprite.getBoundingBox,
+    getXY: sprite.getXY,
     draw: sprite.draw,
     update: update,
   };
