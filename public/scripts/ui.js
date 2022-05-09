@@ -425,8 +425,12 @@ const GamePanel = (function() {
         }
     };
 
+    const checkGameStart = function(onlineUsers) {
+        gameStart();
+    };
+
 
     
 
-    return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, initiatePlayerAttackStop };
+    return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, initiatePlayerAttackStop, checkGameStart};
 })();

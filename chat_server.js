@@ -284,6 +284,12 @@ io.on("connection", (socket) => {
             io.emit("initiate player attack stop", JSON.stringify(message));
         }
     });
+
+    socket.on("game start", () => {
+        if(socket.request.session.user){
+            io.emit("check game start", JSON.stringify(onlineUsers));
+        }
+    });
 });
 
 

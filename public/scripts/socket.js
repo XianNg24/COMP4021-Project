@@ -98,6 +98,13 @@ const Socket = (function() {
             GamePanel.initiatePlayerAttackStop(message.type, message.onlineUsers);
         });
 
+        socket.on("check game start", (message) => {
+
+            message = JSON.parse(message);
+            // Add the message to the chatroom
+            GamePanel.checkGameStart(message);
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -143,5 +150,11 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, disconnect, postMessage, typeEvent, playerMoveEvent, playerStopEvent, playerAttackStartEvent, playerAttackStopEvent};
+    const GameStartEvent = function(){
+        if (socket && socket.connected) {
+            socket.emit("game start");
+        }
+    }
+
+    return { getSocket, connect, disconnect, postMessage, typeEvent, playerMoveEvent, playerStopEvent, playerAttackStartEvent, playerAttackStopEvent, GameStartEvent};
 })();
