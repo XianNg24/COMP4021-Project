@@ -426,7 +426,9 @@ const GamePanel = (function() {
     };
 
     const checkGameStart = function(onlineUsers) {
-        gameStart();
+        if (Object.keys(onlineUsers).length > 1){
+            gameStart();
+        }
     };
 
 
