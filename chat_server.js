@@ -28,6 +28,26 @@ function containWordCharsOnly(text) {
     return /^\w+$/.test(text);
 }
 
+// Handle the /player endpoint
+app.post("/player", (req, res) => {
+    const { player, x, y, status } = req.body;
+
+    const jsonData = fs.readFileSync("data/player.json");
+    const players = JSON.parse(jsonData);
+    // console.log(players)
+
+    players[player] = {x, y, status};
+
+    fs.writeFileSync("data/player.json", JSON.stringify(players, null, " "));
+
+    const testData = fs.readFileSync("data/player.json");
+    const tests = JSON.parse(testData);
+
+    console.log(tests);
+
+    res.json({status: "success"});
+});
+
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body

@@ -211,6 +211,20 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     stopAttack(face);
   };
 
+  const communicate = function () {
+      const loc = sprite.getXY()
+      const jsonData = JSON.stringify({
+          player: "player1", 
+          x: loc.x, 
+          y: loc.y,
+          status: status})
+      fetch("/player", {
+          method: "POST",
+          headers: { "Content-Type": "application/json"},
+          body: jsonData
+      })
+  }
+
   // This function updates the player depending on his movement.
   // - `time` - The timestamp when this function is called
   const update = function (time) {
@@ -243,6 +257,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     /* Update the sprite object */
     sprite.update(time);
     // console.log(status);
+    communicate();
   };
 
   // The methods are returned as an object here.
