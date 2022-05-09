@@ -77,7 +77,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
 
   // This is the sprite object of the player created from the Sprite module.
   const sprite = Sprite(ctx, x, y);
-//   const fireball = Fireball(ctx, x, y, gameArea);
+  //   const fireball = Fireball(ctx, x, y, gameArea);
 
   // The sprite object is configured for the player sprite here.
   sprite
@@ -96,7 +96,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   let direction = 0;
 
   // This records the action of player and will be sent to other player.
-  // - ["idleLeft", "idleRight", "moveLeft", "moveRight", "attackLeft", "attackRight"] 
+  // - ["idleLeft", "idleRight", "moveLeft", "moveRight", "attackLeft", "attackRight"]
   let status = "idleLeft";
 
   // This record the direction of character, which can be either 0 or 1:
@@ -114,9 +114,9 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   let fireballAttack = false;
 
   const fireball = function () {
-      const dir = face ? 'right' : 'left';
-      return {fireballAttack, dir};
-  }
+    const dir = face ? "right" : "left";
+    return { fireballAttack, dir };
+  };
 
   // This function sets the player's moving direction.
   // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
@@ -215,50 +215,53 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   };
 
   const communicate = function () {
-      const loc = sprite.getXY()
-      const jsonData = JSON.stringify({
-          player: "player1", 
-          x: loc.x, 
-          y: loc.y,
-          status: status})
-      fetch("/player", {
-          method: "POST",
-          headers: { "Content-Type": "application/json"},
-          body: jsonData
-      })
-  }
+    const loc = sprite.getXY();
+    const jsonData = JSON.stringify({
+      player: "player1",
+      x: loc.x,
+      y: loc.y,
+      status: status,
+    });
+    fetch("/player", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonData,
+    });
+  };
 
   // This function updates the player depending on his movement.
   // - `time` - The timestamp when this function is called
   const update = function (time) {
     /* Update the player if the player is moving */
-      let { x, y } = sprite.getXY();
+    let { x, y } = sprite.getXY();
     if (isAttack) {
       const index = sprite.getIndex();
-      fireballAttack = (index>3)
-    //   console.log(index);
-    //   fireball.attack(x, y, face ? 'right' : 'left')
-    } else if (direction != 0) {
-
+      fireballAttack = index > 3;
+      //   console.log(index);
+      //   fireball.attack(x, y, face ? 'right' : 'left')
+    } else {
+      fireballAttack = false;
+      if (direction != 0) {
         fireballAttack = false;
-      /* Move the player */
-      switch (direction) {
-        case 1:
-          x -= speed / 60;
-          break;
-        case 2:
-          y -= speed / 60;
-          break;
-        case 3:
-          x += speed / 60;
-          break;
-        case 4:
-          y += speed / 60;
-          break;
-      }
+        /* Move the player */
+        switch (direction) {
+          case 1:
+            x -= speed / 60;
+            break;
+          case 2:
+            y -= speed / 60;
+            break;
+          case 3:
+            x += speed / 60;
+            break;
+          case 4:
+            y += speed / 60;
+            break;
+        }
 
-      /* Set the new position if it is within the game area */
-      if (gameArea.isPointInBox(x, y)) sprite.setXY(x, y);
+        /* Set the new position if it is within the game area */
+        if (gameArea.isPointInBox(x, y)) sprite.setXY(x, y);
+      }
     }
 
     /* Update the sprite object */
