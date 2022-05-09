@@ -15,7 +15,11 @@ const Player = function(ctx, x, y, gameArea, color, name) {
 
         /* Moving sprite sequences for facing different directions */
         moveLeft:  { x: 840, y: 112, width: 56, height: 44, flip: 1, count: 8, timing: 100, loop: true },
-        moveRight: { x: 0, y: 112, width: 56, height: 44, flip: 0, count: 8, timing: 100, loop: true }
+        moveRight: { x: 0, y: 112, width: 56, height: 44, flip: 0, count: 8, timing: 100, loop: true },
+
+        /* Attack */
+        attackLeft:  { x: 840, y: 56, width: 56, height: 44, flip: 1, count: 8, timing: 100, loop: true },
+        attackRight: { x: 0, y: 56, width: 56, height: 44, flip: 0, count: 8, timing: 100, loop: true }
     };
 
     // This is the sprite object of the player created from the Sprite module.
@@ -44,21 +48,25 @@ const Player = function(ctx, x, y, gameArea, color, name) {
     // This is the moving speed (pixels per second) of the player
     let speed = 150;
 
+    // This determine whether it is attacking
+    let isAttack = false;
+
     // This function sets the player's moving direction.
     // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
     const move = function(dir) {
-        if (dir >= 1 && dir <= 4 && dir != direction) {
+        if (dir >= 1 && dir <= 4 && dir != direction && !isAttack) {
             // let direct = dir
             // if (direct == 2 || direct == 4) direct = direction
             switch (dir) {
                 case 1: face = 0; break;
                 case 3: face = 1; break;
             }
-            switch (face) {
+             switch (face) {
                 case 0: sprite.setSequence(sequences.moveLeft); break;
                 case 1: sprite.setSequence(sequences.moveRight); break;
             }
             direction = dir;
+        
         }
     };
 
@@ -66,12 +74,30 @@ const Player = function(ctx, x, y, gameArea, color, name) {
     // - `dir` - the moving direction when the player is stopped (1: Left, 2: Up, 3: Right, 4: Down)
     const stop = function(dir) {
         if (direction == dir) {
-            switch (face) {
+            if (!isAttack) switch (face) {
                 case 0: sprite.setSequence(sequences.idleLeft); break;
                 case 1: sprite.setSequence(sequences.idleRight); break;
             }
             direction = 0;
         }
+    };
+
+    const attack = function() {
+        switch (face) {
+            case 0: sprite.setSequence(sequences.attackLeft); break;
+            case 1: sprite.setSequence(sequences.attackRight); break;
+        }
+    };
+
+
+    const stopAttack = function() {
+            switch (face) {
+                case 0: sprite.setSequence(sequences.idleLeft); break;
+                case 1: sprite.setSequence(sequences.idleRight); break;
+            }
+            const previous_dir = direction
+            direction = 0;
+            move(previous_dir)
     };
 
     // This function speeds up the player.
@@ -84,11 +110,24 @@ const Player = function(ctx, x, y, gameArea, color, name) {
         speed = 150;
     };
 
+    const attackStart = function() {
+        if (isAttack == false) attack();
+        isAttack = true;
+    }
+
+    const attackStop = function() {
+        isAttack = false;
+        stopAttack(face)
+    }
+
     // This function updates the player depending on his movement.
     // - `time` - The timestamp when this function is called
     const update = function(time) {
         /* Update the player if the player is moving */
-        if (direction != 0) {
+        if (isAttack) {
+            sprite.getIndex()
+        }
+        else if (direction != 0) {
             let { x, y } = sprite.getXY();
 
             /* Move the player */
@@ -114,6 +153,8 @@ const Player = function(ctx, x, y, gameArea, color, name) {
         stop: stop,
         speedUp: speedUp,
         slowDown: slowDown,
+        attackStart: attackStart,
+        attackStop: attackStop,
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
         update: update
