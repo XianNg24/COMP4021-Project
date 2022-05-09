@@ -85,7 +85,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     .setScale(2)
     .setShadowScale({ x: 0.5, y: 0.1 })
     .setName({ name: name, x: 0.25, y: 0.2 })
-    .useSheet(`long_char_${color}_1.png`);
+    .useSheet(`./assets/long_char_${color}_1.png`);
 
   // This is the moving direction, which can be a number from 0 to 4:
   // - `0` - not moving
