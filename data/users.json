@@ -27,5 +27,20 @@
  "test": {
   "name": "test",
   "password": "$2b$10$Bh4fTed21Qb/6Nam0Okxeugsmw/2Na15FCfA338FV2T91.He8ZTtK"
+ },
+ "test2": {
+  "avatar": "Red",
+  "name": "test2",
+  "password": "$2b$10$TkJ0Css0FkP1dUBiLzx/KuvL37wAWLivsf3nZRkPKfNnaLyJvRKy2"
+ },
+ "tom": {
+  "avatar": "green",
+  "name": "tom",
+  "password": "$2b$10$f8498TWvLVcP2piVId.S8uqqDqdbwgfWg.Eu7nqzUnaawtnGLjnU."
+ },
+ "jerry": {
+  "avatar": "blue",
+  "name": "jerry",
+  "password": "$2b$10$O//nf2TtVjLMXRDhbp79sepoJrMsJBaXBQg87opaLo1f7lLrC.nKi"
  }
 }

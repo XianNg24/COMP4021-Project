@@ -263,3 +263,136 @@ const UI = (function() {
 
     return { getUserDisplay, initialize };
 })();
+
+const OnlineUsersStatus = (function() {
+
+    // This function initializes the UI
+    const initialize = function() {};
+
+    // This function updates the online users panel
+    const update = function(onlineUsers) {
+
+        const playerStatus = document.getElementsByClassName("player-status");
+
+		// Get the current user
+        const currentUser = Authentication.getUser();
+
+        // console.log(Object.keys(onlineUsers).length)
+        // Add the user
+        if (Object.keys(onlineUsers).length > 1) {
+            for (const username in onlineUsers) {
+                if (username != currentUser.username) {
+                    playerStatus[0].innerHTML = "Player 1 : " + onlineUsers[username].name;
+                    playerStatus[0].id = username
+                    player = Player(context, 427, 240, gameArea, onlineUsers[username].avatar, onlineUsers[username].name);
+                }
+                else{
+                    playerStatus[1].innerHTML = "Player 2 : " + onlineUsers[username].name;
+                    playerStatus[1].id = username
+                    player2 = Player(context, 500, 240, gameArea, onlineUsers[username].avatar, onlineUsers[username].name);
+                }
+            }
+            document.getElementsByClassName("player-status")[2].style.visibility = "visible";
+        }
+    };
+
+    // This function adds a user in the panel
+	const addUser = function(user) {
+
+        const playerStatus = document.getElementsByClassName("player-status");
+
+        // console.log(playerStatus1.innerHTML)
+        if (playerStatus[0].innerHTML == "Player 1 : ??? "){
+            playerStatus[0].innerHTML = "Player 1 : " + user.name;
+            playerStatus[0].id = user.username
+            player = Player(context, 427, 240, gameArea, user.avatar, user.name);
+        }
+        else{
+            playerStatus[1].innerHTML = "Player 2 : " + user.name;
+            playerStatus[2].style.visibility = "visible"; // Start game text
+            playerStatus[1].id = user.username
+            player2 = Player(context, 500, 240, gameArea, user.avatar, user.name);
+        }
+		
+	};
+
+    return { initialize, update, addUser };
+})();
+
+const GamePanel = (function() {
+
+    // This function initializes the UI
+    const initialize = function() {};
+
+
+    const initiatePlayerMove = function(type, onlineUsers) {
+
+        const currentUser = Authentication.getUser();
+
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                if(type == 1){
+                    player.move(1);
+                }
+                else if(type == 2){
+                    player.move(2);
+                }
+                else if(type == 3){
+                    player.move(3);
+                }
+                else if(type == 4){
+                    player.move(4);
+                }
+                else if(type == 5){
+                    player2.move(1);
+                }
+                else if(type == 6){
+                    player2.move(2);
+                }
+                else if(type == 7){
+                    player2.move(3);
+                }
+                else if(type == 8){
+                    player2.move(4);
+                }
+            }
+        }
+    };
+
+    const initiatePlayerStop = function(type, onlineUsers) {
+
+        const currentUser = Authentication.getUser();
+
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                console.log(type)
+                if(type == 1){
+                    player.stop(1);
+                }
+                else if(type == 2){
+                    player.stop(2);
+                }
+                else if(type == 3){
+                    player.stop(3);
+                }
+                else if(type == 4){
+                    player.stop(4);
+                }
+                else if(type == 5){
+                    player2.stop(1);
+                }
+                else if(type == 6){
+                    player2.stop(2);
+                }
+                else if(type == 7){
+                    player2.stop(3);
+                }
+                else if(type == 8){
+                    player2.stop(4);
+                }
+            }
+        }
+    };
+
+    return { initialize, initiatePlayerMove, initiatePlayerStop };
+})();

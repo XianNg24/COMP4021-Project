@@ -26,6 +26,7 @@ const Socket = (function() {
 
             // Show the online users
             OnlineUsersPanel.update(onlineUsers);
+            OnlineUsersStatus.update(onlineUsers);
         });
 
         // Set up the add user event
@@ -34,6 +35,7 @@ const Socket = (function() {
 
             // Add the online user
             OnlineUsersPanel.addUser(user);
+            OnlineUsersStatus.addUser(user);
         });
 
         // Set up the remove user event
@@ -67,6 +69,21 @@ const Socket = (function() {
                 ChatPanel.addTyping(message.typingMessage);
             }
         });
+
+        socket.on("initiate player move", (message) => {
+
+            message = JSON.parse(message);
+            // Add the message to the chatroom
+            GamePanel.initiatePlayerMove(message.type, message.onlineUsers);
+        });
+
+        socket.on("initiate player stop", (message) => {
+
+            message = JSON.parse(message);
+            // Add the message to the chatroom
+            GamePanel.initiatePlayerStop(message.type, message.onlineUsers);
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -88,5 +105,17 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, disconnect, postMessage, typeEvent};
+    const playerMoveEvent = function(type){
+        if (socket && socket.connected) {
+            socket.emit("player move", type);
+        }
+    }
+
+    const playerStopEvent = function(type){
+        if (socket && socket.connected) {
+            socket.emit("player stop", type);
+        }
+    }
+
+    return { getSocket, connect, disconnect, postMessage, typeEvent, playerMoveEvent, playerStopEvent};
 })();

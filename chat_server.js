@@ -223,6 +223,26 @@ io.on("connection", (socket) => {
             io.emit("add typing", JSON.stringify(message));
         }
     });
+
+    socket.on("player move", (type) => {
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("initiate player move", JSON.stringify(message));
+        }
+    });
+
+    socket.on("player stop", (type) => {
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("initiate player stop", JSON.stringify(message));
+        }
+    });
 });
 
 

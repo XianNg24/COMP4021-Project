@@ -2,10 +2,10 @@ const Avatar = (function() {
     // This stores the available avatars
     const avatars = {
         "Colours": {
-            "Red": "&#128997;",
-            "Green": "&#129001;",
-            "Blue": "&#128998;",
-            "Purple": "&#129002;",
+            "red": "&#128997;",
+            "green": "&#129001;",
+            "blue": "&#128998;",
+            "purple": "&#129002;",
         },
     };
 
