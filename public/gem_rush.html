@@ -163,8 +163,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="bounding_box.js"></script>
     <script src="sprite.js"></script>
+    <script src="fireball.js"></script>
     <script src="player.js"></script>
-    <script src="gem.js"></script>
     <script src="fire.js"></script>
     <script src="slime.js"></script>
     <script src="skeleton.js"></script>
@@ -201,9 +201,10 @@
         gameArea = BoundingBox(context, 165, 60, 420, 800);
 
         /* Create the sprites in the game */
+        const fireball = Fireball(context, 427, 350, gameArea);        // The gem
+        const fireball2 = Fireball(context, 427, 350, gameArea);        // The gem
         player = Player(context, 427, 240, gameArea, 'green', "Player1"); // The player
         player2 = Player(context, 500, 240, gameArea, 'purple', "Player2"); // The player
-        const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
           Fire(context, 25, 175),
           Fire(context, 25, 425),
@@ -238,6 +239,16 @@
             }
           if (gameStartTime == 0) gameStartTime = now;
 
+          // Fireball
+          if (player.fireball().fireballAttack) {
+              const {x, y} = player.getXY()
+              fireball.attack(x, y, player.fireball().dir)
+          }
+          if (player2.fireball().fireballAttack) {
+              const {x, y} = player2.getXY()
+              fireball2.attack(x, y, player2.fireball().dir)
+          }
+
           /* Update the time remaining */
           const gameTimeSoFar = now - gameStartTime;
           const timeRemaining = Math.ceil(
@@ -256,9 +267,10 @@
           }
 
             /* Update the sprites */
-            gem.update(now);
             player.update(now);
             player2.update(now);
+            fireball.update(now);
+            fireball2.update(now);
             fires[0].update(now);
             fires[1].update(now);
             fires[2].update(now);
@@ -275,22 +287,21 @@
 
             /* TODO */
             /* Randomize the gem and collect the gem here */
-            if(gem.getAge(now) >= gemMaxAge){
-                gem.randomize(gameArea);
-            }
-            loc = gem.getXY();
-            bbox = player.getBoundingBox();
-            if(bbox.isPointInBox(loc.x, loc.y)){
-                collectedGems++;
-                sounds.collect.play();
-                gem.randomize(gameArea);
-	        }
+            // if(fireball.getAge(now) >= gemMaxAge){
+            //     fireball.randomize(gameArea);
+            // }
+            // loc = fireball.getXY();
+            // bbox = player.getBoundingBox();
+            // if(bbox.isPointInBox(loc.x, loc.y)){
+            //     collectedGems++;
+            //     sounds.collect.play();
+            //     fireball.randomize(gameArea);
+	        // }
 
           /* Clear the screen */
           context.clearRect(0, 0, cv.width, cv.height);
 
           /* Draw the sprites */
-          gem.draw();
           player.draw();
           player2.draw();
           fires[0].draw(now);
@@ -305,6 +316,9 @@
             skeleton[i].draw();
           }
 
+          fireball.draw();
+          fireball2.draw();
+
           /* Process the next frame */
           requestAnimationFrame(doFrame);
         }
@@ -315,7 +329,7 @@
             $("#game-start").hide();
 	    
             sounds.background.play();
-            gem.randomize(gameArea);
+            // fireball.randomize(gameArea);
 
             let isPlayer1 = false
             let isPlayer2 = false
@@ -330,7 +344,7 @@
     
 
           sounds.background.play();
-          gem.randomize(gameArea);
+        //   fireball.randomize(gameArea);
 
           /* Handle the keydown of arrow keys and spacebar */
           $(document).on("keydown", function (event) {

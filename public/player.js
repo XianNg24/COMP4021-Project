@@ -77,6 +77,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
 
   // This is the sprite object of the player created from the Sprite module.
   const sprite = Sprite(ctx, x, y);
+//   const fireball = Fireball(ctx, x, y, gameArea);
 
   // The sprite object is configured for the player sprite here.
   sprite
@@ -108,6 +109,14 @@ const Player = function (ctx, x, y, gameArea, color, name) {
 
   // This determine whether it is attacking
   let isAttack = false;
+
+  // This depend on sword
+  let fireballAttack = false;
+
+  const fireball = function () {
+      const dir = face ? 'right' : 'left';
+      return {fireballAttack, dir};
+  }
 
   // This function sets the player's moving direction.
   // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
@@ -223,11 +232,15 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   // - `time` - The timestamp when this function is called
   const update = function (time) {
     /* Update the player if the player is moving */
-    if (isAttack) {
-      sprite.getIndex();
-    } else if (direction != 0) {
       let { x, y } = sprite.getXY();
+    if (isAttack) {
+      const index = sprite.getIndex();
+      fireballAttack = (index>3)
+    //   console.log(index);
+    //   fireball.attack(x, y, face ? 'right' : 'left')
+    } else if (direction != 0) {
 
+        fireballAttack = false;
       /* Move the player */
       switch (direction) {
         case 1:
@@ -250,6 +263,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
 
     /* Update the sprite object */
     sprite.update(time);
+    // fireball.update(time);
     // console.log(status);
     communicate();
   };
@@ -262,6 +276,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     slowDown: slowDown,
     attackStart: attackStart,
     attackStop: attackStop,
+    fireball: fireball,
     getBoundingBox: sprite.getBoundingBox,
     getXY: sprite.getXY,
     draw: sprite.draw,
