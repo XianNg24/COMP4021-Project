@@ -21,6 +21,11 @@
         top: 0px;
         left: 0px;
       }
+      #logged-out {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
       canvas,
       #game-start,
       #game-over {
@@ -32,12 +37,20 @@
         /* height: absolute; */
         /* width: absolute; */
       }
+      #logged-out {
+        border: 1px solid gray;/
+        height: 100vh;
+        width: 100vw;
+      }
       canvas {
         background: url(background.png);
         background-size: cover;
       }
       #game-start,
       #game-over {
+        background: rgba(1, 1, 1, 0.8);
+      }
+      #logged-out {
         background: rgba(1, 1, 1, 0.8);
       }
       #counter {
@@ -70,6 +83,11 @@
         fill: url(#game-over-fill);
         text-anchor: middle;
     }
+    #logged-out text {
+        font-size: 300%;
+        fill: url(#game-over-fill);
+        text-anchor: middle;
+    }
     .player-status{
         visibility: hidden;
         stroke-width: 1.5;
@@ -79,7 +97,7 @@
     #leaderboard-overlay{
       display: none;
       width: 600px;
-      top: 10%;
+      top: 5%;
       left: 30%;
       right: 30%;
     }
@@ -139,6 +157,42 @@
       font-size: 32px;
       font-family: "Press Start 2P", sans-serif;
       padding: 10px
+    }
+    #play-again {
+      margin: 2px;
+      position: absolute;
+      left: 50%;
+      -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
+      color: white;
+      font-size: 16px;
+      font-family: "Press Start 2P", sans-serif;
+      padding: 10px;
+      background: orange;
+    }
+    #signout-button {
+      /* float: right; */
+      color: white;
+      margin: 2px;
+      position: absolute;
+      left: 70%;
+      -ms-transform: translateX(-70%);
+      transform: translateX(-70%);
+      padding: 10px;
+    }
+    button.icon:hover{
+      background: none;
+    }
+    #reset-message {
+      display: none;
+      margin: 2px;
+      position: absolute;
+      left: 50%;
+      -ms-transform: translate(-50%, 110%);
+      transform: translate(-50%, 110%);
+      font-size: 10px;
+      font-family: "Press Start 2P", sans-serif;
+      padding: 10px;
     }
     svg {
         font-family: 'Russo One', sans-serif;
@@ -225,6 +279,23 @@
           gem(s).
         </text> -->
       </svg>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        id="logged-out"
+        style="display: none"
+      >
+        <defs>
+          <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="red" />
+            <stop offset="0.5" stop-color="yellow" />
+            <stop offset="1" stop-color="red" />
+          </linearGradient>
+        </defs>
+        <text x="50%" y="50%">
+          You are logged out
+        </text>
+      </svg>
     </div>
     
     <div id="leaderboard-overlay" class="overlay row" >
@@ -232,12 +303,17 @@
       <div class="content shadow row" id = "leaderboard-box">
         <div id="leaderboard-text">LEADERBOARD</div>
         <div id="leaderboard-panel" class="row">
-          <!-- <div id="leaderboard-text">LEADERBOARD</div> -->
           <div id="score-panel" class="col">
               <div id="score-area" class="col"></div>
           </div>
         </div>
       </div>
+      <div id="score-text"></div>
+      <div>
+        <button id="play-again" type="submit">Play Again</button>
+        <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+      </div>
+      <div id="reset-message" class="warning center"> Requested to play again</div>
     </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -252,11 +328,18 @@
   <script>
     var player;
     var player2;
+    var playerName;
+    var player2Name;
+    var playerAvatar;
+    var player2Avatar;
     var context;
     var gameArea;
     var gameStart;
-    let isPlayer1 = false
-    let isPlayer2 = false
+    var resetGame;
+    let isPlayer1 = false;
+    let isPlayer2 = false;
+    var playerReset = false;
+    var player2Reset = false;
 
     function distance(coord1, coord2) {
       let a = coord1.x - coord2.x;
@@ -277,7 +360,7 @@
         gameover: new Audio("gameover.mp3"),
       };
 
-      const totalGameTime = 30; // Total game time in seconds
+      const totalGameTime = 5; // Total game time in seconds
       const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
       let gameStartTime = 0; // The timestamp when the game starts
       let playerScore = 0; // The number of enemies killed
@@ -293,8 +376,8 @@
       gameArea = BoundingBox(context, 165, 60, 420, 800);
 
       /* Create the sprites in the game */
-      const fireball = Fireball(context, -1, -1, gameArea);        // The gem
-      const fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
+      let fireball = Fireball(context, -1, -1, gameArea);        // The gem
+      let fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
       player = Player(context, 427, 240, gameArea, 'green', "Player1"); // The player
       player2 = Player(context, 500, 240, gameArea, 'purple', "Player2"); // The player
       const fires = [
@@ -419,6 +502,9 @@
           else if(isPlayer2){
             document.getElementById("score-text").innerHTML = "Your Score: " + player2Score;
           }
+          $("#reset-message").hide();
+          playerReset = false;
+          player2Reset = false;
           $("#game-over").show();
           $("#leaderboard-overlay").show();
           sounds.gameover.play();
@@ -493,6 +579,61 @@
       $("#game-start").on("click", function () {
         Socket.GameStartEvent();
       });
+
+      $("#play-again").on("click", function() {
+        if(isPlayer1){
+          Socket.resetEvent(1);
+        }
+        else if(isPlayer2){
+          Socket.resetEvent(2);
+        }
+      });
+
+      // Click event for the signout button
+      $("#signout-button").on("click", () => {
+            // Send a signout request
+            Authentication.signout(
+                () => {
+                    $("#leaderboard-overlay").hide();
+                    $("#logged-out").show();
+                    Socket.disconnect();
+                }
+            );
+        });
+
+      resetGame = function (){
+          $("#game-over").hide();
+          $("#leaderboard-overlay").hide();
+          sounds.gameover.pause();
+          sounds.background.play();
+
+          player = Player(context, 427, 240, gameArea, playerAvatar, playerName);
+          player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name);
+
+          gameStartTime = 0; // The timestamp when the game starts
+          playerScore = 0; // The number of enemies killed
+          player2Score = 0;
+
+          slime = new Array(MAX_SLIME);
+          skeleton = new Array(MAX_SKELETON);
+
+          fireball = Fireball(context, -1, -1, gameArea);        // The gem
+          fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
+          player = Player(context, 427, 240, gameArea,  playerAvatar, playerName); // The player
+          player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name); // The player
+
+          // The slime
+          for (let i = 0; i < MAX_SLIME; i++) {
+            slime[i] = Slime(context, 0, 0);
+          }
+
+          // The skeleton
+          for (let i = 0; i < MAX_SKELETON; i++) {
+            skeleton[i] = Skeleton(context, 0, 0);
+          }
+
+          requestAnimationFrame(doFrame);
+      }
 
       gameStart = function () {
 

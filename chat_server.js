@@ -314,6 +314,16 @@ io.on("connection", (socket) => {
             io.emit("activate cheat mode", JSON.stringify(message));
         }
     });
+
+    socket.on("reset game", (type) => {
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("reset game page", JSON.stringify(message));
+        }
+    });
 });
 
 
