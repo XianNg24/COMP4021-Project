@@ -74,18 +74,72 @@
         stroke: rgb(123, 139, 165);
         animation: stroke2 2s infinite alternate;
     }
-    svg {
-	font-family: 'Russo One', sans-serif;
-	position: absolute; 
-	width: 100%; height: 100%;
+    #leaderboard-overlay{
+      display: none;
+      width: 600px;
+      top: 20%;
+      left: 30%;
+      right: 30%;
     }
-    /* svg text {
-        text-transform: uppercase;
-        animation: stroke 5s infinite alternate;
-        stroke-width: 2;
-        stroke: #365fa0;
-        font-size: 140px;
+    /* #leaderboard-box{
+        width: 600px;
+        height: 800px;
     } */
+    #score-panel {
+        flex-grow: 1;
+        /* align-items: stretch; */
+        height: 100%;
+        background: var(--chat-panel-background);
+        padding: 0;
+    }
+    #score-area {
+        height: 100%;
+        /* align-items: flex-start; */
+        justify-content: start;
+        gap: 20px;
+        overflow-y: auto;
+        padding: 10px;
+    }
+    .score-message-panel {
+        /* align-items: flex-start; */
+        padding: 0;
+    }
+    .score-message {
+        align-items: start;
+        gap: 5px;
+        padding: 0;
+        font-family: "Press Start 2P", sans-serif;
+    }
+    .score-date {
+        font-size: 75%;
+        color: var(--date-color);
+        font-family: "Press Start 2P", sans-serif;
+    }
+    .score-content {
+        color: white;
+        font-size: large;
+        font-family: "Press Start 2P", sans-serif;
+    }
+    .user-name {
+        color: rgb(156, 150, 150);
+        font-size: medium;
+        font-family: "Press Start 2P", sans-serif;
+    }
+    #leaderboard-text {
+      text-align: center;
+      color: white;
+      font-size: 36px;
+      font-family: "Press Start 2P", sans-serif;
+    }
+    svg {
+        font-family: 'Russo One', sans-serif;
+        position: absolute; 
+        width: 100%; height: 100%;
+        font-family: 'Games', sans-serif;
+    }
+    svg text {
+        font-family: 'Games', sans-serif;
+    }
     
     @keyframes stroke {
         0%   {
@@ -152,12 +206,24 @@
             <stop offset="1" stop-color="red" />
           </linearGradient>
         </defs>
-        <text x="50%" y="50%">
+        <!-- <text x="50%" y="50%">
           Time's up! You have collected
           <tspan id="final-gems">0</tspan>
           gem(s).
-        </text>
+        </text> -->
       </svg>
+    </div>
+    
+    <div id="leaderboard-overlay" class="overlay row" >
+      <div class="content shadow row" id = "leaderboard-box">
+        <div id="leaderboard-text">LEADERBOARD</div>
+        <div id="leaderboard-panel" class="row">
+          <!-- <div id="leaderboard-text">LEADERBOARD</div> -->
+          <div id="score-panel" class="col">
+              <div id="score-area" class="col"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -196,7 +262,7 @@
           gameover: new Audio("gameover.mp3"),
         };
 
-        const totalGameTime = 200; // Total game time in seconds
+        const totalGameTime = 5; // Total game time in seconds
         const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
         let gameStartTime = 0; // The timestamp when the game starts
         let collectedGems = 0; // The number of gems collected in the game
@@ -272,6 +338,7 @@
             $("#final-gems").text(collectedGems);
             sounds.background.pause();
             $("#game-over").show();
+            $("#leaderboard-overlay").show();
             sounds.gameover.play();
             return;
           }

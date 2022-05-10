@@ -30,6 +30,7 @@
 }
 * {
     font-family: 'Games', sans-serif;
+    /* font-family: "Press Start 2P", sans-serif; */
     color: var(--font-color);
     box-sizing: border-box;
 }
@@ -43,7 +44,7 @@ body {
     margin: 0;
 }
 .center { text-align: center; }
-.shadow { box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.4); }
+/* .shadow { box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.4); } */
 
 /* Google icon */
 .material-icons {
@@ -72,6 +73,7 @@ body {
     /* background: var(--overlay-background); */
 }
 .overlay .caption {
+    font-family: 'Games', sans-serif;
     font-size: 120%;
     color: var(--overlay-caption-color);
 }
@@ -125,6 +127,7 @@ button {
     transition: 1s background;
     cursor: pointer;
     font-size: 20px;
+    font-family: 'Games', sans-serif;
 }
 button:hover {
     background: var(--button-background-hover);
@@ -156,15 +159,15 @@ button.icon:active {
 .field-content {
     border-radius: 50px;
     padding: 10px 15px;
-    background: var(--field-background);
+    /* background: var(--field-background); */
     transition: 1s background;
 }
 .field-content * {
     color: var(--field-color);
 }
-.field-content:hover {
+/* .field-content:hover {
     background: var(--field-background-hover);
-}
+} */
 .user-name {
     white-space: nowrap;
 }
@@ -282,9 +285,12 @@ button.icon:active {
 #description-box {
     width: 500px;
     height: 300px;
+    /* align-self: stretch; */
 }
 
 .description {
+    font-family: "Press Start 2P", sans-serif;
     color: white;
-    font-size: 24px;
+    font-size: 16px;
 }
+

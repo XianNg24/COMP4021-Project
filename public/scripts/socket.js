@@ -17,7 +17,10 @@ const Socket = (function() {
             socket.emit("get users");
 
             // Get the chatroom messages
-            socket.emit("get messages");
+            // socket.emit("get messages");
+
+            // Get leaderboard score
+            socket.emit("get scores")
         });
 
         // Set up the users event
@@ -25,7 +28,6 @@ const Socket = (function() {
             onlineUsers = JSON.parse(onlineUsers);
 
             // Show the online users
-            OnlineUsersPanel.update(onlineUsers);
             OnlineUsersStatus.update(onlineUsers);
         });
 
@@ -34,40 +36,24 @@ const Socket = (function() {
             user = JSON.parse(user);
 
             // Add the online user
-            OnlineUsersPanel.addUser(user);
             OnlineUsersStatus.addUser(user);
         });
 
-        // Set up the remove user event
-        socket.on("remove user", (user) => {
-            user = JSON.parse(user);
-
-            // Remove the online user
-            OnlineUsersPanel.removeUser(user);
-        });
-
-        // Set up the messages event
-        socket.on("messages", (chatroom) => {
-            chatroom = JSON.parse(chatroom);
+        // Set up the scores event
+        socket.on("scores", (leaderboard) => {
+            leaderboard = JSON.parse(leaderboard);
 
             // Show the chatroom messages
-            ChatPanel.update(chatroom);
+            BoardPanel.update(leaderboard);
         });
 
-        // Set up the add message event
-        socket.on("add message", (message) => {
+
+         // Set up the add message event
+         socket.on("add scores", (message) => {
             message = JSON.parse(message);
 
             // Add the message to the chatroom
-            ChatPanel.addMessage(message);
-        });
-
-        socket.on("add typing", (message) => {
-            message = JSON.parse(message);
-            const user = Authentication.getUser();
-            if(user.username != message.user.username){
-                ChatPanel.addTyping(message.typingMessage);
-            }
+            BoardPanel.addScores(message);
         });
 
         socket.on("initiate player move", (message) => {
@@ -120,6 +106,13 @@ const Socket = (function() {
         }
     };
 
+    // This function sends a post message event to the server
+    const postScores = function(content) {
+        if (socket && socket.connected) {
+            socket.emit("post scores", content);
+        }
+    };
+
     const typeEvent = function(){
         if (socket && socket.connected) {
             socket.emit("typing");
@@ -156,5 +149,6 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, disconnect, postMessage, typeEvent, playerMoveEvent, playerStopEvent, playerAttackStartEvent, playerAttackStopEvent, GameStartEvent};
+    return { getSocket, connect, disconnect, postMessage, typeEvent, playerMoveEvent, playerStopEvent, 
+        playerAttackStartEvent, playerAttackStopEvent, GameStartEvent, postScores};
 })();
