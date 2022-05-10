@@ -133,15 +133,15 @@ const Sprite = function (ctx, x, y) {
   };
 
   // This function gets the bounding box of the sprite.
-  const getBoundingBox = function () {
+  const getBoundingBox = function (padding = 0) {
     /* Get the display size of the sprite */
     const size = getDisplaySize();
 
     /* Find the box coordinates */
-    const top = y - size.height / 2;
-    const left = x - size.width / 2;
-    const bottom = y + size.height / 2;
-    const right = x + size.width / 2;
+    const top = y - size.height / 2 - padding;
+    const left = x - size.width / 2 - padding;
+    const bottom = y + size.height / 2 + padding;
+    const right = x + size.width / 2 + padding;
 
     return BoundingBox(ctx, top, left, bottom, right);
   };

@@ -268,7 +268,7 @@
         gameover: new Audio("gameover.mp3"),
       };
 
-      const totalGameTime = 5; // Total game time in seconds
+      const totalGameTime = 200; // Total game time in seconds
       const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
       let gameStartTime = 0; // The timestamp when the game starts
       let playerScore = 0; // The number of enemies killed
@@ -309,18 +309,38 @@
       function doFrame(now) {
         /* Randomize enemy position */
 
-        // Slime
-        for (let i = 0; i < MAX_SLIME; i++)
-          if (gameStartTime == 0) {
-            slime[i].randomize(gameArea);
+          // Player
+          box = player.getBoundingBox(padding = 15);
+          box2 = player2.getBoundingBox(padding = 15);
+
+          // Slime
+          for (let i = 0; i < MAX_SLIME; i++){
+            if (gameStartTime == 0) {
+              slime[i].randomize(gameArea);
+            }
+            loc = slime[i].getXY();
+            if (box.isPointInBox(loc.x, loc.y)){
+              player.deadAct(now);
+            }
+            if (box2.isPointInBox(loc.x, loc.y)){
+              player2.deadAct(now);
+            }
           }
 
-        // Skeleton
-        for (let i = 0; i < MAX_SKELETON; i++)
-          if (gameStartTime == 0) {
-            skeleton[i].randomize(gameArea, i);
+          // Skeleton
+          for (let i = 0; i < MAX_SKELETON; i++){
+            if (gameStartTime == 0) {
+              skeleton[i].randomize(gameArea);
+            }
+            loc = slime[i].getXY();
+            if (box.isPointInBox(loc.x, loc.y)){
+              player.deadAct(now);
+            }
+            if (box2.isPointInBox(loc.x, loc.y)){
+              player2.deadAct(now);
+            }
           }
-        if (gameStartTime == 0) gameStartTime = now;
+          if (gameStartTime == 0) gameStartTime = now;
 
         // Fireball
         if (player.fireball().fireballAttack) {

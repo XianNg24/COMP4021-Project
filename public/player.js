@@ -73,6 +73,26 @@ const Player = function (ctx, x, y, gameArea, color, name) {
       timing: 100,
       loop: true,
     },
+    deadLeft: {
+      x: 840,
+      y: 392,
+      width: 56,
+      height: 44,
+      flip: 1,
+      count: 4,
+      timing: 100,
+      loop: false,
+    },
+    deadRight: {
+      x: 0,
+      y: 392,
+      width: 56,
+      height: 44,
+      flip: 0,
+      count: 4,
+      timing: 100,
+      loop: false,
+    },
   };
 
   // This is the sprite object of the player created from the Sprite module.
@@ -113,6 +133,24 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   // This depend on sword
   let fireballAttack = false;
 
+  // This determine whether it is alive
+  let alive = true;
+
+  // This give a status to the player that no enemies can hurt
+  let muteki = false;
+
+  // This record the deadtime
+  let deadTimeStamp;
+
+  // This record the muteki time
+  let mutekiTimeStamp;
+
+  // This constant give how long will it last for dead and muteki status
+  const deadTime = 2000;
+  const mutekiTime = 2000;
+
+  // Cheating mode
+  let goldfinger = false;
   // This is the damage of players attack
   let dmg = 1; 
 
@@ -141,7 +179,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   // This function sets the player's moving direction.
   // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
   const move = function (dir) {
-    if (dir >= 1 && dir <= 4 && dir != direction && !isAttack) {
+    if (dir >= 1 && dir <= 4 && dir != direction && !isAttack && alive) {
       // let direct = dir
       // if (direct == 2 || direct == 4) direct = direction
       switch (dir) {
@@ -169,7 +207,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   // This function stops the player from moving.
   // - `dir` - the moving direction when the player is stopped (1: Left, 2: Up, 3: Right, 4: Down)
   const stop = function (dir) {
-    if (direction == dir) {
+    if (direction == dir && alive) {
       if (!isAttack)
         switch (face) {
           case 0:
@@ -198,6 +236,20 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     }
   };
 
+  const dead = function () {
+    switch (face) {
+      case 0:
+        sprite.setSequence(sequences.deadLeft);
+        status = "deadLeft";
+        break;
+      case 1:
+        sprite.setSequence(sequences.deadRight);
+        status = "deadRight";
+        break;
+    }
+    console.log('dead');
+  };
+
   const stopAttack = function () {
     switch (face) {
       case 0:
@@ -217,21 +269,43 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   // This function speeds up the player.
   const speedUp = function () {
     speed = 250;
+    muteki = true;
+    alive = true;
+    goldfinger = true;
   };
 
   // This function slows down the player.
   const slowDown = function () {
     speed = 150;
+    muteki = false;
+    goldfinger = false;
   };
 
   const attackStart = function () {
-    if (isAttack == false) attack();
+    if (isAttack == false && alive) attack();
     isAttack = true;
   };
 
   const attackStop = function () {
     isAttack = false;
+    if (alive) stopAttack(face);
+  };
+
+  const deadAct = function (time) {
+    if (alive && !muteki) {
+      alive = false;
+      deadTimeStamp = time;
+      dead();
+    }
+  };
+
+  const resurrection = function (time) {
+    alive = true;
+    muteki = true;
+    mutekiTimeStamp = time;
     stopAttack(face);
+    direction = face;
+    stop(face);
   };
 
   const communicate = function () {
@@ -254,33 +328,43 @@ const Player = function (ctx, x, y, gameArea, color, name) {
   const update = function (time) {
     /* Update the player if the player is moving */
     let { x, y } = sprite.getXY();
-    if (isAttack) {
-      const index = sprite.getIndex();
-      fireballAttack = index > 3;
-      //   console.log(index);
-      //   fireball.attack(x, y, face ? 'right' : 'left')
-    } else {
-      fireballAttack = false;
-      if (direction != 0) {
+    if (alive) {
+      if (muteki && time - mutekiTimeStamp > mutekiTime && !goldfinger) {
+        muteki = false;
+        console.log('no muteki now')
+      }
+      if (isAttack) {
+        const index = sprite.getIndex();
+        fireballAttack = index > 3;
+      } else {
         fireballAttack = false;
-        /* Move the player */
-        switch (direction) {
-          case 1:
-            x -= speed / 60;
-            break;
-          case 2:
-            y -= speed / 60;
-            break;
-          case 3:
-            x += speed / 60;
-            break;
-          case 4:
-            y += speed / 60;
-            break;
-        }
+        if (direction != 0) {
+          fireballAttack = false;
+          /* Move the player */
+          switch (direction) {
+            case 1:
+              x -= speed / 60;
+              break;
+            case 2:
+              y -= speed / 60;
+              break;
+            case 3:
+              x += speed / 60;
+              break;
+            case 4:
+              y += speed / 60;
+              break;
+          }
 
-        /* Set the new position if it is within the game area */
-        if (gameArea.isPointInBox(x, y)) sprite.setXY(x, y);
+          /* Set the new position if it is within the game area */
+          if (gameArea.isPointInBox(x, y)) sprite.setXY(x, y);
+        }
+      }
+    }
+    else {
+      if (time - deadTimeStamp > deadTime) {
+        resurrection(time);
+        console.log("resurrection")
       }
     }
 
@@ -299,6 +383,8 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     slowDown: slowDown,
     attackStart: attackStart,
     attackStop: attackStop,
+    deadAct: deadAct,
+    resurrection: resurrection,
     fireball: fireball,
     setHp: setHp,
     getHp: getHp,
