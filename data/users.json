@@ -1,38 +1,4 @@
 {
- "tony": {
-  "avatar": "Owl",
-  "name": "Tony Lee",
-  "password": "$2b$10$Yxb2fSgA5RFn9Oz9TxjLLuve/GiPXCs2DWVFhyFDr4qz39qglwp8e"
- },
- "may": {
-  "avatar": "Rabbit",
-  "name": "May Wong",
-  "password": "$2b$10$gLc3Ri9W6P650EKKbexw6uvirV8Bar7gmvAtMcoMiPiR3rsY50GVu"
- },
- "rabbit": {
-  "avatar": "Rabbit Face",
-  "name": "a rabbit",
-  "password": "$2b$10$w8mTmiEgepxxFIa22oElGugKubtSe47CuAzxmdEI3fqdnbvzzZK/q"
- },
- "bird": {
-  "avatar": "Bird",
-  "name": "a bird",
-  "password": "$2b$10$VSEb78EIF6f.4ofj2KghfucLD35kX8xNBYb5dJ3AIYmWf2qh2jXRO"
- },
- "bat_bat": {
-  "avatar": "Bat",
-  "name": "a bat",
-  "password": "$2b$10$fvxVv2LEqYoH2BxW1StmsuvR7hqysJ14Z5VuUmYhb3FDN3p6qIYT."
- },
- "test": {
-  "name": "test",
-  "password": "$2b$10$Bh4fTed21Qb/6Nam0Okxeugsmw/2Na15FCfA338FV2T91.He8ZTtK"
- },
- "test2": {
-  "avatar": "Red",
-  "name": "test2",
-  "password": "$2b$10$TkJ0Css0FkP1dUBiLzx/KuvL37wAWLivsf3nZRkPKfNnaLyJvRKy2"
- },
  "tom": {
   "avatar": "green",
   "name": "tom",

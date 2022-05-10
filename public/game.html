@@ -43,7 +43,7 @@
         width: 100vw;
       }
       canvas {
-        background: url(background.png);
+        background: url(./assets/dungeon.jpg);
         background-size: cover;
       }
       #game-start,
@@ -360,8 +360,7 @@
         gameover: new Audio("gameover.mp3"),
       };
 
-      const totalGameTime = 5; // Total game time in seconds
-      const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
+      const totalGameTime = 5000; // Total game time in seconds
       let gameStartTime = 0; // The timestamp when the game starts
       let playerScore = 0; // The number of enemies killed
       let player2Score = 0;
@@ -373,7 +372,7 @@
       let skeleton = new Array(MAX_SKELETON);
 
       /* Create the game area */
-      gameArea = BoundingBox(context, 165, 60, 420, 800);
+      gameArea = BoundingBox(context, 60, 20, 420, 800);
 
       /* Create the sprites in the game */
       let fireball = Fireball(context, -1, -1, gameArea);        // The gem
