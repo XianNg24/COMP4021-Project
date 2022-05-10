@@ -236,17 +236,37 @@
         function doFrame(now) {
           /* Randomize enemy position */
 
+          // Player
+          box = player.getBoundingBox(padding = 15);
+          box2 = player2.getBoundingBox(padding = 15);
+
           // Slime
-          for (let i = 0; i < MAX_SLIME; i++)
+          for (let i = 0; i < MAX_SLIME; i++){
             if (gameStartTime == 0) {
               slime[i].randomize(gameArea);
             }
+            loc = slime[i].getXY();
+            if (box.isPointInBox(loc.x, loc.y)){
+              player.deadAct(now);
+            }
+            if (box2.isPointInBox(loc.x, loc.y)){
+              player2.deadAct(now);
+            }
+          }
 
           // Skeleton
-          for (let i = 0; i < MAX_SKELETON; i++)
+          for (let i = 0; i < MAX_SKELETON; i++){
             if (gameStartTime == 0) {
               skeleton[i].randomize(gameArea);
             }
+            loc = slime[i].getXY();
+            if (box.isPointInBox(loc.x, loc.y)){
+              player.deadAct(now);
+            }
+            if (box2.isPointInBox(loc.x, loc.y)){
+              player2.deadAct(now);
+            }
+          }
           if (gameStartTime == 0) gameStartTime = now;
 
           // Fireball
@@ -373,6 +393,7 @@
             if(isPlayer1){
                 switch(event.keyCode){
                     case 65: player.attackStart();Socket.playerAttackStartEvent(1);break;
+                    case 87: player.resurrection(); break;
                     case 32: player.speedUp();break;
                     case 37: player.move(1);Socket.playerMoveEvent(1);break;
                     case 38: player.move(2);Socket.playerMoveEvent(2);break;
@@ -383,6 +404,7 @@
             else{
                 switch(event.keyCode){
                     case 65: player2.attackStart();Socket.playerAttackStartEvent(2);break;
+                    case 87: player2.resurrection(); break;
                     case 32: player2.speedUp();break;
                     case 37: player2.move(1);Socket.playerMoveEvent(5);break;
                     case 38: player2.move(2);Socket.playerMoveEvent(6);break;
