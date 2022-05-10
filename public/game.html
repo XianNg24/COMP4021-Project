@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Collect the Gems!</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P"
       rel="stylesheet"
@@ -358,6 +357,7 @@
         background: new Audio("background.mp3"),
         collect: new Audio("collect.mp3"),
         gameover: new Audio("gameover.mp3"),
+        attack: new Audio("/sound/attack.wav"),
       };
 
       const totalGameTime = 5000; // Total game time in seconds
@@ -449,12 +449,18 @@
             slime[i].hit(player.getDmg());
             fireball.hit();
             ++playerScore;
+            sounds.attack.pause();
+            sounds.attack.currentTime = 0;
+            sounds.attack.play();
             console.log("Player 1 score: ", playerScore);
           }
           else if (slime[i].getBoundingBox().intersect(fireball2.getBoundingBox())) {
             slime[i].hit(player2.getDmg());
             fireball2.hit();
             ++player2Score;
+            sounds.attack.pause();
+            sounds.attack.currentTime = 0;
+            sounds.attack.play();
             console.log("Player 2 score: ", player2Score);
           }
           if (slime[i].getHp() <= 0)
@@ -465,12 +471,18 @@
           if (skeleton[i].getBoundingBox().intersect(fireball.getBoundingBox())) {
             skeleton[i].hit(player.getDmg());
             fireball.hit();
+            sounds.attack.pause();
+            sounds.attack.currentTime = 0;
+            sounds.attack.play();
             ++playerScore;
             console.log("Player 1 score: ", playerScore);
           }
           else if (skeleton[i].getBoundingBox().intersect(fireball2.getBoundingBox())) {
             skeleton[i].hit(player2.getDmg());
             fireball2.hit();
+            sounds.attack.pause();
+            sounds.attack.currentTime = 0;
+            sounds.attack.play();
             ++player2Score;
             console.log("Player 2 score: ", player2Score);
           }
