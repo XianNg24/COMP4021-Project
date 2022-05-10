@@ -151,6 +151,25 @@ const Player = function (ctx, x, y, gameArea, color, name) {
 
   // Cheating mode
   let goldfinger = false;
+  // This is the damage of players attack
+  let dmg = 1; 
+
+  // This is the Hp of player
+  let hp = 3;
+
+  const getDmg = function () {
+    return dmg;
+  }
+
+  // This function sets the hp of slime and kills it
+  const setHp = function (dmg) {
+    hp = hp - dmg;
+  }
+
+  // This function gets the hp of slime
+  const getHp = function () {
+    return hp;
+  }
 
   const fireball = function () {
     const dir = face ? "right" : "left";
@@ -367,8 +386,11 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     deadAct: deadAct,
     resurrection: resurrection,
     fireball: fireball,
+    setHp: setHp,
+    getHp: getHp,
     getBoundingBox: sprite.getBoundingBox,
     getXY: sprite.getXY,
+    getDmg: getDmg,
     draw: sprite.draw,
     update: update,
   };
