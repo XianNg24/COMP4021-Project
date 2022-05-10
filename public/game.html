@@ -321,6 +321,10 @@
         );
         $("#time-remaining").text(timeRemaining);
 
+        /* Updates Players Scores */
+        $("#playerScore").text(playerScore);
+        $("#player2Score").text(player2Score);
+
         /* TODO */
         /* Handle the game over situation here */
         if (timeRemaining <= 0) {
@@ -330,10 +334,6 @@
           sounds.gameover.play();
           return;
         }
-
-        /* Updates Players Scores */
-        $("#playerScore").text(playerScore);
-        $("#player2Score").text(player2Score);
 
         /* Update the sprites */
         player.update(now);

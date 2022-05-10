@@ -229,33 +229,22 @@ io.on("connection", (socket) => {
         socket.emit("users", JSON.stringify(onlineUsers));
     });
 
-    socket.on("get messages", () => {
-        const chatroom = JSON.parse(fs.readFileSync("data/chatroom.json"));
-        socket.emit("messages", JSON.stringify(chatroom));
+    socket.on("get scores", () => {
+        const leaderboard = JSON.parse(fs.readFileSync("data/leaderboard.json"));
+        socket.emit("scores", JSON.stringify(leaderboard));
     });
 
-    socket.on("post message", (content) => {
+    socket.on("post scores", (content) => {
         if(socket.request.session.user){
             const message = {
                 user: socket.request.session.user,
                 datetime: new Date(),
                 content: content
             };
-            const chatroom = JSON.parse(fs.readFileSync("data/chatroom.json"));
-            chatroom.push(message);
-            fs.writeFileSync("data/chatroom.json", JSON.stringify(chatroom, null, " "));
-            io.emit("add message", JSON.stringify(message));
-        }
-    });
-
-    socket.on("typing", () => {
-        if(socket.request.session.user){
-            const typingMessage = String(socket.request.session.user.name) + " is typing...";
-            const message = {
-                user: socket.request.session.user,
-                typingMessage: typingMessage
-            };
-            io.emit("add typing", JSON.stringify(message));
+            const leaderboard = JSON.parse(fs.readFileSync("data/leaderboard.json"));
+            leaderboard.push(message);
+            fs.writeFileSync("data/leaderboard.json", JSON.stringify(leaderboard, null, " "));
+            io.emit("add scores", JSON.stringify(message));
         }
     });
 
