@@ -4,9 +4,11 @@
 // - `y` - The initial y position of the skeleton
 // - `color` - The colour of the skeleton
 const Skeleton = function (ctx, x, y) {
+    let hp = 2;
 
     // This is the sprite sequences of the skeleton.
     const sequences = {
+        idle: { x: 0, y: 0, width: 22, height: 32, flip: 0, count: 13, timing: 200, loop: true },
         right_walk: { x: 0, y: 0, width: 22, height: 32, flip: 0, count: 13, timing: 200, loop: true },
         //right_hit:  { x: 0, y:  0, width: 15, height: 14, flip: 0, count: 7, timing: 200, loop: true },
         right_attack:  { x: 0, y:  67, width: 43, height: 36, flip: 0, count: 18, timing: 100, loop: true },
@@ -33,9 +35,19 @@ const Skeleton = function (ctx, x, y) {
         return now - birthTime;
     };
 
+    // This function sets the hp of skeleton according to the players damage
+    const hit = function (dmg) {
+        hp = hp - dmg;
+    }
+
+    // This function gets the hp of skeleton
+    const getHp = function () {
+        return hp;
+    }
+
     // This function randomizes the skeleton position.
     // - `area` - The area that the skeleton should be located in.
-    const randomize = function (area) {
+    const randomize = function (area, index) {
         /* Randomize the position */
         while (true) {
             const { x, y } = area.randomPoint();
@@ -44,14 +56,30 @@ const Skeleton = function (ctx, x, y) {
                 break;
             }
         }
+        hp = 2;
+        communicate(index);
     };
+
+    const communicate = function (index) {
+        const loc = sprite.getXY();
+        const jsonData = JSON.stringify({
+          skeleton: index,
+          x: loc.x,
+          y: loc.y,
+        });
+        fetch("/skeleton", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: jsonData,
+        });
+      };
 
     // This function moves the skeleton to the coordinate. 
     // coord is the player coordinate
     const move = function (playerXY, playerBoundingBox) {
         const skeletonBoundingBox = sprite.getBoundingBox();
         const curr_seq = sprite.getSequence();
-        const speed = 0.5;
+        const speed = 0.2;
 
         if (!skeletonBoundingBox.intersect(playerBoundingBox)) {
             let skeletonXY = sprite.getXY();
@@ -87,6 +115,8 @@ const Skeleton = function (ctx, x, y) {
     return {
         getXY: sprite.getXY,
         setXY: sprite.setXY,
+        hit: hit,
+        getHp: getHp,
         getAge: getAge,
         getBoundingBox: sprite.getBoundingBox,
         randomize: randomize,

@@ -48,6 +48,20 @@ app.post("/player", (req, res) => {
     res.json({status: "success"});
 });
 
+// Handle the /skeleton endpoint
+app.post("/skeleton", (req, res) => {
+    const { skeleton, x, y } = req.body;
+
+    const jsonData = fs.readFileSync("data/skeleton.json");
+    const skeletons = JSON.parse(jsonData);
+
+    skeletons[skeleton] = {skeleton, x, y};
+
+    fs.writeFileSync("data/skeleton.json", JSON.stringify(skeletons, null, " "));
+
+    res.json({status: "success"});
+});
+
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body

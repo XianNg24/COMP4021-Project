@@ -46,6 +46,9 @@ const Sprite = function (ctx, x, y) {
   // This give a player name
   let player = { name: "player", x: 0.2, y: 0 };
 
+  // This is to check if animation is done
+  let animationDone = false;
+
   // This function uses a new sprite sheet in the image object.
   // - `spriteSheet` - The source of the sprite sheet (URL)
   const useSheet = function (spriteSheet) {
@@ -70,6 +73,15 @@ const Sprite = function (ctx, x, y) {
     [x, y] = [xvalue, yvalue];
     return this;
   };
+
+  // Getter and setter function for animationDone
+  const getAnimationDone = function () {
+    return animationDone;
+  };
+
+  const setAnimationDone = function (state) {
+    animationDone = state;
+  }
 
   // This function sets the sprite sequence.
   // - `newSequence` - The new sprite sequence to be used by the sprite
@@ -248,10 +260,14 @@ const Sprite = function (ctx, x, y) {
     const size = getDisplaySize();
 
     if (time - lastUpdate >= sequence.timing) {
+      animationDone = false;
       lastUpdate = time;
       index++;
-      if (index >= sequence.count)
-        index = sequence.loop ? 0 : sequence.count - 1;
+      if (index >= sequence.count) {
+        index = 0;
+        if(!sequence.loop)
+          animationDone = true;
+      }
     }
 
     return this;
@@ -272,6 +288,8 @@ const Sprite = function (ctx, x, y) {
     setName: setName,
     getDisplaySize: getDisplaySize,
     getBoundingBox: getBoundingBox,
+    getAnimationDone: getAnimationDone,
+    setAnimationDone: setAnimationDone,
     getSequence: getSequence,
     getIndex: getIndex,
     isReady: isReady,
