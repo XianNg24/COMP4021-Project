@@ -1,187 +1,236 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>Collect the Gems!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet" />
-  <style>
-    body {
-      font-family: "Press Start 2P", sans-serif;
-      min-height: 100%;
-    }
-
-    #game-container {
-      position: relative;
-    }
-
-    canvas,
-    #game-start,
-    #game-over {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-    }
-
-    canvas,
-    #game-start,
-    #game-over {
-      border: 1px solid gray;
-      /* width: 854px;
+  <head>
+    <title>Collect the Gems!</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Press Start 2P", sans-serif;
+        min-height: 100%;
+      }
+      #game-container {
+        position: relative;
+      }
+      canvas,
+      #game-start,
+      #game-over {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+      canvas,
+      #game-start,
+      #game-over {
+        border: 1px solid gray;
+        /* width: 854px;
         height: 480px; */
-      height: 100vh;
-      width: 100vw;
-      /* height: absolute; */
-      /* width: absolute; */
-    }
-
-    canvas {
-      background: url(background.png);
-      background-size: cover;
-    }
-
-    #game-start,
-    #game-over {
-      background: rgba(1, 1, 1, 0.8);
-    }
-
-    #counter text {
-      font-size: 130%;
-      fill: white;
-      stroke: black;
-      stroke-width: 1px;
-    }
-
-    #counter {
-      position: relative;
-    }
-
-    #game-start text {
-      font-size: 150%;
-      fill: white;
-      text-anchor: middle;
-    }
-
-    #game-start #game-title {
-      font-size: 400%;
-      fill: url(#title-fill);
-      stroke: black;
-      visibility: hidden;
-      text-transform: uppercase;
-      animation: stroke 5s infinite alternate;
-      stroke-width: 2;
-      stroke: #365fa0;
-      /* font-size: 140px; */
-    }
-
-    #game-over text {
-      font-size: 120%;
-      fill: url(#game-over-fill);
-      text-anchor: middle;
-    }
-
-    .player-status {
-      visibility: hidden;
-      stroke-width: 1.5;
-      stroke: rgb(123, 139, 165);
-      animation: stroke2 2s infinite alternate;
-    }
-
-    svg {
-      font-family: 'Russo One', sans-serif;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* svg text {
+        height: 100vh;
+        width: 100vw;
+        /* height: absolute; */
+        /* width: absolute; */
+      }
+      canvas {
+        background: url(background.png);
+        background-size: cover;
+      }
+      #game-start,
+      #game-over {
+        background: rgba(1, 1, 1, 0.8);
+      }
+      #counter {
+        position: relative;
+      }
+      #counter text {
+        font-size: 130%;
+        fill: white;
+        stroke: black;
+        stroke-width: 1px;
+      }
+      #game-start text {
+        font-size: 150%;
+        fill: white;
+        text-anchor: middle;
+      }
+      #game-start #game-title {
+        font-size: 400%;
+        fill: url(#title-fill);
+        stroke: black;
+        visibility: hidden;
         text-transform: uppercase;
         animation: stroke 5s infinite alternate;
         stroke-width: 2;
         stroke: #365fa0;
-        font-size: 140px;
+        /* font-size: 140px; */
+    }
+    #game-over text {
+        font-size: 120%;
+        fill: url(#game-over-fill);
+        text-anchor: middle;
+    }
+    .player-status{
+        visibility: hidden;
+        stroke-width: 1.5;
+        stroke: rgb(123, 139, 165);
+        animation: stroke2 2s infinite alternate;
+    }
+    #leaderboard-overlay{
+      display: none;
+      width: 600px;
+      top: 20%;
+      left: 30%;
+      right: 30%;
+    }
+    /* #leaderboard-box{
+        width: 600px;
+        height: 800px;
     } */
-
+    #score-panel {
+        flex-grow: 1;
+        /* align-items: stretch; */
+        height: 100%;
+        background: var(--chat-panel-background);
+        padding: 0;
+    }
+    #score-area {
+        height: 100%;
+        /* align-items: flex-start; */
+        justify-content: start;
+        gap: 20px;
+        overflow-y: auto;
+        padding: 10px;
+    }
+    .score-message-panel {
+        /* align-items: flex-start; */
+        padding: 0;
+    }
+    .score-message {
+        align-items: start;
+        gap: 5px;
+        padding: 0;
+        font-family: "Press Start 2P", sans-serif;
+    }
+    .score-date {
+        font-size: 75%;
+        color: var(--date-color);
+        font-family: "Press Start 2P", sans-serif;
+    }
+    .score-content {
+        color: white;
+        font-size: large;
+        font-family: "Press Start 2P", sans-serif;
+    }
+    .user-name {
+        color: rgb(156, 150, 150);
+        font-size: medium;
+        font-family: "Press Start 2P", sans-serif;
+    }
+    #leaderboard-text {
+      text-align: center;
+      color: white;
+      font-size: 36px;
+      font-family: "Press Start 2P", sans-serif;
+    }
+    svg {
+        font-family: 'Russo One', sans-serif;
+        position: absolute; 
+        width: 100%; height: 100%;
+        font-family: 'Games', sans-serif;
+    }
+    svg text {
+        font-family: 'Games', sans-serif;
+    }
+    
     @keyframes stroke {
-      0% {
-        fill: rgba(72, 138, 20, 0);
-        stroke: rgb(229, 232, 237);
-        stroke-dashoffset: 25%;
-        stroke-dasharray: 50% 50%;
-        stroke-width: 2;
-      }
-
-      100% {
-        fill: rgba(72, 138, 204, 1);
-        stroke: rgba(54, 95, 160, 0);
-        stroke-dashoffset: -25%;
-        stroke-dasharray: 50% 0;
-        stroke-width: 0;
-      }
+        0%   {
+            fill: rgba(72,138,20,0); stroke: rgb(229, 232, 237);
+            stroke-dashoffset: 25%; stroke-dasharray: 50% 50%; stroke-width: 2;
+        }
+        100% {
+          fill: rgba(72, 138, 204, 1);
+          stroke: rgba(54, 95, 160, 0);
+          stroke-dashoffset: -25%;
+          stroke-dasharray: 50% 0;
+          stroke-width: 0;
+        }
     }
-
+    
     @keyframes stroke2 {
-      0% {
-        fill: rgba(72, 138, 20, 0);
-        stroke: rgb(26, 57, 107);
-        stroke-dashoffset: 25%;
-        stroke-dasharray: 100% 100%;
-        stroke-width: 2;
-      }
-
-      100% {
-        fill: rgba(72, 138, 204, 1);
-        stroke: rgba(54, 95, 160, 0);
-        stroke-dashoffset: -25%;
-        stroke-dasharray: 100% 100%;
-        stroke-width: 0;
-      }
+        0%   {
+            fill: rgba(72,138,20,0); stroke: rgb(26, 57, 107);
+            stroke-dashoffset: 25%; stroke-dasharray: 100% 100%; stroke-width: 2;
+        }
+        100% {
+            fill: rgba(72,138,204,1); stroke: rgba(54,95,160,0); 
+            stroke-dashoffset: -25%; stroke-dasharray: 100% 100%; stroke-width: 0;
+        }
     }
-  </style>
-</head>
 
-<body>
-  <div id="game-container">
-    <canvas width="854px" height="480px"></canvas>
+    </style>
+  </head>
+  <body>
+    <div id="game-container">
+      <canvas width="854px" height="480px"></canvas>
 
-    <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-      <text x="10" y="35">
-        Player: <tspan id="playerScore"> 0</tspan>
-      </text>
-      <text x="300" y="35">
-        Player:<tspan id="player2Score"> 0</tspan>
-      </text>
-    </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+        <text x="10" y="35">
+          Player:
+          <tspan id="playerScore">0</tspan>
+        </text>
+        <text x="300" y="35">
+          Player:
+          <tspan id="player2Score">0</tspan>
+        </text>
+      </svg>
 
-    <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
-      <defs>
-        <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0.2" stop-color="red" />
-          <stop offset="0.4" stop-color="yellow" />
-          <stop offset="0.6" stop-color="green" />
-          <stop offset="0.8" stop-color="purple" />
-        </linearGradient>
-      </defs>
-      <text id="game-title" x="50%" y="45%">Waiting for Player 2...</text>
-      <text class="player-status" x="38%" y="60%">Player 1 : ??? </text>
-      <text class="player-status" x="60%" y="60%">Player 2 : ??? </text>
-      <text class="player-status" x="50%" y="70%">Click Here To Start The Game </text>
-    </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
+            <defs>
+                <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0.2" stop-color="red" />
+                    <stop offset="0.4" stop-color="yellow" />
+                    <stop offset="0.6" stop-color="green" />
+                    <stop offset="0.8" stop-color="purple" />
+                </linearGradient>
+            </defs>
+            <text id="game-title" x="50%" y="45%">Waiting for Player 2...</text>
+            <text class="player-status" x="38%" y="60%" >Player 1 : ??? </text>
+            <text class="player-status" x="60%" y="60%" >Player 2 : ??? </text>
+            <text class="player-status" x="50%" y="70%" >Click Here To Start The Game </text>
+        </svg>
 
-    <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
-      <defs>
-        <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="red" />
-          <stop offset="0.5" stop-color="yellow" />
-          <stop offset="1" stop-color="red" />
-        </linearGradient>
-      </defs>
-      <text x="50%" y="50%">
-        Time's up! You have collected
-        <tspan id="final-gems">0</tspan>
-        gem(s).
-      </text>
-    </svg>
-  </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        id="game-over"
+        style="display: none"
+      >
+        <defs>
+          <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="red" />
+            <stop offset="0.5" stop-color="yellow" />
+            <stop offset="1" stop-color="red" />
+          </linearGradient>
+        </defs>
+        <!-- <text x="50%" y="50%">
+          Time's up! You have collected
+          <tspan id="final-gems">0</tspan>
+          gem(s).
+        </text> -->
+      </svg>
+    </div>
+    
+    <div id="leaderboard-overlay" class="overlay row" >
+      <div class="content shadow row" id = "leaderboard-box">
+        <div id="leaderboard-text">LEADERBOARD</div>
+        <div id="leaderboard-panel" class="row">
+          <!-- <div id="leaderboard-text">LEADERBOARD</div> -->
+          <div id="score-panel" class="col">
+              <div id="score-area" class="col"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="bounding_box.js"></script>
@@ -219,7 +268,7 @@
         gameover: new Audio("gameover.mp3"),
       };
 
-      const totalGameTime = 200; // Total game time in seconds
+      const totalGameTime = 5; // Total game time in seconds
       const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
       let gameStartTime = 0; // The timestamp when the game starts
       let playerScore = 0; // The number of enemies killed
@@ -328,9 +377,10 @@
         /* TODO */
         /* Handle the game over situation here */
         if (timeRemaining <= 0) {
-          $("#final-gems").text(collectedGems);
+          $("#final-gems").text(playerScore);
           sounds.background.pause();
           $("#game-over").show();
+          $("#leaderboard-overlay").show();
           sounds.gameover.play();
           return;
         }
