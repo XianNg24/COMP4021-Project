@@ -268,7 +268,7 @@
         gameover: new Audio("gameover.mp3"),
       };
 
-      const totalGameTime = 5; // Total game time in seconds
+      const totalGameTime = 200; // Total game time in seconds
       const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
       let gameStartTime = 0; // The timestamp when the game starts
       let playerScore = 0; // The number of enemies killed
@@ -312,7 +312,7 @@
         // Slime
         for (let i = 0; i < MAX_SLIME; i++)
           if (gameStartTime == 0) {
-            slime[i].randomize(gameArea);
+            slime[i].randomize(gameArea, i);
           }
 
         // Skeleton
@@ -345,7 +345,7 @@
             ++player2Score;
           }
           if (slime[i].getHp() <= 0)
-            slime[i].randomize(gameArea);
+            slime[i].randomize(gameArea, i);
         }
 
         for (let i = 0; i < MAX_SKELETON; i++) {
@@ -377,7 +377,6 @@
         /* TODO */
         /* Handle the game over situation here */
         if (timeRemaining <= 0) {
-          $("#final-gems").text(playerScore);
           sounds.background.pause();
           $("#game-over").show();
           $("#leaderboard-overlay").show();

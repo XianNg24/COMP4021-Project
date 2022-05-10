@@ -42,7 +42,7 @@ const Slime = function (ctx, x, y) {
 
     // This function randomizes the slime position.
     // - `area` - The area that the slime should be located in.
-    const randomize = function (area) {
+    const randomize = function (area, index) {
         /* Randomize the position */
         while (true) {
             const { x, y } = area.randomPoint();
@@ -52,7 +52,22 @@ const Slime = function (ctx, x, y) {
             }
         }
         hp = 1;
+        communicate(index);
     };
+
+    const communicate = function (index) {
+        const loc = sprite.getXY();
+        const jsonData = JSON.stringify({
+          slime: index,
+          x: loc.x,
+          y: loc.y,
+        });
+        fetch("/slime", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: jsonData,
+        });
+      };
 
     // This function moves the slime to the coordinate. 
     // coord is the player coordinate

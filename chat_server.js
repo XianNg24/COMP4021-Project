@@ -62,6 +62,20 @@ app.post("/skeleton", (req, res) => {
     res.json({status: "success"});
 });
 
+// Handle the /slime endpoint
+app.post("/slime", (req, res) => {
+    const { slime, x, y } = req.body;
+
+    const jsonData = fs.readFileSync("data/slime.json");
+    const slimes = JSON.parse(jsonData);
+
+    slimes[slime] = {slime, x, y};
+
+    fs.writeFileSync("data/slime.json", JSON.stringify(slimes, null, " "));
+
+    res.json({status: "success"});
+});
+
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
