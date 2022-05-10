@@ -246,8 +246,9 @@
     var player2;
     var context;
     var gameArea;
-    var gameStartStatus = false;
     var gameStart;
+    let isPlayer1 = false
+    let isPlayer2 = false
 
     function distance(coord1, coord2) {
       let a = coord1.x - coord2.x;
@@ -379,6 +380,9 @@
         if (timeRemaining <= 0) {
           $("#final-gems").text(playerScore);
           sounds.background.pause();
+          if(isPlayer1){
+            Socket.updatePlayerScore();
+          }
           $("#game-over").show();
           $("#leaderboard-overlay").show();
           sounds.gameover.play();
@@ -462,8 +466,6 @@
         sounds.background.play();
         // fireball.randomize(gameArea);
 
-        let isPlayer1 = false
-        let isPlayer2 = false
         const playerStatus = document.getElementsByClassName("player-status");
         const currentUser = Authentication.getUser();
         if (currentUser.username == playerStatus[0].id) {

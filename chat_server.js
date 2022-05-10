@@ -244,7 +244,7 @@ io.on("connection", (socket) => {
             const leaderboard = JSON.parse(fs.readFileSync("data/leaderboard.json"));
             leaderboard.push(message);
             fs.writeFileSync("data/leaderboard.json", JSON.stringify(leaderboard, null, " "));
-            io.emit("add scores", JSON.stringify(message));
+            io.emit("scores", JSON.stringify(leaderboard));
         }
     });
 
@@ -291,6 +291,17 @@ io.on("connection", (socket) => {
     socket.on("game start", () => {
         if(socket.request.session.user){
             io.emit("check game start", JSON.stringify(onlineUsers));
+        }
+    });
+
+    socket.on("update player score", () => {
+        type = 0;
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("update leaderboard", JSON.stringify(message));
         }
     });
 });

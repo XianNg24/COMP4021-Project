@@ -441,33 +441,36 @@ const BoardPanel = (function() {
     // This function initializes the UI
     const initialize = function() {};
 
-    // This function updates the chatroom area
-    const update = function(chatroom) {
+    const update = function(leaderboard) {
         // Clear the online users area
         chatArea = $("#score-area");
         chatArea.empty();
 
         // Add the chat message one-by-one
-        for (const message of chatroom) {
+        for (const message of leaderboard) {
 			addScores(message);
         }
 
-        // Submit event for the input form
-        // $("#chat-input-form").on("submit", (e) => {
-        //     // Do not submit the form
-        //     e.preventDefault();
-
-        //     // Get the message content
-        //     const content = $("#chat-input").val().trim();
-
-        //     // Post it
-        //     Socket.postScores(content);
-
-		// 	// Clear the message
-        //     $("#chat-input").val("");
-        // });
-
     };
+
+    const updateBoard = function(type, onlineUsers){
+
+        const currentUser = Authentication.getUser();
+        const playerStatus = document.getElementsByClassName("player-status");
+
+        for (const username in onlineUsers) {
+            if (username == currentUser.username) {
+                if (currentUser.username == playerStatus[0].id){
+                    score = document.getElementById("playerScore").innerHTML;
+                    Socket.postScores(score);
+                }
+                else{
+                    score = document.getElementById("player2Score").innerHTML;
+                    Socket.postScores(score)
+                }
+            }
+        }
+    }
 
     // This function adds a new message at the end of the chatroom
     const addScores = function(message) {
@@ -486,5 +489,5 @@ const BoardPanel = (function() {
 		chatArea.scrollTop(chatArea[0].scrollHeight);
     };
 
-    return { initialize, update, addScores };
+    return { initialize, update, addScores, updateBoard};
 })();
