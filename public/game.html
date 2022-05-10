@@ -79,7 +79,7 @@
     #leaderboard-overlay{
       display: none;
       width: 600px;
-      top: 20%;
+      top: 10%;
       left: 30%;
       right: 30%;
     }
@@ -132,6 +132,13 @@
       color: white;
       font-size: 36px;
       font-family: "Press Start 2P", sans-serif;
+    }
+    #score-text {
+      text-align: center;
+      color: white;
+      font-size: 32px;
+      font-family: "Press Start 2P", sans-serif;
+      padding: 10px
     }
     svg {
         font-family: 'Russo One', sans-serif;
@@ -195,8 +202,8 @@
                 </linearGradient>
             </defs>
             <text id="game-title" x="50%" y="45%">Waiting for Player 2...</text>
-            <text class="player-status" x="38%" y="60%" >Player 1 : ??? </text>
-            <text class="player-status" x="60%" y="60%" >Player 2 : ??? </text>
+            <text class="player-status" x="50%" y="55%" >Player 1 : ??? </text>
+            <text class="player-status" x="50%" y="60%" >Player 2 : ??? </text>
             <text class="player-status" x="50%" y="70%" >Click Here To Start The Game </text>
         </svg>
 
@@ -221,6 +228,7 @@
     </div>
     
     <div id="leaderboard-overlay" class="overlay row" >
+      <div id="score-text"></div>
       <div class="content shadow row" id = "leaderboard-box">
         <div id="leaderboard-text">LEADERBOARD</div>
         <div id="leaderboard-panel" class="row">
@@ -269,7 +277,7 @@
         gameover: new Audio("gameover.mp3"),
       };
 
-      const totalGameTime = 5; // Total game time in seconds
+      const totalGameTime = 30; // Total game time in seconds
       const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
       let gameStartTime = 0; // The timestamp when the game starts
       let playerScore = 0; // The number of enemies killed
@@ -285,8 +293,8 @@
       gameArea = BoundingBox(context, 165, 60, 420, 800);
 
       /* Create the sprites in the game */
-      const fireball = Fireball(context, 427, 350, gameArea);        // The gem
-      const fireball2 = Fireball(context, 427, 350, gameArea);        // The gem
+      const fireball = Fireball(context, -1, -1, gameArea);        // The gem
+      const fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
       player = Player(context, 427, 240, gameArea, 'green', "Player1"); // The player
       player2 = Player(context, 500, 240, gameArea, 'purple', "Player2"); // The player
       const fires = [
@@ -310,18 +318,38 @@
       function doFrame(now) {
         /* Randomize enemy position */
 
-        // Slime
-        for (let i = 0; i < MAX_SLIME; i++)
-          if (gameStartTime == 0) {
-            slime[i].randomize(gameArea);
+          // Player
+          box = player.getBoundingBox(padding = 15);
+          box2 = player2.getBoundingBox(padding = 15);
+
+          // Slime
+          for (let i = 0; i < MAX_SLIME; i++){
+            if (gameStartTime == 0) {
+              slime[i].randomize(gameArea);
+            }
+            loc = slime[i].getXY();
+            if (box.isPointInBox(loc.x, loc.y)){
+              player.deadAct(now);
+            }
+            if (box2.isPointInBox(loc.x, loc.y)){
+              player2.deadAct(now);
+            }
           }
 
-        // Skeleton
-        for (let i = 0; i < MAX_SKELETON; i++)
-          if (gameStartTime == 0) {
-            skeleton[i].randomize(gameArea, i);
+          // Skeleton
+          for (let i = 0; i < MAX_SKELETON; i++){
+            if (gameStartTime == 0) {
+              skeleton[i].randomize(gameArea);
+            }
+            loc = slime[i].getXY();
+            if (box.isPointInBox(loc.x, loc.y)){
+              player.deadAct(now);
+            }
+            if (box2.isPointInBox(loc.x, loc.y)){
+              player2.deadAct(now);
+            }
           }
-        if (gameStartTime == 0) gameStartTime = now;
+          if (gameStartTime == 0) gameStartTime = now;
 
         // Fireball
         if (player.fireball().fireballAttack) {
@@ -339,11 +367,13 @@
             slime[i].hit(player.getDmg());
             fireball.hit();
             ++playerScore;
+            console.log("Player 1 score: ", playerScore);
           }
           else if (slime[i].getBoundingBox().intersect(fireball2.getBoundingBox())) {
             slime[i].hit(player2.getDmg());
             fireball2.hit();
             ++player2Score;
+            console.log("Player 2 score: ", player2Score);
           }
           if (slime[i].getHp() <= 0)
             slime[i].randomize(gameArea);
@@ -354,11 +384,13 @@
             skeleton[i].hit(player.getDmg());
             fireball.hit();
             ++playerScore;
+            console.log("Player 1 score: ", playerScore);
           }
           else if (skeleton[i].getBoundingBox().intersect(fireball2.getBoundingBox())) {
             skeleton[i].hit(player2.getDmg());
             fireball2.hit();
             ++player2Score;
+            console.log("Player 2 score: ", player2Score);
           }
           if (skeleton[i].getHp() <= 0)
             skeleton[i].randomize(gameArea, i);
@@ -378,10 +410,14 @@
         /* TODO */
         /* Handle the game over situation here */
         if (timeRemaining <= 0) {
-          $("#final-gems").text(playerScore);
+          // $("#final-gems").text(playerScore);
           sounds.background.pause();
           if(isPlayer1){
             Socket.updatePlayerScore();
+            document.getElementById("score-text").innerHTML = "Your Score: " + playerScore;
+          }
+          else if(isPlayer2){
+            document.getElementById("score-text").innerHTML = "Your Score: " + player2Score;
           }
           $("#game-over").show();
           $("#leaderboard-overlay").show();
@@ -478,13 +514,26 @@
         sounds.background.play();
         //   fireball.randomize(gameArea);
 
+        // Handle keypress
+        $(document).on("keypress", function (event) {
+          if (isPlayer1) {
+            switch (event.keyCode) {
+              case 32: player.speedUp(); Socket.playerCheatMode(1); break;
+            }
+          }
+          else {
+            switch (event.keyCode) {
+              case 32: player2.speedUp(); Socket.playerCheatMode(2); break;
+            }
+          }
+        });
+
         /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function (event) {
           /* Handle the key down */
           if (isPlayer1) {
             switch (event.keyCode) {
               case 65: player.attackStart(); Socket.playerAttackStartEvent(1); break;
-              case 32: player.speedUp(); break;
               case 37: player.move(1); Socket.playerMoveEvent(1); break;
               case 38: player.move(2); Socket.playerMoveEvent(2); break;
               case 39: player.move(3); Socket.playerMoveEvent(3); break;
@@ -494,14 +543,12 @@
           else {
             switch (event.keyCode) {
               case 65: player2.attackStart(); Socket.playerAttackStartEvent(2); break;
-              case 32: player2.speedUp(); break;
               case 37: player2.move(1); Socket.playerMoveEvent(5); break;
               case 38: player2.move(2); Socket.playerMoveEvent(6); break;
               case 39: player2.move(3); Socket.playerMoveEvent(7); break;
               case 40: player2.move(4); Socket.playerMoveEvent(8); break;
             }
           }
-
         });
 
 
@@ -511,7 +558,6 @@
           if (isPlayer1) {
             switch (event.keyCode) {
               case 65: player.attackStop(); Socket.playerAttackStopEvent(1); break;
-              case 32: player.slowDown(); break;
               case 37: player.stop(1); Socket.playerStopEvent(1); break;
               case 38: player.stop(2); Socket.playerStopEvent(2); break;
               case 39: player.stop(3); Socket.playerStopEvent(3); break;
@@ -521,7 +567,6 @@
           else {
             switch (event.keyCode) {
               case 65: player2.attackStop(); Socket.playerAttackStopEvent(2); break;
-              case 32: player2.slowDown(); break;
               case 37: player2.stop(1); Socket.playerStopEvent(5); break;
               case 38: player2.stop(2); Socket.playerStopEvent(6); break;
               case 39: player2.stop(3); Socket.playerStopEvent(7); break;

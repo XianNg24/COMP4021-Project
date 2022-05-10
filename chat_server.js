@@ -304,6 +304,16 @@ io.on("connection", (socket) => {
             io.emit("update leaderboard", JSON.stringify(message));
         }
     });
+
+    socket.on("cheat mode", (type) => {
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("activate cheat mode", JSON.stringify(message));
+        }
+    });
 });
 
 

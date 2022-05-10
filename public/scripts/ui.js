@@ -431,24 +431,45 @@ const GamePanel = (function() {
         }
     };
 
-    return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, initiatePlayerAttackStop, checkGameStart};
+    const activateCheatMode = function(type, onlineUsers) {
+
+        const currentUser = Authentication.getUser();
+
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                if(type == 1){
+                    player.speedUp();
+                }
+                else if(type == 2){
+                    player2.speedUp();
+                }
+            }
+        }
+    };
+
+    return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, initiatePlayerAttackStop, checkGameStart, activateCheatMode};
 })();
 
 const BoardPanel = (function() {
 	// This stores the chat area
-    let chatArea = null;
+    let scoreArea = null;
 
     // This function initializes the UI
     const initialize = function() {};
 
     const update = function(leaderboard) {
         // Clear the online users area
-        chatArea = $("#score-area");
-        chatArea.empty();
+        scoreArea = $("#score-area");
+        scoreArea.empty();
+
+        leaderboard.sort((a,b) => parseFloat(b.content) - parseFloat(a.content))
 
         // Add the chat message one-by-one
+        count = 0;
         for (const message of leaderboard) {
+            if(count == 5) break;
 			addScores(message);
+            count++;
         }
 
     };
@@ -478,7 +499,7 @@ const BoardPanel = (function() {
 		const datetimeString = datetime.toLocaleDateString() + " " +
 							   datetime.toLocaleTimeString();
 
-		chatArea.append(
+		scoreArea.append(
 			$("<div class='score-message-panel row'></div>")
 				.append(UI.getUserDisplay(message.user))
 				.append($("<div class='score-message col'></div>")
@@ -486,7 +507,7 @@ const BoardPanel = (function() {
 					.append($("<div class='score-content'>" + message.content + "</div>"))
 				)
 		);
-		chatArea.scrollTop(chatArea[0].scrollHeight);
+		scoreArea.scrollTop(scoreArea[0].scrollHeight);
     };
 
     return { initialize, update, addScores, updateBoard};

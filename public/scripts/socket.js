@@ -98,6 +98,13 @@ const Socket = (function() {
             BoardPanel.updateBoard(message.type, message.onlineUsers);
         });
 
+        socket.on("activate cheat mode", (message) => {
+
+            message = JSON.parse(message);
+            // Add the message to the chatroom
+            GamePanel.activateCheatMode(message.type, message.onlineUsers);
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -155,6 +162,12 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, disconnect, postMessage, playerMoveEvent, playerStopEvent, 
+    const playerCheatMode = function(type){
+        if (socket && socket.connected) {
+            socket.emit("cheat mode", type);
+        }
+    }
+
+    return { getSocket, connect, disconnect, postMessage, playerMoveEvent, playerStopEvent, playerCheatMode,
         playerAttackStartEvent, playerAttackStopEvent, GameStartEvent, postScores, updatePlayerScore};
 })();
