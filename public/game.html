@@ -309,18 +309,45 @@
       function doFrame(now) {
         /* Randomize enemy position */
 
+<<<<<<< HEAD
         // Slime
         for (let i = 0; i < MAX_SLIME; i++)
           if (gameStartTime == 0) {
             slime[i].randomize(gameArea, i);
+=======
+          // Player
+          box = player.getBoundingBox(padding = 15);
+          box2 = player2.getBoundingBox(padding = 15);
+
+          // Slime
+          for (let i = 0; i < MAX_SLIME; i++){
+            if (gameStartTime == 0) {
+              slime[i].randomize(gameArea);
+            }
+            loc = slime[i].getXY();
+            if (box.isPointInBox(loc.x, loc.y)){
+              player.deadAct(now);
+            }
+            if (box2.isPointInBox(loc.x, loc.y)){
+              player2.deadAct(now);
+            }
+>>>>>>> 641384667bebd23a2ac5a3125bcdbb52909f8036
           }
 
-        // Skeleton
-        for (let i = 0; i < MAX_SKELETON; i++)
-          if (gameStartTime == 0) {
-            skeleton[i].randomize(gameArea, i);
+          // Skeleton
+          for (let i = 0; i < MAX_SKELETON; i++){
+            if (gameStartTime == 0) {
+              skeleton[i].randomize(gameArea);
+            }
+            loc = slime[i].getXY();
+            if (box.isPointInBox(loc.x, loc.y)){
+              player.deadAct(now);
+            }
+            if (box2.isPointInBox(loc.x, loc.y)){
+              player2.deadAct(now);
+            }
           }
-        if (gameStartTime == 0) gameStartTime = now;
+          if (gameStartTime == 0) gameStartTime = now;
 
         // Fireball
         if (player.fireball().fireballAttack) {
