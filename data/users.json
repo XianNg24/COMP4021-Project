@@ -8,5 +8,15 @@
   "avatar": "blue",
   "name": "jerry",
   "password": "$2b$10$O//nf2TtVjLMXRDhbp79sepoJrMsJBaXBQg87opaLo1f7lLrC.nKi"
+ },
+ "test_user": {
+  "avatar": "purple",
+  "name": "test",
+  "password": "$2b$10$bOEQlksKdaLviOH7VaRnQOK1zsjfveHb64W2HUG7yPGVNbyPfIzkG"
+ },
+ "test2_user": {
+  "avatar": "red",
+  "name": "test2",
+  "password": "$2b$10$J2KS1jk6KygLSjuLku6ss.lIeHMe6bKJ9GHcjJx/prXIif6Ugv8Ye"
  }
 }

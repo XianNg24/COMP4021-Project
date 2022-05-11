@@ -284,7 +284,7 @@ button.icon:active {
 
 #description-box {
     width: 500px;
-    height: 400px;
+    height: 300px;
     align-items: flex-start;
     /* align-self: stretch; */
 }
