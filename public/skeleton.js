@@ -28,7 +28,7 @@ const Skeleton = function (ctx, x, y) {
         left_walk: { x: 0, y: 34, width: 22, height: 32, flip: 0, count: 13, timing: 200, loop: true },
         //left_hit:  { x: 0, y:  0, width: 15, height: 14, flip: 0, count: 7, timing: 200, loop: true },
         left_attack: { x: 0, y: 104, width: 43, height: 36, flip: 0, count: 18, timing: 100, loop: true },
-        dead: { x: 656, y: 0, width: 17, height: 32, flip: 0, count: 7, timing: 200, loop: false },
+        dead: { x: 656, y: 0, width: 17, height: 32, flip: 0, count: 7, timing: 20, loop: false },
     };
 
     // This is the sprite object of the skeleton created from the Sprite module.

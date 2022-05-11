@@ -22,7 +22,7 @@ const Slime = function (ctx, x, y) {
     // This is the sprite sequences of the slime.
     const sequences = {
         idle: { x: 0, y: 0, width: 15, height: 14, flip: 0, count: 7, timing: 200, loop: true },
-        dead: { x: 0, y: 16, width: 15, height: 15, flip: 0, count: 7, timing: 200, loop: false },
+        dead: { x: 0, y: 16, width: 15, height: 15, flip: 0, count: 7, timing: 20, loop: false },
     };
 
     // This is the sprite object of the slime created from the Sprite module.

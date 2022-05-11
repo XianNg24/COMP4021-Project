@@ -351,6 +351,12 @@ const GamePanel = (function() {
                 else if(type == 2){
                     player2.speedUp();
                 }
+                else if(type == 3){
+                    player.slowDown();
+                }
+                else if(type == 4){
+                    player2.slowDown();
+                }
             }
         }
     };

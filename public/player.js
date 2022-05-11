@@ -268,7 +268,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
 
   // This function speeds up the player.
   const speedUp = function () {
-    // speed = 250;
+    speed = 250;
     muteki = true;
     alive = true;
     goldfinger = true;
@@ -276,7 +276,7 @@ const Player = function (ctx, x, y, gameArea, color, name) {
 
   // This function slows down the player.
   const slowDown = function () {
-    // speed = 150;
+    speed = 150;
     muteki = false;
     goldfinger = false;
   };

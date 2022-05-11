@@ -714,20 +714,6 @@
         sounds.background.play();
         //   fireball.randomize(gameArea);
 
-        // Handle keypress
-        $(document).on("keypress", function (event) {
-          if (isPlayer1) {
-            switch (event.keyCode) {
-              case 32: player.speedUp(); Socket.playerCheatMode(1); break;
-            }
-          }
-          else {
-            switch (event.keyCode) {
-              case 32: player2.speedUp(); Socket.playerCheatMode(2); break;
-            }
-          }
-        });
-
         /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function (event) {
           /* Handle the key down */
@@ -738,6 +724,7 @@
               case 38: player.move(2); Socket.playerMoveEvent(2); break;
               case 39: player.move(3); Socket.playerMoveEvent(3); break;
               case 40: player.move(4); Socket.playerMoveEvent(4); break;
+              case 32: player.speedUp(); Socket.playerCheatMode(1); break;
             }
           }
           else {
@@ -747,6 +734,7 @@
               case 38: player2.move(2); Socket.playerMoveEvent(6); break;
               case 39: player2.move(3); Socket.playerMoveEvent(7); break;
               case 40: player2.move(4); Socket.playerMoveEvent(8); break;
+              case 32: player2.speedUp(); Socket.playerCheatMode(2); break;
             }
           }
         });
@@ -762,6 +750,7 @@
               case 38: player.stop(2); Socket.playerStopEvent(2); break;
               case 39: player.stop(3); Socket.playerStopEvent(3); break;
               case 40: player.stop(4); Socket.playerStopEvent(4); break;
+              case 32: player.slowDown(); Socket.playerCheatMode(3); break;
             }
           }
           else {
@@ -771,6 +760,7 @@
               case 38: player2.stop(2); Socket.playerStopEvent(6); break;
               case 39: player2.stop(3); Socket.playerStopEvent(7); break;
               case 40: player2.stop(4); Socket.playerStopEvent(8); break;
+              case 32: player2.slowDown(); Socket.playerCheatMode(4); break;
             }
           }
 
