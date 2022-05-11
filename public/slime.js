@@ -46,6 +46,8 @@ const Slime = function (ctx, x, y) {
     // This function sets the hp of slime according to the players damage
     const hit = function (dmg) {
         hp = hp - dmg;
+        if (hp <= 0 && sprite.getSequence() != sequences['dead'])
+            sprite.setSequence(sequences['dead']);
     }
 
     // This function gets the hp of slime
@@ -57,11 +59,13 @@ const Slime = function (ctx, x, y) {
     // - `area` - The area that the slime should be located in.
     const randomize = function (index) {
         /* Randomize the position */
-        if (phase >= 3)
-            phase = 0;
-        sprite.setXY(loc[index][phase].x, loc[index][phase].y);
-        hp = 1;
-        phase++;
+        if (sprite.getSequence() != sequences['dead']) {
+            if (phase >= 3)
+                phase = 0;
+            sprite.setXY(loc[index][phase].x, loc[index][phase].y);
+            hp = 1;
+            phase++;
+        }
     };
 
     // This function moves the slime to the coordinate. 
@@ -70,7 +74,8 @@ const Slime = function (ctx, x, y) {
         const slimeBoundingBox = sprite.getBoundingBox();
         const speed = 0.1;
 
-        if (!slimeBoundingBox.intersect(playerBoundingBox)) {
+        if (!slimeBoundingBox.intersect(playerBoundingBox) && 
+        sprite.getSequence() != sequences['dead']) {
             let slimeXY = sprite.getXY();
             if (slimeXY.x >= playerXY.x)
                 slimeXY.x = slimeXY.x - speed;
@@ -83,6 +88,11 @@ const Slime = function (ctx, x, y) {
                 slimeXY.y = slimeXY.y + speed;
 
             sprite.setXY(slimeXY.x, slimeXY.y);
+        }
+        
+        if(sprite.getSequence() == sequences['dead'] && sprite.getAnimationDone()) {
+            sprite.setSequence(sequences['idle']);
+            sprite.setAnimationDone(false);
         }
     }
 
