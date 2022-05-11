@@ -234,19 +234,28 @@
     }
 
     @keyframes stroke {
-        0%   {
-            fill: rgba(72,138,20,0); stroke: rgb(229, 232, 237);
-            stroke-dashoffset: 25%; stroke-dasharray: 50% 50%; stroke-width: 2;
-        }
-        /* 70%  {fill: rgba(72,138,20,0); stroke: rgba(54,95,160,1); } */
-        80%  {fill: rgba(72,138,20,0); stroke: rgba(54,95,160,1); stroke-width: 3; }
-        100% {
-          fill: rgba(72, 138, 204, 1);
-          stroke: rgba(54, 95, 160, 0);
-          stroke-dashoffset: -25%;
-          stroke-dasharray: 50% 0;
-          stroke-width: 0;
-        }
+      0% {
+        fill: rgba(72, 138, 20, 0);
+        stroke: rgb(229, 232, 237);
+        stroke-dashoffset: 25%;
+        stroke-dasharray: 50% 50%;
+        stroke-width: 2;
+      }
+
+      /* 70%  {fill: rgba(72,138,20,0); stroke: rgba(54,95,160,1); } */
+      80% {
+        fill: rgba(72, 138, 20, 0);
+        stroke: rgba(54, 95, 160, 1);
+        stroke-width: 3;
+      }
+
+      100% {
+        fill: rgba(72, 138, 204, 1);
+        stroke: rgba(54, 95, 160, 0);
+        stroke-dashoffset: -25%;
+        stroke-dasharray: 50% 0;
+        stroke-width: 0;
+      }
     }
 
     @keyframes stroke2 {
@@ -279,6 +288,9 @@
       </text>
       <text id="player2Name" x="300" y="35">
         <tspan id="player2Score">0</tspan>
+      </text>
+      <text id="time" x="90%" y="35">
+        TIME: <tspan id="time-remaining">100</tspan>
       </text>
     </svg>
 
