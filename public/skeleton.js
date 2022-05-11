@@ -7,16 +7,16 @@ const Skeleton = function (ctx, x, y) {
     let hp = 10;
     let phase = 0;
     const loc = [
-        [{ x: 820, y: 327 }, { x: 0, y: 133 }, { x: 820, y: 121 }],
-        [{ x: 820, y: 117 }, { x: 0, y: 157 }, { x: 247, y: 450 }],
-        [{ x: 109, y: 450 }, { x: 820, y: 140 }, { x: 217, y: 60 }],
-        [{ x: 0, y: 80 }, { x: 820, y: 202 }, { x: 200, y: 450 }],
-        [{ x: 0, y: 193 }, { x: 820, y: 288 }, { x: 169, y: 450 }],
-        [{ x: 820, y: 409 }, { x: 0, y: 375 }, { x: 793, y: 450 }],
-        [{ x: 429, y: 450 }, { x: 820, y: 323 }, { x: 622, y: 450 }],
-        [{ x: 820, y: 200 }, { x: 0, y: 376 }, { x: 46, y: 450 }],
-        [{ x: 0, y: 176 }, { x: 820, y: 75 }, { x: 744, y: 450 }],
-        [{ x: 820, y: 267 }, { x: 0, y: 403 }, { x: 180, y: 450 }],
+        [{ x: 850, y: 327 }, { x: -30, y: 133 }, { x: 850, y: 121 }],
+        [{ x: 850, y: 117 }, { x: -30, y: 157 }, { x: 247, y: 480 }],
+        [{ x: 109, y: 480 }, { x: 850, y: 140 }, { x: 217, y: 60 }],
+        [{ x: -30, y: 80 }, { x: 850, y: 202 }, { x: 200, y: 480 }],
+        [{ x: -30, y: 193 }, { x: 850, y: 288 }, { x: 169, y: 480 }],
+        [{ x: 850, y: 409 }, { x: -30, y: 375 }, { x: 793, y: 480 }],
+        [{ x: 429, y: 480 }, { x: 850, y: 323 }, { x: 622, y: 480 }],
+        [{ x: 850, y: 200 }, { x: -30, y: 376 }, { x: 46, y: 480 }],
+        [{ x: -30, y: 176 }, { x: 850, y: 75 }, { x: 744, y: 480 }],
+        [{ x: 850, y: 267 }, { x: -30, y: 403 }, { x: 180, y: 480 }],
     ];
 
     // This is the sprite sequences of the skeleton.
@@ -52,7 +52,7 @@ const Skeleton = function (ctx, x, y) {
     // This function sets the hp of skeleton according to the players damage
     const hit = function (dmg) {
         hp = hp - dmg;
-        if (hp <= 0 && sprite.getSequence() != sequences['dead'])
+        if (hp === 0 && sprite.getSequence() != sequences['dead'])
             sprite.setSequence(sequences['dead']);
     }
 
@@ -80,6 +80,11 @@ const Skeleton = function (ctx, x, y) {
         const skeletonBoundingBox = sprite.getBoundingBox();
         const curr_seq = sprite.getSequence();
         const speed = 0.2;
+
+        if (sprite.getSequence() === sequences['dead'] && sprite.getAnimationDone()) {
+            sprite.setSequence(sequences['idle']);
+            sprite.setAnimationDone(false);
+        }
 
         if (sprite.getSequence() != sequences['dead']) {
             if (!skeletonBoundingBox.intersect(playerBoundingBox)) {
@@ -111,11 +116,6 @@ const Skeleton = function (ctx, x, y) {
                 }
             }
         }
-
-        if (sprite.getSequence() == sequences['dead'] && sprite.getAnimationDone()) {
-            sprite.setSequence(sequences['idle']);
-            sprite.setAnimationDone(false);
-        }
     }
 
     // The methods are returned as an object here.
@@ -126,6 +126,7 @@ const Skeleton = function (ctx, x, y) {
         getHp: getHp,
         getAge: getAge,
         getBoundingBox: sprite.getBoundingBox,
+        getAnimationDone: sprite.getAnimationDone,
         randomize: randomize,
         move: move,
         draw: sprite.draw,

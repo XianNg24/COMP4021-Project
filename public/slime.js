@@ -7,16 +7,16 @@ const Slime = function (ctx, x, y) {
     let hp = 1;
     let phase = 0;
     const loc = [
-        [{ x: 0, y: 80 }, { x: 820, y: 80 }, { x: 200, y: 450 }],
-        [{ x: 820, y: 200 }, { x: 0, y: 150 }, { x: 500, y: 450 }],
-        [{ x: 0, y: 300 }, { x: 820, y: 100 }, { x: 700, y: 450 }],
-        [{ x: 820, y: 267 }, { x: 0, y: 60 }, { x: 180, y: 450 }],
-        [{ x: 0, y: 188 }, { x: 820, y: 288 }, { x: 169, y: 450 }],
-        [{ x: 820, y: 400 }, { x: 0, y: 333 }, { x: 727, y: 450 }],
-        [{ x: 0, y: 450 }, { x: 820, y: 323 }, { x: 622, y: 450 }],
-        [{ x: 820, y: 222 }, { x: 0, y: 133 }, { x: 666, y: 121 }],
-        [{ x: 820, y: 211 }, { x: 0, y: 222 }, { x: 80, y: 450 }],
-        [{ x: 0, y: 450 }, { x: 820, y: 400 }, { x: 555, y: 60 }],
+        [{ x: -30, y: 80 }, { x: 850, y: 80 }, { x: 200, y: 480 }],
+        [{ x: 850, y: 200 }, { x: -30, y: 150 }, { x: 500, y: 480 }],
+        [{ x: -30, y: 300 }, { x: 850, y: 100 }, { x: 700, y: 480 }],
+        [{ x: 850, y: 267 }, { x: -30, y: 60 }, { x: 180, y: 480 }],
+        [{ x: -30, y: 188 }, { x: 850, y: 288 }, { x: 169, y: 480 }],
+        [{ x: 850, y: 400 }, { x: -30, y: 333 }, { x: 727, y: 480 }],
+        [{ x: -30, y: 480 }, { x: 850, y: 323 }, { x: 622, y: 480 }],
+        [{ x: 850, y: 222 }, { x: -30, y: 133 }, { x: 666, y: 121 }],
+        [{ x: 850, y: 211 }, { x: -30, y: 222 }, { x: 80, y: 480 }],
+        [{ x: -30, y: 480 }, { x: 850, y: 400 }, { x: 555, y: 60 }],
     ];
 
     // This is the sprite sequences of the slime.
@@ -46,7 +46,7 @@ const Slime = function (ctx, x, y) {
     // This function sets the hp of slime according to the players damage
     const hit = function (dmg) {
         hp = hp - dmg;
-        if (hp <= 0 && sprite.getSequence() != sequences['dead'])
+        if (hp === 0 && sprite.getSequence() != sequences['dead'])
             sprite.setSequence(sequences['dead']);
     }
 
@@ -73,7 +73,12 @@ const Slime = function (ctx, x, y) {
     const move = function (playerXY, playerBoundingBox) {
         const slimeBoundingBox = sprite.getBoundingBox();
         const speed = 0.1;
-
+                
+        if(sprite.getSequence() == sequences['dead'] && sprite.getAnimationDone()) {
+            sprite.setSequence(sequences['idle']);
+            sprite.setAnimationDone(false);
+        }
+        
         if (!slimeBoundingBox.intersect(playerBoundingBox) && 
         sprite.getSequence() != sequences['dead']) {
             let slimeXY = sprite.getXY();
@@ -89,11 +94,6 @@ const Slime = function (ctx, x, y) {
 
             sprite.setXY(slimeXY.x, slimeXY.y);
         }
-        
-        if(sprite.getSequence() == sequences['dead'] && sprite.getAnimationDone()) {
-            sprite.setSequence(sequences['idle']);
-            sprite.setAnimationDone(false);
-        }
     }
 
     // The methods are returned as an object here.
@@ -104,6 +104,7 @@ const Slime = function (ctx, x, y) {
         getHp: getHp,
         getAge: getAge,
         getBoundingBox: sprite.getBoundingBox,
+        getAnimationDone: sprite.getAnimationDone,
         randomize: randomize,
         move: move,
         draw: sprite.draw,

@@ -144,7 +144,7 @@ const Sprite = function (ctx, x, y) {
     const right = x + size.width / 2 + padding;
 
     if(!animationDone && !sequence.loop)
-      return BoundingBox(ctx, 0, 0, 0, 0);
+      return BoundingBox(ctx, -200, -200, -201, -201);
     else
       return BoundingBox(ctx, top, left, bottom, right);
   };

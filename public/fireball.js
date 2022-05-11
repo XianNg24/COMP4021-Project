@@ -73,10 +73,6 @@ const Fireball = function (ctx, x, y, gameArea) {
     }
   };
 
-  const hit = function () {
-    sprite.setSequence(sequences.idle);
-  }
-
   const update = function (time) {
     if (alive) {
       let { x, y } = sprite.getXY();
@@ -105,7 +101,6 @@ const Fireball = function (ctx, x, y, gameArea) {
     attack: attack,
     getAge: getAge,
     getBoundingBox: sprite.getBoundingBox,
-    hit: hit,
     update: update,
     draw: sprite.draw,
   };
