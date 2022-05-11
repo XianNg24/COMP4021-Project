@@ -6,7 +6,7 @@
    "name": "John"
   },
   "datetime": "2022-05-09T01:00:00.000Z",
-  "content": "100"
+  "content": 100
  },
  {
   "user": {
@@ -15,7 +15,7 @@
    "name": "Smith"
   },
   "datetime": "2022-05-10T19:33:52.685Z",
-  "content": "50"
+  "content": 50
  },
  {
   "user": {
@@ -24,60 +24,6 @@
    "name": "Alex"
   },
   "datetime": "2022-05-10T20:32:30.634Z",
-  "content": "30"
- },
- {
-  "user": {
-   "username": "tom",
-   "avatar": "green",
-   "name": "tom"
-  },
-  "datetime": "2022-05-11T09:23:53.085Z",
-  "content": 19
- },
- {
-  "user": {
-   "username": "jerry",
-   "avatar": "blue",
-   "name": "jerry"
-  },
-  "datetime": "2022-05-11T09:23:53.086Z",
-  "content": 19
- },
- {
-  "user": {
-   "username": "tom",
-   "avatar": "green",
-   "name": "tom"
-  },
-  "datetime": "2022-05-11T09:31:27.815Z",
-  "content": 28
- },
- {
-  "user": {
-   "username": "jerry",
-   "avatar": "blue",
-   "name": "jerry"
-  },
-  "datetime": "2022-05-11T09:31:27.818Z",
-  "content": 16
- },
- {
-  "user": {
-   "username": "tom",
-   "avatar": "green",
-   "name": "tom"
-  },
-  "datetime": "2022-05-11T09:50:54.824Z",
-  "content": 29
- },
- {
-  "user": {
-   "username": "jerry",
-   "avatar": "blue",
-   "name": "jerry"
-  },
-  "datetime": "2022-05-11T09:50:54.825Z",
-  "content": 11
+  "content": 30
  }
 ]
