@@ -422,7 +422,7 @@
         attack: new Audio("/sound/attack.wav"),
       };
 
-      const totalGameTime = 60; // Total game time in seconds
+      const totalGameTime = 90; // Total game time in seconds
       const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
       let gameStartTime = 0; // The timestamp when the game starts
       playerScore = 0; // The number of enemies killed
@@ -463,8 +463,8 @@
         /* Randomize enemy position */
 
         // Player
-        box = player.getBoundingBox(padding_h = 20, padding_v = 40);
-        box2 = player2.getBoundingBox(padding_h = 20, padding_v = 40);
+        box = player.getBoundingBox(padding_h = 10, padding_v = 10);
+        box2 = player2.getBoundingBox(padding_h = 10, padding_v = 10);
 
         if(isPlayer1){
             Socket.playerUpdate(player.getStatusLocation("player1"));
