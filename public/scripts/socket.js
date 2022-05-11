@@ -112,6 +112,13 @@ const Socket = (function() {
             GamePanel.resetGameEvent(message.type, message.onlineUsers);
         });
 
+        socket.on("update score event", (message) => {
+
+            message = JSON.parse(message);
+            // Add the message to the chatroom
+            GamePanel.updateGameScores(message.playerScore, message.player2Score);
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -181,6 +188,12 @@ const Socket = (function() {
         }
     }
 
+    const updateScoreEvent = function(content){
+        if (socket && socket.connected) {
+            socket.emit("score event", content);
+        }
+    }
+
     return { getSocket, connect, disconnect, postMessage, playerMoveEvent, playerStopEvent, playerCheatMode,
-        playerAttackStartEvent, playerAttackStopEvent, GameStartEvent, postScores, updatePlayerScore, resetEvent};
+        playerAttackStartEvent, playerAttackStopEvent, GameStartEvent, postScores, updatePlayerScore, resetEvent, updateScoreEvent};
 })();

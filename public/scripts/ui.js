@@ -339,6 +339,13 @@ const GamePanel = (function() {
         }
     };
 
+    const updateGameScores = function(score1, score2) {
+
+        playerScore = score1;
+        player2Score = score2;
+        
+    };
+
     const activateCheatMode = function(type, onlineUsers) {
 
         const currentUser = Authentication.getUser();
@@ -362,7 +369,7 @@ const GamePanel = (function() {
     };
 
     return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, resetGameEvent,
-          initiatePlayerAttackStop, checkGameStart, activateCheatMode};
+          initiatePlayerAttackStop, checkGameStart, activateCheatMode, updateGameScores};
 })();
 
 const BoardPanel = (function() {
