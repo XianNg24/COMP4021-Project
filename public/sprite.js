@@ -143,7 +143,10 @@ const Sprite = function (ctx, x, y) {
     const bottom = y + size.height / 2 + padding;
     const right = x + size.width / 2 + padding;
 
-    return BoundingBox(ctx, top, left, bottom, right);
+    if(!animationDone && !sequence.loop)
+      return BoundingBox(ctx, 0, 0, 0, 0);
+    else
+      return BoundingBox(ctx, top, left, bottom, right);
   };
 
   // This function draws shadow underneath the sprite.
