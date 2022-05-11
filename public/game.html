@@ -1,155 +1,178 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: "Press Start 2P", sans-serif;
-        min-height: 100%;
-      }
-      #game-container {
-        position: relative;
-      }
-      canvas,
-      #game-start,
-      #game-over {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-      }
-      #logged-out {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-      }
-      canvas,
-      #game-start,
-      #game-over {
-        border: 1px solid gray;
-        /* width: 854px;
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet" />
+  <style>
+    body {
+      font-family: "Press Start 2P", sans-serif;
+      min-height: 100%;
+    }
+
+    #game-container {
+      position: relative;
+    }
+
+    canvas,
+    #game-start,
+    #game-over {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+
+    #logged-out {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+
+    canvas,
+    #game-start,
+    #game-over {
+      border: 1px solid gray;
+      /* width: 854px;
         height: 480px; */
-        height: 100vh;
-        width: 100vw;
-        /* height: absolute; */
-        /* width: absolute; */
-      }
-      #logged-out {
-        border: 1px solid gray;
-        height: 100vh;
-        width: 100vw;
-      }
-      canvas {
-        background: url(./assets/dungeon.jpg);
-        background-size: cover;
-      }
-      #game-start,
-      #game-over {
-        background: rgba(1, 1, 1, 0.8);
-      }
-      #logged-out {
-        background: rgba(1, 1, 1, 0.8);
-      }
-      #counter {
-        position: relative;
-      }
-      #counter text {
-        font-size: 130%;
-        fill: white;
-        stroke: black;
-        stroke-width: 1px;
-      }
-      #game-start text {
-        font-size: 150%;
-        fill: white;
-        text-anchor: middle;
-      }
-      #game-start #game-title {
-        font-size: 400%;
-        fill: url(#title-fill);
-        stroke: black;
-        visibility: hidden;
-        text-transform: uppercase;
-        animation: stroke 5s infinite alternate;
-        stroke-width: 2;
-        stroke: #365fa0;
-        /* font-size: 140px; */
+      height: 100vh;
+      width: 100vw;
+      /* height: absolute; */
+      /* width: absolute; */
     }
+
+    #logged-out {
+      border: 1px solid gray;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    canvas {
+      background: url(./assets/dungeon.jpg);
+      background-size: cover;
+    }
+
+    #game-start,
+    #game-over {
+      background: rgba(1, 1, 1, 0.8);
+    }
+
+    #logged-out {
+      background: rgba(1, 1, 1, 0.8);
+    }
+
+    #counter {
+      position: relative;
+    }
+
+    #counter text {
+      font-size: 130%;
+      fill: white;
+      stroke: black;
+      stroke-width: 1px;
+    }
+
+    #game-start text {
+      font-size: 150%;
+      fill: white;
+      text-anchor: middle;
+    }
+
+    #game-start #game-title {
+      font-size: 400%;
+      fill: url(#title-fill);
+      stroke: black;
+      visibility: hidden;
+      text-transform: uppercase;
+      animation: stroke 5s infinite alternate;
+      stroke-width: 2;
+      stroke: #365fa0;
+      /* font-size: 140px; */
+    }
+
     #game-over text {
-        font-size: 120%;
-        fill: url(#game-over-fill);
-        text-anchor: middle;
+      font-size: 120%;
+      fill: url(#game-over-fill);
+      text-anchor: middle;
     }
+
     #logged-out text {
-        font-size: 300%;
-        fill: url(#game-over-fill);
-        text-anchor: middle;
+      font-size: 300%;
+      fill: url(#game-over-fill);
+      text-anchor: middle;
     }
-    .player-status{
-        visibility: hidden;
-        stroke-width: 1.5;
-        stroke: rgb(123, 139, 165);
-        animation: stroke2 2s infinite alternate;
+
+    .player-status {
+      visibility: hidden;
+      stroke-width: 1.5;
+      stroke: rgb(123, 139, 165);
+      animation: stroke2 2s infinite alternate;
     }
-    #leaderboard-overlay{
+
+    #leaderboard-overlay {
       display: none;
       width: 600px;
       top: 5%;
       left: 30%;
       right: 30%;
     }
+
     /* #leaderboard-box{
         width: 600px;
         height: 800px;
     } */
     #score-panel {
-        flex-grow: 1;
-        /* align-items: stretch; */
-        height: 100%;
-        background: var(--chat-panel-background);
-        padding: 0;
+      flex-grow: 1;
+      /* align-items: stretch; */
+      height: 100%;
+      background: var(--chat-panel-background);
+      padding: 0;
     }
+
     #score-area {
-        height: 100%;
-        /* align-items: flex-start; */
-        justify-content: start;
-        gap: 20px;
-        overflow-y: auto;
-        padding: 10px;
+      height: 100%;
+      /* align-items: flex-start; */
+      justify-content: start;
+      gap: 20px;
+      overflow-y: auto;
+      padding: 10px;
     }
+
     .score-message-panel {
-        /* align-items: flex-start; */
-        padding: 0;
+      /* align-items: flex-start; */
+      padding: 0;
     }
+
     .score-message {
-        align-items: start;
-        gap: 5px;
-        padding: 0;
-        font-family: "Press Start 2P", sans-serif;
+      align-items: start;
+      gap: 5px;
+      padding: 0;
+      font-family: "Press Start 2P", sans-serif;
     }
+
     .score-date {
-        font-size: 75%;
-        color: var(--date-color);
-        font-family: "Press Start 2P", sans-serif;
+      font-size: 75%;
+      color: var(--date-color);
+      font-family: "Press Start 2P", sans-serif;
     }
+
     .score-content {
-        color: white;
-        font-size: large;
-        font-family: "Press Start 2P", sans-serif;
+      color: white;
+      font-size: large;
+      font-family: "Press Start 2P", sans-serif;
     }
+
     .user-name {
-        color: rgb(156, 150, 150);
-        font-size: medium;
-        font-family: "Press Start 2P", sans-serif;
+      color: rgb(156, 150, 150);
+      font-size: medium;
+      font-family: "Press Start 2P", sans-serif;
     }
+
     #leaderboard-text {
       text-align: center;
       color: white;
       font-size: 36px;
       font-family: "Press Start 2P", sans-serif;
     }
+
     #score-text {
       text-align: center;
       color: white;
@@ -157,6 +180,7 @@
       font-family: "Press Start 2P", sans-serif;
       padding: 10px
     }
+
     #play-again {
       margin: 2px;
       position: absolute;
@@ -169,6 +193,7 @@
       padding: 10px;
       background: orange;
     }
+
     #signout-button {
       /* float: right; */
       color: white;
@@ -179,9 +204,11 @@
       transform: translateX(-70%);
       padding: 10px;
     }
-    button.icon:hover{
+
+    button.icon:hover {
       background: none;
     }
+
     #reset-message {
       display: none;
       margin: 2px;
@@ -193,16 +220,19 @@
       font-family: "Press Start 2P", sans-serif;
       padding: 10px;
     }
+
     svg {
-        font-family: 'Russo One', sans-serif;
-        position: absolute; 
-        width: 100%; height: 100%;
-        font-family: 'Games', sans-serif;
+      font-family: 'Russo One', sans-serif;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      font-family: 'Games', sans-serif;
     }
+
     svg text {
-        font-family: 'Games', sans-serif;
+      font-family: 'Games', sans-serif;
     }
-    
+
     @keyframes stroke {
         0%   {
             fill: rgba(72,138,20,0); stroke: rgb(229, 232, 237);
@@ -218,102 +248,101 @@
           stroke-width: 0;
         }
     }
-    
+
     @keyframes stroke2 {
-        0%   {
-            fill: rgba(72,138,20,0); stroke: rgb(26, 57, 107);
-            stroke-dashoffset: 25%; stroke-dasharray: 100% 100%; stroke-width: 2;
-        }
-        100% {
-            fill: rgba(72,138,204,1); stroke: rgba(54,95,160,0); 
-            stroke-dashoffset: -25%; stroke-dasharray: 100% 100%; stroke-width: 0;
-        }
+      0% {
+        fill: rgba(72, 138, 20, 0);
+        stroke: rgb(26, 57, 107);
+        stroke-dashoffset: 25%;
+        stroke-dasharray: 100% 100%;
+        stroke-width: 2;
+      }
+
+      100% {
+        fill: rgba(72, 138, 204, 1);
+        stroke: rgba(54, 95, 160, 0);
+        stroke-dashoffset: -25%;
+        stroke-dasharray: 100% 100%;
+        stroke-width: 0;
+      }
     }
+  </style>
+</head>
 
-    </style>
-  </head>
-  <body>
-    <div id="game-container">
-      <canvas width="854px" height="480px"></canvas>
+<body>
+  <div id="game-container">
+    <canvas width="854px" height="480px"></canvas>
 
-      <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-        <text id="playerName" x="10" y="35">
-          <tspan id="playerScore">0</tspan>
-        </text>
-        <text id="player2Name" x="300" y="35">
-          <tspan id="player2Score">0</tspan>
-        </text>
-      </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+      <text id="playerName" x="10" y="35">
+        <tspan id="playerScore">0</tspan>
+      </text>
+      <text id="player2Name" x="300" y="35">
+        <tspan id="player2Score">0</tspan>
+      </text>
+    </svg>
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
-            <defs>
-                <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0.2" stop-color="red" />
-                    <stop offset="0.4" stop-color="yellow" />
-                    <stop offset="0.6" stop-color="green" />
-                    <stop offset="0.8" stop-color="purple" />
-                </linearGradient>
-            </defs>
-            <text id="game-title" x="50%" y="45%">Waiting for Player 2...</text>
-            <text class="player-status" x="50%" y="55%" >Player 1 : ??? </text>
-            <text class="player-status" x="50%" y="60%" >Player 2 : ??? </text>
-            <text class="player-status" x="50%" y="70%" >Click Here To Start The Game </text>
-        </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
+      <defs>
+        <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0.2" stop-color="red" />
+          <stop offset="0.4" stop-color="yellow" />
+          <stop offset="0.6" stop-color="green" />
+          <stop offset="0.8" stop-color="purple" />
+        </linearGradient>
+      </defs>
+      <text id="game-title" x="50%" y="45%">Waiting for Player 2...</text>
+      <text class="player-status" x="50%" y="55%">Player 1 : ??? </text>
+      <text class="player-status" x="50%" y="60%">Player 2 : ??? </text>
+      <text class="player-status" x="50%" y="70%">Click Here To Start The Game </text>
+    </svg>
 
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        id="game-over"
-        style="display: none"
-      >
-        <defs>
-          <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="red" />
-            <stop offset="0.5" stop-color="yellow" />
-            <stop offset="1" stop-color="red" />
-          </linearGradient>
-        </defs>
-        <!-- <text x="50%" y="50%">
+    <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
+      <defs>
+        <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="red" />
+          <stop offset="0.5" stop-color="yellow" />
+          <stop offset="1" stop-color="red" />
+        </linearGradient>
+      </defs>
+      <!-- <text x="50%" y="50%">
           Time's up! You have collected
           <tspan id="final-gems">0</tspan>
           gem(s).
         </text> -->
-      </svg>
+    </svg>
 
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        id="logged-out"
-        style="display: none"
-      >
-        <defs>
-          <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="red" />
-            <stop offset="0.5" stop-color="yellow" />
-            <stop offset="1" stop-color="red" />
-          </linearGradient>
-        </defs>
-        <text x="50%" y="50%">
-          You are logged out
-        </text>
-      </svg>
-    </div>
-    
-    <div id="leaderboard-overlay" class="overlay row" >
-      <div id="score-text"></div>
-      <div class="content shadow row" id = "leaderboard-box">
-        <div id="leaderboard-text">LEADERBOARD</div>
-        <div id="leaderboard-panel" class="row">
-          <div id="score-panel" class="col">
-              <div id="score-area" class="col"></div>
-          </div>
+    <svg xmlns="http://www.w3.org/2000/svg" id="logged-out" style="display: none">
+      <defs>
+        <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="red" />
+          <stop offset="0.5" stop-color="yellow" />
+          <stop offset="1" stop-color="red" />
+        </linearGradient>
+      </defs>
+      <text x="50%" y="50%">
+        You are logged out
+      </text>
+    </svg>
+  </div>
+
+  <div id="leaderboard-overlay" class="overlay row">
+    <div id="score-text"></div>
+    <div class="content shadow row" id="leaderboard-box">
+      <div id="leaderboard-text">LEADERBOARD</div>
+      <div id="leaderboard-panel" class="row">
+        <div id="score-panel" class="col">
+          <div id="score-area" class="col"></div>
         </div>
       </div>
-      <div id="score-text"></div>
-      <div>
-        <button id="play-again" type="submit">Play Again</button>
-        <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
-      </div>
-      <div id="reset-message" class="warning center"> Requested to play again</div>
     </div>
+    <div id="score-text"></div>
+    <div>
+      <button id="play-again" type="submit">Play Again</button>
+      <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+    </div>
+    <div id="reset-message" class="warning center"> Requested to play again</div>
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="bounding_box.js"></script>
@@ -323,6 +352,7 @@
   <script src="fire.js"></script>
   <script src="slime.js"></script>
   <script src="skeleton.js"></script>
+  <script src="gem.js"></script>
   <!-- <script src="scripts/socket.js"></script> -->
   <script>
     var player;
@@ -363,6 +393,7 @@
       };
 
       const totalGameTime = 20; // Total game time in seconds
+      const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
       let gameStartTime = 0; // The timestamp when the game starts
       playerScore = 0; // The number of enemies killed
       player2Score = 0;
@@ -377,8 +408,9 @@
       gameArea = BoundingBox(context, 60, 20, 420, 800);
 
       /* Create the sprites in the game */
-      let fireball = Fireball(context, -1, -1, gameArea);        // The gem
-      let fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
+      let fireball = Fireball(context, -1, -1, gameArea);        // The fireball
+      let fireball2 = Fireball(context, -1, -1, gameArea);        // The fireball
+      const gem = Gem(context, 427, 350, "green");        // The gem
       player = Player(context, 427, 240, gameArea, 'green', "Player1"); // The player
       player2 = Player(context, 500, 240, gameArea, 'purple', "Player2"); // The player
       const fires = [
@@ -402,38 +434,38 @@
       function doFrame(now) {
         /* Randomize enemy position */
 
-          // Player
-          box = player.getBoundingBox(padding = 15);
-          box2 = player2.getBoundingBox(padding = 15);
+        // Player
+        box = player.getBoundingBox(padding = 15);
+        box2 = player2.getBoundingBox(padding = 15);
 
-          // Slime
-          for (let i = 0; i < MAX_SLIME; i++){
-            if (gameStartTime == 0) {
-              slime[i].randomize(i);
-            }
-            loc = slime[i].getXY();
-            if (box.isPointInBox(loc.x, loc.y)){
-              player.deadAct(now);
-            }
-            if (box2.isPointInBox(loc.x, loc.y)){
-              player2.deadAct(now);
-            }
+        // Slime
+        for (let i = 0; i < MAX_SLIME; i++) {
+          if (gameStartTime == 0) {
+            slime[i].randomize(i);
           }
+          loc = slime[i].getXY();
+          if (box.isPointInBox(loc.x, loc.y)) {
+            player.deadAct(now);
+          }
+          if (box2.isPointInBox(loc.x, loc.y)) {
+            player2.deadAct(now);
+          }
+        }
 
-          // Skeleton
-          for (let i = 0; i < MAX_SKELETON; i++){
-            if (gameStartTime == 0) {
-              skeleton[i].randomize(i);
-            }
-            loc = slime[i].getXY();
-            if (box.isPointInBox(loc.x, loc.y)){
-              player.deadAct(now);
-            }
-            if (box2.isPointInBox(loc.x, loc.y)){
-              player2.deadAct(now);
-            }
+        // Skeleton
+        for (let i = 0; i < MAX_SKELETON; i++) {
+          if (gameStartTime == 0) {
+            skeleton[i].randomize(i);
           }
-          if (gameStartTime == 0) gameStartTime = now;
+          loc = slime[i].getXY();
+          if (box.isPointInBox(loc.x, loc.y)) {
+            player.deadAct(now);
+          }
+          if (box2.isPointInBox(loc.x, loc.y)) {
+            player2.deadAct(now);
+          }
+        }
+        if (gameStartTime == 0) gameStartTime = now;
 
         // Fireball
         if (player.fireball().fireballAttack) {
@@ -508,11 +540,11 @@
         if (timeRemaining <= 0) {
           // $("#final-gems").text(playerScore);
           sounds.background.pause();
-          if(isPlayer1){
+          if (isPlayer1) {
             Socket.updatePlayerScore();
             document.getElementById("score-text").innerHTML = "Your Score: " + playerScore;
           }
-          else if(isPlayer2){
+          else if (isPlayer2) {
             document.getElementById("score-text").innerHTML = "Your Score: " + player2Score;
           }
           $("#reset-message").hide();
@@ -527,6 +559,7 @@
         /* Update the sprites */
         player.update(now);
         player2.update(now);
+        gem.update(now);
         fireball.update(now);
         fireball2.update(now);
         fires[0].update(now);
@@ -548,6 +581,19 @@
             skeleton[i].move(player2.getXY(), player2.getBoundingBox(padding = -30));
           else
             skeleton[i].move(player.getXY(), player.getBoundingBox(padding = -30));
+        }
+
+        if (gem.getAge() >= gemMaxAge)
+          gem.randomize();
+
+        if (player.getBoundingBox(padding = -30).intersect(gem.getBoundingBox())) {
+          sounds.collect.play();
+          gem.randomize();
+          playerScore = playerScore + 10;
+        } else if (player2.getBoundingBox(padding = -30).intersect(gem.getBoundingBox())) {
+          sounds.collect.play();
+          gem.randomize();
+          player2Score = player2Score + 10;
         }
 
         /* TODO */
@@ -581,6 +627,7 @@
           skeleton[i].draw();
         }
 
+        gem.draw();
         fireball.draw();
         fireball2.draw();
 
@@ -593,59 +640,59 @@
         Socket.GameStartEvent();
       });
 
-      $("#play-again").on("click", function() {
-        if(isPlayer1){
+      $("#play-again").on("click", function () {
+        if (isPlayer1) {
           Socket.resetEvent(1);
         }
-        else if(isPlayer2){
+        else if (isPlayer2) {
           Socket.resetEvent(2);
         }
       });
 
       // Click event for the signout button
       $("#signout-button").on("click", () => {
-            // Send a signout request
-            Authentication.signout(
-                () => {
-                    $("#leaderboard-overlay").hide();
-                    $("#logged-out").show();
-                    Socket.disconnect();
-                }
-            );
-        });
-
-      resetGame = function (){
-          $("#game-over").hide();
-          $("#leaderboard-overlay").hide();
-          sounds.gameover.pause();
-          sounds.background.play();
-
-          player = Player(context, 427, 240, gameArea, playerAvatar, playerName);
-          player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name);
-
-          gameStartTime = 0; // The timestamp when the game starts
-          playerScore = 0; // The number of enemies killed
-          player2Score = 0;
-
-          slime = new Array(MAX_SLIME);
-          skeleton = new Array(MAX_SKELETON);
-
-          fireball = Fireball(context, -1, -1, gameArea);        // The gem
-          fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
-          player = Player(context, 427, 240, gameArea,  playerAvatar, playerName); // The player
-          player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name); // The player
-
-          // The slime
-          for (let i = 0; i < MAX_SLIME; i++) {
-            slime[i] = Slime(context, 0, 0);
+        // Send a signout request
+        Authentication.signout(
+          () => {
+            $("#leaderboard-overlay").hide();
+            $("#logged-out").show();
+            Socket.disconnect();
           }
+        );
+      });
 
-          // The skeleton
-          for (let i = 0; i < MAX_SKELETON; i++) {
-            skeleton[i] = Skeleton(context, 0, 0);
-          }
+      resetGame = function () {
+        $("#game-over").hide();
+        $("#leaderboard-overlay").hide();
+        sounds.gameover.pause();
+        sounds.background.play();
 
-          requestAnimationFrame(doFrame);
+        player = Player(context, 427, 240, gameArea, playerAvatar, playerName);
+        player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name);
+
+        gameStartTime = 0; // The timestamp when the game starts
+        playerScore = 0; // The number of enemies killed
+        player2Score = 0;
+
+        slime = new Array(MAX_SLIME);
+        skeleton = new Array(MAX_SKELETON);
+
+        fireball = Fireball(context, -1, -1, gameArea);        // The gem
+        fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
+        player = Player(context, 427, 240, gameArea, playerAvatar, playerName); // The player
+        player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name); // The player
+
+        // The slime
+        for (let i = 0; i < MAX_SLIME; i++) {
+          slime[i] = Slime(context, 0, 0);
+        }
+
+        // The skeleton
+        for (let i = 0; i < MAX_SKELETON; i++) {
+          skeleton[i] = Skeleton(context, 0, 0);
+        }
+
+        requestAnimationFrame(doFrame);
       }
 
       gameStart = function () {

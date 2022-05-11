@@ -24,10 +24,11 @@ const Skeleton = function (ctx, x, y) {
         idle: { x: 0, y: 0, width: 22, height: 32, flip: 0, count: 13, timing: 200, loop: true },
         right_walk: { x: 0, y: 0, width: 22, height: 32, flip: 0, count: 13, timing: 200, loop: true },
         //right_hit:  { x: 0, y:  0, width: 15, height: 14, flip: 0, count: 7, timing: 200, loop: true },
-        right_attack:  { x: 0, y:  67, width: 43, height: 36, flip: 0, count: 18, timing: 100, loop: true },
+        right_attack: { x: 0, y: 67, width: 43, height: 36, flip: 0, count: 18, timing: 100, loop: true },
         left_walk: { x: 0, y: 34, width: 22, height: 32, flip: 0, count: 13, timing: 200, loop: true },
         //left_hit:  { x: 0, y:  0, width: 15, height: 14, flip: 0, count: 7, timing: 200, loop: true },
-        left_attack:  { x: 0, y:  104, width: 43, height: 36, flip: 0, count: 18, timing: 100, loop: true },
+        left_attack: { x: 0, y: 104, width: 43, height: 36, flip: 0, count: 18, timing: 100, loop: true },
+        dead: { x: 656, y: 0, width: 17, height: 32, flip: 0, count: 7, timing: 200, loop: false },
     };
 
     // This is the sprite object of the skeleton created from the Sprite module.
@@ -51,6 +52,8 @@ const Skeleton = function (ctx, x, y) {
     // This function sets the hp of skeleton according to the players damage
     const hit = function (dmg) {
         hp = hp - dmg;
+        if (hp <= 0 && sprite.getSequence() != sequences['dead'])
+            sprite.setSequence(sequences['dead']);
     }
 
     // This function gets the hp of skeleton
@@ -62,11 +65,13 @@ const Skeleton = function (ctx, x, y) {
     // - `area` - The area that the skeleton should be located in.
     const randomize = function (index) {
         /* Randomize the position */
-        if (phase >= 3)
-            phase = 0;
-        sprite.setXY(loc[index][phase].x, loc[index][phase].y);
-        hp = 10;
-        phase++;
+        if (sprite.getSequence() != sequences['dead']) {
+            if (phase >= 3)
+                phase = 0;
+            sprite.setXY(loc[index][phase].x, loc[index][phase].y);
+            hp = 10;
+            phase++;
+        }
     };
 
     // This function moves the skeleton to the coordinate. 
@@ -76,33 +81,40 @@ const Skeleton = function (ctx, x, y) {
         const curr_seq = sprite.getSequence();
         const speed = 0.2;
 
-        if (!skeletonBoundingBox.intersect(playerBoundingBox)) {
-            let skeletonXY = sprite.getXY();
+        if (sprite.getSequence() != sequences['dead']) {
+            if (!skeletonBoundingBox.intersect(playerBoundingBox)) {
+                let skeletonXY = sprite.getXY();
 
-            if (skeletonXY.x >= playerXY.x) {
-                if (curr_seq != sequences['left_walk'])
-                    sprite.setSequence(sequences['left_walk']);
-                skeletonXY.x = skeletonXY.x - speed;
-            }
-            else if ((skeletonXY.x < playerXY.x)) {
-                if (curr_seq != sequences['right_walk'])
-                    sprite.setSequence(sequences['right_walk']);
-                skeletonXY.x = skeletonXY.x + speed;
-            }
+                if (skeletonXY.x >= playerXY.x) {
+                    if (curr_seq != sequences['left_walk'])
+                        sprite.setSequence(sequences['left_walk']);
+                    skeletonXY.x = skeletonXY.x - speed;
+                }
+                else if ((skeletonXY.x < playerXY.x)) {
+                    if (curr_seq != sequences['right_walk'])
+                        sprite.setSequence(sequences['right_walk']);
+                    skeletonXY.x = skeletonXY.x + speed;
+                }
 
-            if (skeletonXY.y >= playerXY.y)
-                skeletonXY.y = skeletonXY.y - speed;
-            else if ((skeletonXY.y < playerXY.y))
-                skeletonXY.y = skeletonXY.y + speed;
+                if (skeletonXY.y >= playerXY.y)
+                    skeletonXY.y = skeletonXY.y - speed;
+                else if ((skeletonXY.y < playerXY.y))
+                    skeletonXY.y = skeletonXY.y + speed;
 
-            sprite.setXY(skeletonXY.x, skeletonXY.y);
-        } else {
-            if (curr_seq != sequences['right_attack'] || curr_seq != sequences['left_attack']) {
-                if (curr_seq === sequences['right_walk'])
-                    sprite.setSequence(sequences['right_attack']);
-                else if (curr_seq === sequences['left_walk'])
-                sprite.setSequence(sequences['left_attack']);
+                sprite.setXY(skeletonXY.x, skeletonXY.y);
+            } else {
+                if (curr_seq != sequences['right_attack'] || curr_seq != sequences['left_attack']) {
+                    if (curr_seq === sequences['right_walk'])
+                        sprite.setSequence(sequences['right_attack']);
+                    else if (curr_seq === sequences['left_walk'])
+                        sprite.setSequence(sequences['left_attack']);
+                }
             }
+        }
+
+        if (sprite.getSequence() == sequences['dead'] && sprite.getAnimationDone()) {
+            sprite.setSequence(sequences['idle']);
+            sprite.setAnimationDone(false);
         }
     }
 
