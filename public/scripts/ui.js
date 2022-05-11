@@ -397,11 +397,11 @@ const BoardPanel = (function() {
         for (const username in onlineUsers) {
             if (username == currentUser.username) {
                 if (currentUser.username == playerStatus[0].id){
-                    score = document.getElementById("playerScore").innerHTML;
+                    score = playerScore;
                     Socket.postScores(score);
                 }
                 else{
-                    score = document.getElementById("player2Score").innerHTML;
+                    score = player2Score;
                     Socket.postScores(score)
                 }
             }
