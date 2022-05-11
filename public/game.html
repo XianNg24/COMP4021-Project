@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Collect the Gems!</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P"
       rel="stylesheet"
@@ -21,6 +20,11 @@
         top: 0px;
         left: 0px;
       }
+      #logged-out {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
       canvas,
       #game-start,
       #game-over {
@@ -32,12 +36,20 @@
         /* height: absolute; */
         /* width: absolute; */
       }
+      #logged-out {
+        border: 1px solid gray;
+        height: 100vh;
+        width: 100vw;
+      }
       canvas {
-        background: url(background.png);
+        background: url(./assets/dungeon.jpg);
         background-size: cover;
       }
       #game-start,
       #game-over {
+        background: rgba(1, 1, 1, 0.8);
+      }
+      #logged-out {
         background: rgba(1, 1, 1, 0.8);
       }
       #counter {
@@ -70,6 +82,11 @@
         fill: url(#game-over-fill);
         text-anchor: middle;
     }
+    #logged-out text {
+        font-size: 300%;
+        fill: url(#game-over-fill);
+        text-anchor: middle;
+    }
     .player-status{
         visibility: hidden;
         stroke-width: 1.5;
@@ -79,7 +96,7 @@
     #leaderboard-overlay{
       display: none;
       width: 600px;
-      top: 20%;
+      top: 5%;
       left: 30%;
       right: 30%;
     }
@@ -132,6 +149,49 @@
       color: white;
       font-size: 36px;
       font-family: "Press Start 2P", sans-serif;
+    }
+    #score-text {
+      text-align: center;
+      color: white;
+      font-size: 32px;
+      font-family: "Press Start 2P", sans-serif;
+      padding: 10px
+    }
+    #play-again {
+      margin: 2px;
+      position: absolute;
+      left: 50%;
+      -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
+      color: white;
+      font-size: 16px;
+      font-family: "Press Start 2P", sans-serif;
+      padding: 10px;
+      background: orange;
+    }
+    #signout-button {
+      /* float: right; */
+      color: white;
+      margin: 2px;
+      position: absolute;
+      left: 70%;
+      -ms-transform: translateX(-70%);
+      transform: translateX(-70%);
+      padding: 10px;
+    }
+    button.icon:hover{
+      background: none;
+    }
+    #reset-message {
+      display: none;
+      margin: 2px;
+      position: absolute;
+      left: 50%;
+      -ms-transform: translate(-50%, 110%);
+      transform: translate(-50%, 110%);
+      font-size: 10px;
+      font-family: "Press Start 2P", sans-serif;
+      padding: 10px;
     }
     svg {
         font-family: 'Russo One', sans-serif;
@@ -193,8 +253,8 @@
                 </linearGradient>
             </defs>
             <text id="game-title" x="50%" y="45%">Waiting for Player 2...</text>
-            <text class="player-status" x="38%" y="60%" >Player 1 : ??? </text>
-            <text class="player-status" x="60%" y="60%" >Player 2 : ??? </text>
+            <text class="player-status" x="50%" y="55%" >Player 1 : ??? </text>
+            <text class="player-status" x="50%" y="60%" >Player 2 : ??? </text>
             <text class="player-status" x="50%" y="70%" >Click Here To Start The Game </text>
         </svg>
 
@@ -216,18 +276,41 @@
           gem(s).
         </text> -->
       </svg>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        id="logged-out"
+        style="display: none"
+      >
+        <defs>
+          <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="red" />
+            <stop offset="0.5" stop-color="yellow" />
+            <stop offset="1" stop-color="red" />
+          </linearGradient>
+        </defs>
+        <text x="50%" y="50%">
+          You are logged out
+        </text>
+      </svg>
     </div>
     
     <div id="leaderboard-overlay" class="overlay row" >
+      <div id="score-text"></div>
       <div class="content shadow row" id = "leaderboard-box">
         <div id="leaderboard-text">LEADERBOARD</div>
         <div id="leaderboard-panel" class="row">
-          <!-- <div id="leaderboard-text">LEADERBOARD</div> -->
           <div id="score-panel" class="col">
               <div id="score-area" class="col"></div>
           </div>
         </div>
       </div>
+      <div id="score-text"></div>
+      <div>
+        <button id="play-again" type="submit">Play Again</button>
+        <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+      </div>
+      <div id="reset-message" class="warning center"> Requested to play again</div>
     </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -242,10 +325,18 @@
   <script>
     var player;
     var player2;
+    var playerName;
+    var player2Name;
+    var playerAvatar;
+    var player2Avatar;
     var context;
     var gameArea;
-    var gameStartStatus = false;
     var gameStart;
+    var resetGame;
+    let isPlayer1 = false;
+    let isPlayer2 = false;
+    var playerReset = false;
+    var player2Reset = false;
 
     function distance(coord1, coord2) {
       let a = coord1.x - coord2.x;
@@ -264,10 +355,10 @@
         background: new Audio("background.mp3"),
         collect: new Audio("collect.mp3"),
         gameover: new Audio("gameover.mp3"),
+        attack: new Audio("/sound/attack.wav"),
       };
 
-      const totalGameTime = 200; // Total game time in seconds
-      const gemMaxAge = 3000; // The maximum age of the gems in milliseconds
+      const totalGameTime = 5000; // Total game time in seconds
       let gameStartTime = 0; // The timestamp when the game starts
       let playerScore = 0; // The number of enemies killed
       let player2Score = 0;
@@ -279,11 +370,11 @@
       let skeleton = new Array(MAX_SKELETON);
 
       /* Create the game area */
-      gameArea = BoundingBox(context, 165, 60, 420, 800);
+      gameArea = BoundingBox(context, 60, 20, 420, 800);
 
       /* Create the sprites in the game */
-      const fireball = Fireball(context, 427, 350, gameArea);        // The gem
-      const fireball2 = Fireball(context, 427, 350, gameArea);        // The gem
+      let fireball = Fireball(context, -1, -1, gameArea);        // The gem
+      let fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
       player = Player(context, 427, 240, gameArea, 'green', "Player1"); // The player
       player2 = Player(context, 500, 240, gameArea, 'purple', "Player2"); // The player
       const fires = [
@@ -314,7 +405,7 @@
           // Slime
           for (let i = 0; i < MAX_SLIME; i++){
             if (gameStartTime == 0) {
-              slime[i].randomize(gameArea, i);
+              slime[i].randomize(i);
             }
             loc = slime[i].getXY();
             if (box.isPointInBox(loc.x, loc.y)){
@@ -328,7 +419,7 @@
           // Skeleton
           for (let i = 0; i < MAX_SKELETON; i++){
             if (gameStartTime == 0) {
-              skeleton[i].randomize(gameArea, i);
+              skeleton[i].randomize(i);
             }
             loc = slime[i].getXY();
             if (box.isPointInBox(loc.x, loc.y)){
@@ -356,29 +447,45 @@
             slime[i].hit(player.getDmg());
             fireball.hit();
             ++playerScore;
+            sounds.attack.pause();
+            sounds.attack.currentTime = 0;
+            sounds.attack.play();
+            //console.log("Player 1 score: ", playerScore);
           }
           else if (slime[i].getBoundingBox().intersect(fireball2.getBoundingBox())) {
             slime[i].hit(player2.getDmg());
             fireball2.hit();
             ++player2Score;
+            sounds.attack.pause();
+            sounds.attack.currentTime = 0;
+            sounds.attack.play();
+            //console.log("Player 2 score: ", player2Score);
           }
           if (slime[i].getHp() <= 0)
-            slime[i].randomize(gameArea, i);
+            slime[i].randomize(i);
         }
 
         for (let i = 0; i < MAX_SKELETON; i++) {
           if (skeleton[i].getBoundingBox().intersect(fireball.getBoundingBox())) {
             skeleton[i].hit(player.getDmg());
             fireball.hit();
+            sounds.attack.pause();
+            sounds.attack.currentTime = 0;
+            sounds.attack.play();
             ++playerScore;
+            //console.log("Player 1 score: ", playerScore);
           }
           else if (skeleton[i].getBoundingBox().intersect(fireball2.getBoundingBox())) {
             skeleton[i].hit(player2.getDmg());
             fireball2.hit();
+            sounds.attack.pause();
+            sounds.attack.currentTime = 0;
+            sounds.attack.play();
             ++player2Score;
+            //console.log("Player 2 score: ", player2Score);
           }
           if (skeleton[i].getHp() <= 0)
-            skeleton[i].randomize(gameArea, i);
+            skeleton[i].randomize(i);
         }
 
         /* Update the time remaining */
@@ -395,7 +502,18 @@
         /* TODO */
         /* Handle the game over situation here */
         if (timeRemaining <= 0) {
+          // $("#final-gems").text(playerScore);
           sounds.background.pause();
+          if(isPlayer1){
+            Socket.updatePlayerScore();
+            document.getElementById("score-text").innerHTML = "Your Score: " + playerScore;
+          }
+          else if(isPlayer2){
+            document.getElementById("score-text").innerHTML = "Your Score: " + player2Score;
+          }
+          $("#reset-message").hide();
+          playerReset = false;
+          player2Reset = false;
           $("#game-over").show();
           $("#leaderboard-overlay").show();
           sounds.gameover.play();
@@ -415,17 +533,17 @@
         for (let i = 0; i < MAX_SLIME; i++) {
           slime[i].update(now);
           if (distance(player.getXY(), slime[i].getXY()) > distance(player2.getXY(), slime[i].getXY()))
-            slime[i].move(player2.getXY(), player2.getBoundingBox());
+            slime[i].move(player2.getXY(), player2.getBoundingBox(padding = -30));
           else
-            slime[i].move(player.getXY(), player.getBoundingBox());
+            slime[i].move(player.getXY(), player.getBoundingBox(padding = -30));
         }
 
         for (let i = 0; i < MAX_SKELETON; i++) {
           skeleton[i].update(now);
           if (distance(player.getXY(), skeleton[i].getXY()) > distance(player2.getXY(), skeleton[i].getXY()))
-            skeleton[i].move(player2.getXY(), player2.getBoundingBox());
+            skeleton[i].move(player2.getXY(), player2.getBoundingBox(padding = -30));
           else
-            skeleton[i].move(player.getXY(), player.getBoundingBox());
+            skeleton[i].move(player.getXY(), player.getBoundingBox(padding = -30));
         }
 
         /* TODO */
@@ -471,6 +589,61 @@
         Socket.GameStartEvent();
       });
 
+      $("#play-again").on("click", function() {
+        if(isPlayer1){
+          Socket.resetEvent(1);
+        }
+        else if(isPlayer2){
+          Socket.resetEvent(2);
+        }
+      });
+
+      // Click event for the signout button
+      $("#signout-button").on("click", () => {
+            // Send a signout request
+            Authentication.signout(
+                () => {
+                    $("#leaderboard-overlay").hide();
+                    $("#logged-out").show();
+                    Socket.disconnect();
+                }
+            );
+        });
+
+      resetGame = function (){
+          $("#game-over").hide();
+          $("#leaderboard-overlay").hide();
+          sounds.gameover.pause();
+          sounds.background.play();
+
+          player = Player(context, 427, 240, gameArea, playerAvatar, playerName);
+          player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name);
+
+          gameStartTime = 0; // The timestamp when the game starts
+          playerScore = 0; // The number of enemies killed
+          player2Score = 0;
+
+          slime = new Array(MAX_SLIME);
+          skeleton = new Array(MAX_SKELETON);
+
+          fireball = Fireball(context, -1, -1, gameArea);        // The gem
+          fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
+          player = Player(context, 427, 240, gameArea,  playerAvatar, playerName); // The player
+          player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name); // The player
+
+          // The slime
+          for (let i = 0; i < MAX_SLIME; i++) {
+            slime[i] = Slime(context, 0, 0);
+          }
+
+          // The skeleton
+          for (let i = 0; i < MAX_SKELETON; i++) {
+            skeleton[i] = Skeleton(context, 0, 0);
+          }
+
+          requestAnimationFrame(doFrame);
+      }
+
       gameStart = function () {
         /* Hide the start screen */
         $("#game-start").hide();
@@ -478,8 +651,6 @@
         sounds.background.play();
         // fireball.randomize(gameArea);
 
-        let isPlayer1 = false
-        let isPlayer2 = false
         const playerStatus = document.getElementsByClassName("player-status");
         const currentUser = Authentication.getUser();
         if (currentUser.username == playerStatus[0].id) {
@@ -492,13 +663,26 @@
         sounds.background.play();
         //   fireball.randomize(gameArea);
 
+        // Handle keypress
+        $(document).on("keypress", function (event) {
+          if (isPlayer1) {
+            switch (event.keyCode) {
+              case 32: player.speedUp(); Socket.playerCheatMode(1); break;
+            }
+          }
+          else {
+            switch (event.keyCode) {
+              case 32: player2.speedUp(); Socket.playerCheatMode(2); break;
+            }
+          }
+        });
+
         /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function (event) {
           /* Handle the key down */
           if (isPlayer1) {
             switch (event.keyCode) {
               case 65: player.attackStart(); Socket.playerAttackStartEvent(1); break;
-              case 32: player.speedUp(); break;
               case 37: player.move(1); Socket.playerMoveEvent(1); break;
               case 38: player.move(2); Socket.playerMoveEvent(2); break;
               case 39: player.move(3); Socket.playerMoveEvent(3); break;
@@ -508,14 +692,12 @@
           else {
             switch (event.keyCode) {
               case 65: player2.attackStart(); Socket.playerAttackStartEvent(2); break;
-              case 32: player2.speedUp(); break;
               case 37: player2.move(1); Socket.playerMoveEvent(5); break;
               case 38: player2.move(2); Socket.playerMoveEvent(6); break;
               case 39: player2.move(3); Socket.playerMoveEvent(7); break;
               case 40: player2.move(4); Socket.playerMoveEvent(8); break;
             }
           }
-
         });
 
 
@@ -525,7 +707,6 @@
           if (isPlayer1) {
             switch (event.keyCode) {
               case 65: player.attackStop(); Socket.playerAttackStopEvent(1); break;
-              case 32: player.slowDown(); break;
               case 37: player.stop(1); Socket.playerStopEvent(1); break;
               case 38: player.stop(2); Socket.playerStopEvent(2); break;
               case 39: player.stop(3); Socket.playerStopEvent(3); break;
@@ -535,7 +716,6 @@
           else {
             switch (event.keyCode) {
               case 65: player2.attackStop(); Socket.playerAttackStopEvent(2); break;
-              case 32: player2.slowDown(); break;
               case 37: player2.stop(1); Socket.playerStopEvent(5); break;
               case 38: player2.stop(2); Socket.playerStopEvent(6); break;
               case 39: player2.stop(3); Socket.playerStopEvent(7); break;

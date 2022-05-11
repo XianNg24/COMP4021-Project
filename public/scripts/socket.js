@@ -91,6 +91,27 @@ const Socket = (function() {
             GamePanel.checkGameStart(message);
         });
 
+        socket.on("update leaderboard", (message) => {
+
+            message = JSON.parse(message);
+            // Add the message to the chatroom
+            BoardPanel.updateBoard(message.type, message.onlineUsers);
+        });
+
+        socket.on("activate cheat mode", (message) => {
+
+            message = JSON.parse(message);
+            // Add the message to the chatroom
+            GamePanel.activateCheatMode(message.type, message.onlineUsers);
+        });
+
+        socket.on("reset game page", (message) => {
+
+            message = JSON.parse(message);
+            // Add the message to the chatroom
+            GamePanel.resetGameEvent(message.type, message.onlineUsers);
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -100,24 +121,17 @@ const Socket = (function() {
     };
 
     // This function sends a post message event to the server
-    const postMessage = function(content) {
-        if (socket && socket.connected) {
-            socket.emit("post message", content);
-        }
-    };
+    // const postMessage = function(content) {
+    //     if (socket && socket.connected) {
+    //         socket.emit("post message", content);
+    //     }
+    // };
 
-    // This function sends a post message event to the server
     const postScores = function(content) {
         if (socket && socket.connected) {
             socket.emit("post scores", content);
         }
     };
-
-    const typeEvent = function(){
-        if (socket && socket.connected) {
-            socket.emit("typing");
-        }
-    }
 
     const playerMoveEvent = function(type){
         if (socket && socket.connected) {
@@ -149,6 +163,24 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, disconnect, postMessage, typeEvent, playerMoveEvent, playerStopEvent, 
-        playerAttackStartEvent, playerAttackStopEvent, GameStartEvent, postScores};
+    const updatePlayerScore = function(){
+        if (socket && socket.connected) {
+            socket.emit("update player score");
+        }
+    }
+
+    const playerCheatMode = function(type){
+        if (socket && socket.connected) {
+            socket.emit("cheat mode", type);
+        }
+    }
+
+    const resetEvent = function(type){
+        if (socket && socket.connected) {
+            socket.emit("reset game", type);
+        }
+    }
+
+    return { getSocket, connect, disconnect, postMessage, playerMoveEvent, playerStopEvent, playerCheatMode,
+        playerAttackStartEvent, playerAttackStopEvent, GameStartEvent, postScores, updatePlayerScore, resetEvent};
 })();

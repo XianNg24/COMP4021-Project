@@ -48,34 +48,6 @@ app.post("/player", (req, res) => {
     res.json({status: "success"});
 });
 
-// Handle the /skeleton endpoint
-app.post("/skeleton", (req, res) => {
-    const { skeleton, x, y } = req.body;
-
-    const jsonData = fs.readFileSync("data/skeleton.json");
-    const skeletons = JSON.parse(jsonData);
-
-    skeletons[skeleton] = {skeleton, x, y};
-
-    fs.writeFileSync("data/skeleton.json", JSON.stringify(skeletons, null, " "));
-
-    res.json({status: "success"});
-});
-
-// Handle the /slime endpoint
-app.post("/slime", (req, res) => {
-    const { slime, x, y } = req.body;
-
-    const jsonData = fs.readFileSync("data/slime.json");
-    const slimes = JSON.parse(jsonData);
-
-    slimes[slime] = {slime, x, y};
-
-    fs.writeFileSync("data/slime.json", JSON.stringify(slimes, null, " "));
-
-    res.json({status: "success"});
-});
-
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
@@ -258,7 +230,7 @@ io.on("connection", (socket) => {
             const leaderboard = JSON.parse(fs.readFileSync("data/leaderboard.json"));
             leaderboard.push(message);
             fs.writeFileSync("data/leaderboard.json", JSON.stringify(leaderboard, null, " "));
-            io.emit("add scores", JSON.stringify(message));
+            io.emit("scores", JSON.stringify(leaderboard));
         }
     });
 
@@ -305,6 +277,37 @@ io.on("connection", (socket) => {
     socket.on("game start", () => {
         if(socket.request.session.user){
             io.emit("check game start", JSON.stringify(onlineUsers));
+        }
+    });
+
+    socket.on("update player score", () => {
+        type = 0;
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("update leaderboard", JSON.stringify(message));
+        }
+    });
+
+    socket.on("cheat mode", (type) => {
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("activate cheat mode", JSON.stringify(message));
+        }
+    });
+
+    socket.on("reset game", (type) => {
+        if(socket.request.session.user){
+            const message = {
+                type: type,
+                onlineUsers: onlineUsers
+            };
+            io.emit("reset game page", JSON.stringify(message));
         }
     });
 });

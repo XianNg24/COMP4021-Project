@@ -5,6 +5,19 @@
 // - `color` - The colour of the slime
 const Slime = function (ctx, x, y) {
     let hp = 1;
+    let phase = 0;
+    const loc = [
+        [{ x: 0, y: 80 }, { x: 820, y: 80 }, { x: 200, y: 450 }],
+        [{ x: 820, y: 200 }, { x: 0, y: 150 }, { x: 500, y: 450 }],
+        [{ x: 0, y: 300 }, { x: 820, y: 100 }, { x: 700, y: 450 }],
+        [{ x: 820, y: 267 }, { x: 0, y: 60 }, { x: 180, y: 450 }],
+        [{ x: 0, y: 188 }, { x: 820, y: 288 }, { x: 169, y: 450 }],
+        [{ x: 820, y: 400 }, { x: 0, y: 333 }, { x: 727, y: 450 }],
+        [{ x: 0, y: 450 }, { x: 820, y: 323 }, { x: 622, y: 450 }],
+        [{ x: 820, y: 222 }, { x: 0, y: 133 }, { x: 666, y: 121 }],
+        [{ x: 820, y: 211 }, { x: 0, y: 222 }, { x: 80, y: 450 }],
+        [{ x: 0, y: 450 }, { x: 820, y: 400 }, { x: 555, y: 60 }],
+    ];
 
     // This is the sprite sequences of the slime.
     const sequences = {
@@ -42,32 +55,14 @@ const Slime = function (ctx, x, y) {
 
     // This function randomizes the slime position.
     // - `area` - The area that the slime should be located in.
-    const randomize = function (area, index) {
+    const randomize = function (index) {
         /* Randomize the position */
-        while (true) {
-            const { x, y } = area.randomPoint();
-            if (x <= 90 || y <= 165 || x >= 770 || y >= 390) { //only spawn from the left, right or bottom of map
-                sprite.setXY(x, y);
-                break;
-            }
-        }
+        if (phase >= 3)
+            phase = 0;
+        sprite.setXY(loc[index][phase].x, loc[index][phase].y);
         hp = 1;
-        communicate(index);
+        phase++;
     };
-
-    const communicate = function (index) {
-        const loc = sprite.getXY();
-        const jsonData = JSON.stringify({
-          slime: index,
-          x: loc.x,
-          y: loc.y,
-        });
-        fetch("/slime", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: jsonData,
-        });
-      };
 
     // This function moves the slime to the coordinate. 
     // coord is the player coordinate

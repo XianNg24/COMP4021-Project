@@ -4,7 +4,20 @@
 // - `y` - The initial y position of the skeleton
 // - `color` - The colour of the skeleton
 const Skeleton = function (ctx, x, y) {
-    let hp = 2;
+    let hp = 10;
+    let phase = 0;
+    const loc = [
+        [{ x: 820, y: 327 }, { x: 0, y: 133 }, { x: 820, y: 121 }],
+        [{ x: 820, y: 117 }, { x: 0, y: 157 }, { x: 247, y: 450 }],
+        [{ x: 109, y: 450 }, { x: 820, y: 140 }, { x: 217, y: 60 }],
+        [{ x: 0, y: 80 }, { x: 820, y: 202 }, { x: 200, y: 450 }],
+        [{ x: 0, y: 193 }, { x: 820, y: 288 }, { x: 169, y: 450 }],
+        [{ x: 820, y: 409 }, { x: 0, y: 375 }, { x: 793, y: 450 }],
+        [{ x: 429, y: 450 }, { x: 820, y: 323 }, { x: 622, y: 450 }],
+        [{ x: 820, y: 200 }, { x: 0, y: 376 }, { x: 46, y: 450 }],
+        [{ x: 0, y: 176 }, { x: 820, y: 75 }, { x: 744, y: 450 }],
+        [{ x: 820, y: 267 }, { x: 0, y: 403 }, { x: 180, y: 450 }],
+    ];
 
     // This is the sprite sequences of the skeleton.
     const sequences = {
@@ -47,32 +60,14 @@ const Skeleton = function (ctx, x, y) {
 
     // This function randomizes the skeleton position.
     // - `area` - The area that the skeleton should be located in.
-    const randomize = function (area, index) {
+    const randomize = function (index) {
         /* Randomize the position */
-        while (true) {
-            const { x, y } = area.randomPoint();
-            if (x <= 90 || y <= 165 || x >= 770 || y >= 390) {
-                sprite.setXY(x, y);
-                break;
-            }
-        }
-        hp = 2;
-        communicate(index);
+        if (phase >= 3)
+            phase = 0;
+        sprite.setXY(loc[index][phase].x, loc[index][phase].y);
+        hp = 10;
+        phase++;
     };
-
-    const communicate = function (index) {
-        const loc = sprite.getXY();
-        const jsonData = JSON.stringify({
-          skeleton: index,
-          x: loc.x,
-          y: loc.y,
-        });
-        fetch("/skeleton", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: jsonData,
-        });
-      };
 
     // This function moves the skeleton to the coordinate. 
     // coord is the player coordinate

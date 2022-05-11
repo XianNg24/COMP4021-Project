@@ -119,127 +119,6 @@ const UserPanel = (function() {
     return { initialize, show, hide, update };
 })();
 
-// const OnlineUsersPanel = (function() {
-//     // This function initializes the UI
-//     const initialize = function() {};
-
-//     // This function updates the online users panel
-//     const update = function(onlineUsers) {
-//         const onlineUsersArea = $("#online-users-area");
-
-//         // Clear the online users area
-//         onlineUsersArea.empty();
-
-// 		// Get the current user
-//         const currentUser = Authentication.getUser();
-
-//         // Add the user one-by-one
-//         for (const username in onlineUsers) {
-//             if (username != currentUser.username) {
-//                 onlineUsersArea.append(
-//                     $("<div id='username-" + username + "'></div>")
-//                         .append(UI.getUserDisplay(onlineUsers[username]))
-//                 );
-//             }
-//         }
-//     };
-
-//     // This function adds a user in the panel
-// 	const addUser = function(user) {
-//         const onlineUsersArea = $("#online-users-area");
-		
-// 		// Find the user
-// 		const userDiv = onlineUsersArea.find("#username-" + user.username);
-		
-// 		// Add the user
-// 		if (userDiv.length == 0) {
-// 			onlineUsersArea.append(
-// 				$("<div id='username-" + user.username + "'></div>")
-// 					.append(UI.getUserDisplay(user))
-// 			);
-// 		}
-// 	};
-
-//     // This function removes a user from the panel
-// 	const removeUser = function(user) {
-//         const onlineUsersArea = $("#online-users-area");
-		
-// 		// Find the user
-// 		const userDiv = onlineUsersArea.find("#username-" + user.username);
-		
-// 		// Remove the user
-// 		if (userDiv.length > 0) userDiv.remove();
-// 	};
-
-//     return { initialize, update, addUser, removeUser };
-// })();
-
-// const ChatPanel = (function() {
-// 	// This stores the chat area
-//     let chatArea = null;
-//     let chatTyping = null;
-//     let timeout = null;
-
-//     // This function initializes the UI
-//     const initialize = function() {
-// 		// Set up the chat area
-// 		chatArea = $("#chat-area");
-//         chatTyping = $("#chat-typing");
-
-//         // Submit event for the input form
-//         $("#chat-input-form").on("submit", (e) => {
-//             // Do not submit the form
-//             e.preventDefault();
-
-//             // Get the message content
-//             const content = $("#chat-input").val().trim();
-
-//             // Post it
-//             Socket.postMessage(content);
-
-// 			// Clear the message
-//             $("#chat-input").val("");
-//         });
-//  	};
-
-//     // This function updates the chatroom area
-//     const update = function(chatroom) {
-//         // Clear the online users area
-//         chatArea.empty();
-
-//         // Add the chat message one-by-one
-//         for (const message of chatroom) {
-// 			addMessage(message);
-//         }
-//     };
-
-//     // This function adds a new message at the end of the chatroom
-//     const addMessage = function(message) {
-// 		const datetime = new Date(message.datetime);
-// 		const datetimeString = datetime.toLocaleDateString() + " " +
-// 							   datetime.toLocaleTimeString();
-
-// 		chatArea.append(
-// 			$("<div class='chat-message-panel row'></div>")
-// 				.append(UI.getUserDisplay(message.user))
-// 				.append($("<div class='chat-message col'></div>")
-// 					.append($("<div class='chat-date'>" + datetimeString + "</div>"))
-// 					.append($("<div class='chat-content'>" + message.content + "</div>"))
-// 				)
-// 		);
-// 		chatArea.scrollTop(chatArea[0].scrollHeight);
-//     };
-
-//     const addTyping = function(message) {
-//         chatTyping.html(message);
-//         if(timeout) clearTimeout(timeout);
-//         timeout = setTimeout(() => {
-//             chatTyping.html("");
-//         }, 3000);
-//     };
-
-//     return { initialize, update, addMessage, addTyping };
-// })();
 
 const UI = (function() {
     // This function gets the user display
@@ -284,11 +163,15 @@ const OnlineUsersStatus = (function() {
                 if (username != currentUser.username) {
                     playerStatus[0].innerHTML = "Player 1 : " + onlineUsers[username].name;
                     playerStatus[0].id = username
+                    playerName = onlineUsers[username].name;
+                    playerAvatar = onlineUsers[username].avatar
                     player = Player(context, 427, 240, gameArea, onlineUsers[username].avatar, onlineUsers[username].name);
                 }
                 else{
                     playerStatus[1].innerHTML = "Player 2 : " + onlineUsers[username].name;
                     playerStatus[1].id = username
+                    player2Name = onlineUsers[username].name;
+                    player2Avatar = onlineUsers[username].avatar
                     player2 = Player(context, 500, 240, gameArea, onlineUsers[username].avatar, onlineUsers[username].name);
                 }
             }
@@ -305,12 +188,16 @@ const OnlineUsersStatus = (function() {
         if (playerStatus[0].innerHTML == "Player 1 : ??? "){
             playerStatus[0].innerHTML = "Player 1 : " + user.name;
             playerStatus[0].id = user.username
+            playerName = user.name;
+            playerAvatar = user.avatar;
             player = Player(context, 427, 240, gameArea, user.avatar, user.name);
         }
         else{
             playerStatus[1].innerHTML = "Player 2 : " + user.name;
             playerStatus[2].style.visibility = "visible"; // Start game text
             playerStatus[1].id = user.username
+            player2Name = user.name;
+            player2Avatar = user.avatar;
             player2 = Player(context, 500, 240, gameArea, user.avatar, user.name);
         }
 		
@@ -431,43 +318,89 @@ const GamePanel = (function() {
         }
     };
 
-    return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, initiatePlayerAttackStop, checkGameStart};
+    const resetGameEvent = function(type, onlineUsers) {
+
+        const currentUser = Authentication.getUser();
+
+        if(type == 1){
+            playerReset = true;
+            $("#reset-message").show();
+        }
+        else if(type == 2){
+            player2Reset = true;
+            $("#reset-message").show();
+        }
+
+
+        if (Object.keys(onlineUsers).length > 1){
+            if(playerReset && player2Reset){
+                resetGame();
+            }
+        }
+    };
+
+    const activateCheatMode = function(type, onlineUsers) {
+
+        const currentUser = Authentication.getUser();
+
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                if(type == 1){
+                    player.speedUp();
+                }
+                else if(type == 2){
+                    player2.speedUp();
+                }
+            }
+        }
+    };
+
+    return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, resetGameEvent,
+          initiatePlayerAttackStop, checkGameStart, activateCheatMode};
 })();
 
 const BoardPanel = (function() {
 	// This stores the chat area
-    let chatArea = null;
+    let scoreArea = null;
 
     // This function initializes the UI
     const initialize = function() {};
 
-    // This function updates the chatroom area
-    const update = function(chatroom) {
+    const update = function(leaderboard) {
         // Clear the online users area
-        chatArea = $("#score-area");
-        chatArea.empty();
+        scoreArea = $("#score-area");
+        scoreArea.empty();
+
+        leaderboard.sort((a,b) => parseFloat(b.content) - parseFloat(a.content))
 
         // Add the chat message one-by-one
-        for (const message of chatroom) {
+        count = 0;
+        for (const message of leaderboard) {
+            if(count == 5) break;
 			addScores(message);
+            count++;
         }
 
-        // Submit event for the input form
-        // $("#chat-input-form").on("submit", (e) => {
-        //     // Do not submit the form
-        //     e.preventDefault();
-
-        //     // Get the message content
-        //     const content = $("#chat-input").val().trim();
-
-        //     // Post it
-        //     Socket.postScores(content);
-
-		// 	// Clear the message
-        //     $("#chat-input").val("");
-        // });
-
     };
+
+    const updateBoard = function(type, onlineUsers){
+
+        const currentUser = Authentication.getUser();
+        const playerStatus = document.getElementsByClassName("player-status");
+
+        for (const username in onlineUsers) {
+            if (username == currentUser.username) {
+                if (currentUser.username == playerStatus[0].id){
+                    score = document.getElementById("playerScore").innerHTML;
+                    Socket.postScores(score);
+                }
+                else{
+                    score = document.getElementById("player2Score").innerHTML;
+                    Socket.postScores(score)
+                }
+            }
+        }
+    }
 
     // This function adds a new message at the end of the chatroom
     const addScores = function(message) {
@@ -475,7 +408,7 @@ const BoardPanel = (function() {
 		const datetimeString = datetime.toLocaleDateString() + " " +
 							   datetime.toLocaleTimeString();
 
-		chatArea.append(
+		scoreArea.append(
 			$("<div class='score-message-panel row'></div>")
 				.append(UI.getUserDisplay(message.user))
 				.append($("<div class='score-message col'></div>")
@@ -483,8 +416,8 @@ const BoardPanel = (function() {
 					.append($("<div class='score-content'>" + message.content + "</div>"))
 				)
 		);
-		chatArea.scrollTop(chatArea[0].scrollHeight);
+		scoreArea.scrollTop(scoreArea[0].scrollHeight);
     };
 
-    return { initialize, update, addScores };
+    return { initialize, update, addScores, updateBoard};
 })();
