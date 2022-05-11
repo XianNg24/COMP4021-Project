@@ -440,7 +440,7 @@
       /* Create the sprites in the game */
       let fireball = Fireball(context, -1, -1, gameArea);        // The fireball
       let fireball2 = Fireball(context, -1, -1, gameArea);        // The fireball
-      const gem = Gem(context, 427, 350, "green");        // The gem
+      let gem = Gem(context, 427, 350, "green");        // The gem
       player = Player(context, 427, 240, gameArea, 'green', "Player1"); // The player
       player2 = Player(context, 500, 240, gameArea, 'purple', "Player2"); // The player
       const fires = [
@@ -565,6 +565,8 @@
         /* Handle the game over situation here */
         if (timeRemaining <= 0) {
           // $("#final-gems").text(playerScore);
+          sounds.attack.pause();
+          sounds.collect.pause();
           sounds.background.pause();
           if (isPlayer1) {
             Socket.updatePlayerScore();
@@ -705,6 +707,7 @@
 
         fireball = Fireball(context, -1, -1, gameArea);        // The gem
         fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
+        gem = Gem(context, 427, 350, "green"); 
         player = Player(context, 427, 240, gameArea, playerAvatar, playerName); // The player
         player2 = Player(context, 500, 240, gameArea, player2Avatar, player2Name); // The player
 

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node chat_server.js"
+    "start": "node game_server.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
