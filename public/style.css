@@ -300,7 +300,7 @@ button.icon:active {
     fill: url(#title-fill);
     stroke: black;
     text-transform: uppercase;
-    animation: stroke2 5s infinite alternate;
+    animation: stroke3 2s infinite alternate;
     stroke-width: 2;
     stroke: #365fa0;
 }
