@@ -175,12 +175,10 @@
       <canvas width="854px" height="480px"></canvas>
 
       <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-        <text x="10" y="35">
-          Player:
+        <text id="playerName" x="10" y="35">
           <tspan id="playerScore">0</tspan>
         </text>
-        <text x="300" y="35">
-          Player:
+        <text id="player2Name" x="300" y="35">
           <tspan id="player2Score">0</tspan>
         </text>
       </svg>
@@ -309,12 +307,6 @@
       function doFrame(now) {
         /* Randomize enemy position */
 
-<<<<<<< HEAD
-        // Slime
-        for (let i = 0; i < MAX_SLIME; i++)
-          if (gameStartTime == 0) {
-            slime[i].randomize(gameArea, i);
-=======
           // Player
           box = player.getBoundingBox(padding = 15);
           box2 = player2.getBoundingBox(padding = 15);
@@ -322,7 +314,7 @@
           // Slime
           for (let i = 0; i < MAX_SLIME; i++){
             if (gameStartTime == 0) {
-              slime[i].randomize(gameArea);
+              slime[i].randomize(gameArea, i);
             }
             loc = slime[i].getXY();
             if (box.isPointInBox(loc.x, loc.y)){
@@ -331,13 +323,12 @@
             if (box2.isPointInBox(loc.x, loc.y)){
               player2.deadAct(now);
             }
->>>>>>> 641384667bebd23a2ac5a3125bcdbb52909f8036
           }
 
           // Skeleton
           for (let i = 0; i < MAX_SKELETON; i++){
             if (gameStartTime == 0) {
-              skeleton[i].randomize(gameArea);
+              skeleton[i].randomize(gameArea, i);
             }
             loc = slime[i].getXY();
             if (box.isPointInBox(loc.x, loc.y)){
@@ -398,8 +389,8 @@
         $("#time-remaining").text(timeRemaining);
 
         /* Updates Players Scores */
-        $("#playerScore").text(playerScore);
-        $("#player2Score").text(player2Score);
+        $("#playerScore").text(document.getElementsByClassName("player-status")[0].id + ": " + playerScore);
+        $("#player2Score").text(document.getElementsByClassName("player-status")[1].id + ": " + player2Score);
 
         /* TODO */
         /* Handle the game over situation here */
@@ -481,7 +472,6 @@
       });
 
       gameStart = function () {
-
         /* Hide the start screen */
         $("#game-start").hide();
 
