@@ -193,6 +193,7 @@ const Sprite = function (ctx, x, y) {
     ctx.strokeStyle = "yellow";
     ctx.globalAlpha = 0.6;
     ctx.font = "20px Arial";
+    context.fillStyle = "#FFFFFF";
     ctx.fillText(
       player.name,
       x - size.width / 2 + size.width * player.x,

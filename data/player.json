@@ -1,8 +1,14 @@
 {
  "player1": {
+<<<<<<< HEAD
   "x": 500,
   "y": 240,
   "status": "idleLeft"
+=======
+  "x": 362.5,
+  "y": 292.5,
+  "status": "attackLeft"
+>>>>>>> a0422f9c6f456e98ad785c9f46385010ab2233e8
  },
  "player2": {
   "x": 600,
