@@ -566,18 +566,6 @@
         );
         $("#time-remaining").text(timeRemaining);
 
-        /* Updates Players Scores */
-        $("#playerScore").text(playerName + ": " + playerScore);
-        $("#player2Score").text(player2Name + ": " + player2Score);
-
-        if(isPlayer1){
-          const message = {
-                playerScore: playerScore,
-                player2Score: player2Score
-            };
-          Socket.updateScoreEvent(message);
-        }
-
         /* TODO */
         /* Handle the game over situation here */
         if (timeRemaining <= 0) {
@@ -675,6 +663,18 @@
         gem.draw();
         fireball.draw();
         fireball2.draw();
+
+        if(isPlayer1){
+          const message = {
+                playerScore: playerScore,
+                player2Score: player2Score
+            };
+          Socket.updateScoreEvent(message);
+        }
+
+        /* Updates Players Scores */
+        $("#playerScore").text(playerName + ": " + playerScore);
+        $("#player2Score").text(player2Name + ": " + player2Score);
 
         /* Process the next frame */
         requestAnimationFrame(doFrame);
