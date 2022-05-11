@@ -166,6 +166,7 @@ const OnlineUsersStatus = (function() {
                     playerName = onlineUsers[username].name;
                     playerAvatar = onlineUsers[username].avatar
                     player = Player(context, 427, 240, gameArea, onlineUsers[username].avatar, onlineUsers[username].name);
+                    // player.setNameColor(onlineUsers[username].avatar, onlineUsers[username].name);
                 }
                 else{
                     playerStatus[1].innerHTML = "Player 2 : " + onlineUsers[username].name;
@@ -173,6 +174,7 @@ const OnlineUsersStatus = (function() {
                     player2Name = onlineUsers[username].name;
                     player2Avatar = onlineUsers[username].avatar
                     player2 = Player(context, 500, 240, gameArea, onlineUsers[username].avatar, onlineUsers[username].name);
+                    // player2.setNameColor(onlineUsers[username].avatar, onlineUsers[username].name);
                 }
             }
             document.getElementsByClassName("player-status")[2].style.visibility = "visible";
@@ -211,6 +213,21 @@ const GamePanel = (function() {
     // This function initializes the UI
     const initialize = function() {};
 
+    const setPlayer = function(x, y, status, name, onlineUsers) {
+        const currentUser = Authentication.getUser();
+        const playerStatus = document.getElementsByClassName("player-status");
+
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                if (currentUser.username == playerStatus[0].id && name == "player2") {//isPlayer1
+                    player2.setStatusLocation(x, y, status);
+                }
+                else if (currentUser.username != playerStatus[0].id && name == "player1"){
+                    player.setStatusLocation(x, y, status);
+                }
+            }
+        }
+    }
 
     const initiatePlayerMove = function(type, onlineUsers) {
 
@@ -356,7 +373,7 @@ const GamePanel = (function() {
     };
 
     return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, resetGameEvent,
-          initiatePlayerAttackStop, checkGameStart, activateCheatMode};
+          initiatePlayerAttackStop, checkGameStart, activateCheatMode, setPlayer};
 })();
 
 const BoardPanel = (function() {

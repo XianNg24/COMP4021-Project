@@ -377,8 +377,6 @@
       /* Create the sprites in the game */
       let fireball = Fireball(context, -1, -1, gameArea);        // The gem
       let fireball2 = Fireball(context, -1, -1, gameArea);        // The gem
-      player = Player(context, 427, 240, gameArea, 'green', "Player1"); // The player
-      player2 = Player(context, 500, 240, gameArea, 'purple', "Player2"); // The player
       const fires = [
         Fire(context, 25, 175),
         Fire(context, 25, 425),
@@ -403,6 +401,13 @@
           // Player
           box = player.getBoundingBox(padding = 15);
           box2 = player2.getBoundingBox(padding = 15);
+
+          if(isPlayer1){
+            Socket.playerUpdate(player.getStatusLocation("player1"));
+          }
+          else if(isPlayer2){
+            Socket.playerUpdate(player2.getStatusLocation("player2"));
+          }
 
           // Slime
           for (let i = 0; i < MAX_SLIME; i++){
@@ -664,41 +669,28 @@
         }
 
         sounds.background.play();
-        //   fireball.randomize(gameArea);
-
-        // Handle keypress
-        $(document).on("keypress", function (event) {
-          if (isPlayer1) {
-            switch (event.keyCode) {
-              case 32: player.speedUp(); Socket.playerCheatMode(1); break;
-            }
-          }
-          else {
-            switch (event.keyCode) {
-              case 32: player2.speedUp(); Socket.playerCheatMode(2); break;
-            }
-          }
-        });
 
         /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function (event) {
           /* Handle the key down */
           if (isPlayer1) {
             switch (event.keyCode) {
-              case 65: player.attackStart(); Socket.playerAttackStartEvent(1); break;
-              case 37: player.move(1); Socket.playerMoveEvent(1); break;
-              case 38: player.move(2); Socket.playerMoveEvent(2); break;
-              case 39: player.move(3); Socket.playerMoveEvent(3); break;
-              case 40: player.move(4); Socket.playerMoveEvent(4); break;
+              case 65: player.attackStart(); break;
+              case 37: player.move(1); break;
+              case 38: player.move(2); break;
+              case 39: player.move(3); break;
+              case 40: player.move(4); break;
+              case 32: player.speedUp(); break;
             }
           }
           else {
             switch (event.keyCode) {
-              case 65: player2.attackStart(); Socket.playerAttackStartEvent(2); break;
-              case 37: player2.move(1); Socket.playerMoveEvent(5); break;
-              case 38: player2.move(2); Socket.playerMoveEvent(6); break;
-              case 39: player2.move(3); Socket.playerMoveEvent(7); break;
-              case 40: player2.move(4); Socket.playerMoveEvent(8); break;
+              case 65: player2.attackStart(); break;
+              case 37: player2.move(1); break;
+              case 38: player2.move(2); break;
+              case 39: player2.move(3); break;
+              case 40: player2.move(4); break;
+              case 32: player2.speedUp(); break;
             }
           }
         });
@@ -709,20 +701,22 @@
           /* Handle the key up */
           if (isPlayer1) {
             switch (event.keyCode) {
-              case 65: player.attackStop(); Socket.playerAttackStopEvent(1); break;
-              case 37: player.stop(1); Socket.playerStopEvent(1); break;
-              case 38: player.stop(2); Socket.playerStopEvent(2); break;
-              case 39: player.stop(3); Socket.playerStopEvent(3); break;
-              case 40: player.stop(4); Socket.playerStopEvent(4); break;
+              case 65: player.attackStop(); break;
+              case 37: player.stop(1); break;
+              case 38: player.stop(2); break;
+              case 39: player.stop(3); break;
+              case 40: player.stop(4); break;
+              case 32: player.speedUp(); break;
             }
           }
           else {
             switch (event.keyCode) {
-              case 65: player2.attackStop(); Socket.playerAttackStopEvent(2); break;
-              case 37: player2.stop(1); Socket.playerStopEvent(5); break;
-              case 38: player2.stop(2); Socket.playerStopEvent(6); break;
-              case 39: player2.stop(3); Socket.playerStopEvent(7); break;
-              case 40: player2.stop(4); Socket.playerStopEvent(8); break;
+              case 65: player2.attackStop(); break;
+              case 37: player2.stop(1); break;
+              case 38: player2.stop(2); break;
+              case 39: player2.stop(3); break;
+              case 40: player2.stop(4); break;
+              case 32: player2.speedUp(); break;
             }
           }
 

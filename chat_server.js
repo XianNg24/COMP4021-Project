@@ -324,6 +324,19 @@ io.on("connection", (socket) => {
             io.emit("reset game page", JSON.stringify(message));
         }
     });
+
+    socket.on("update player status", (data) => {
+        if(socket.request.session.user){
+            const message = {
+                x: data.x,
+                y: data.y,
+                status: data.status,
+                name: data.name,
+                onlineUsers: onlineUsers
+            };
+            io.emit("update player status", JSON.stringify(message));
+        }
+    });
 });
 
 
