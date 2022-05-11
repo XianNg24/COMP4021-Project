@@ -510,16 +510,18 @@
         // Check if fireball hit any enemy
         for (let i = 0; i < MAX_SLIME; i++) {
           if (slime[i].getBoundingBox().intersect(fireball.getBoundingBox())) {
-            slime[i].hit(player.getDmg());
-            ++playerScore;
+            if(slime[i].hit(player.getDmg())){
+              ++playerScore;
+            }
             sounds.attack.pause();
             sounds.attack.currentTime = 0;
             sounds.attack.play();
             //console.log("Player 1 score: ", playerScore);
           }
           else if (slime[i].getBoundingBox().intersect(fireball2.getBoundingBox())) {
-            slime[i].hit(player2.getDmg());
-            ++player2Score;
+            if(slime[i].hit(player2.getDmg())){
+              ++player2Score;
+            }
             sounds.attack.pause();
             sounds.attack.currentTime = 0;
             sounds.attack.play();
@@ -531,19 +533,21 @@
 
         for (let i = 0; i < MAX_SKELETON; i++) {
           if (skeleton[i].getBoundingBox().intersect(fireball.getBoundingBox())) {
-            skeleton[i].hit(player.getDmg());
+            if(skeleton[i].hit(player.getDmg())){
+              ++playerScore;
+            }
             sounds.attack.pause();
             sounds.attack.currentTime = 0;
             sounds.attack.play();
-            ++playerScore;
             //console.log("Player 1 score: ", playerScore);
           }
           else if (skeleton[i].getBoundingBox().intersect(fireball2.getBoundingBox())) {
-            skeleton[i].hit(player2.getDmg());
+            if(skeleton[i].hit(player2.getDmg())){
+              ++player2Score;
+            }
             sounds.attack.pause();
             sounds.attack.currentTime = 0;
             sounds.attack.play();
-            ++player2Score;
             //console.log("Player 2 score: ", player2Score);
           }
           if (skeleton[i].getHp() <= 0 && !skeleton[i].getAnimationDone())
