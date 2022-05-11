@@ -46,8 +46,13 @@ const Slime = function (ctx, x, y) {
     // This function sets the hp of slime according to the players damage
     const hit = function (dmg) {
         hp = hp - dmg;
-        if (hp === 0 && sprite.getSequence() != sequences['dead'])
+        if (hp === 0 && sprite.getSequence() != sequences['dead']){
             sprite.setSequence(sequences['dead']);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     // This function gets the hp of slime
