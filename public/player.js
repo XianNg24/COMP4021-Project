@@ -176,6 +176,32 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     return { fireballAttack, dir };
   };
 
+  const setStatusLocation = function (x, y, statusReceive) {
+    sprite.setXY(x, y);
+    if (statusReceive == "attackLeft"){
+      face = 0;
+      isAttack = true;
+    }
+    else if (statusReceive == "attackRight") {
+      face = 1;
+      isAttack = true;
+    }
+    else {
+      isAttack = false;
+    }
+    if (status != statusReceive){
+      sprite.setSequence(sequences[statusReceive]);
+      status = statusReceive;
+    }
+  }
+
+  const setNameColor = function (name, color) {
+    sprite
+    .setName({ name: name, x: 0.25, y: 0.2 })
+    .useSheet(`./assets/long_char_${color}_1.png`);
+  }
+
+
   // This function sets the player's moving direction.
   // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
   const move = function (dir) {
@@ -193,11 +219,11 @@ const Player = function (ctx, x, y, gameArea, color, name) {
       switch (face) {
         case 0:
           sprite.setSequence(sequences.moveLeft);
-          status = 2;
+          status = "moveLeft";
           break;
         case 1:
           sprite.setSequence(sequences.moveRight);
-          status = 3;
+          status = "moveRight";
           break;
       }
       direction = dir;
@@ -323,6 +349,17 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     });
   };
 
+  const getStatusLocation = function (name) {
+    const loc = sprite.getXY();
+    const data = {
+      x: loc.x,
+      y: loc.y,
+      status: status,
+      name: name,
+    }
+    return data
+  }
+
   // This function updates the player depending on his movement.
   // - `time` - The timestamp when this function is called
   const update = function (time) {
@@ -390,6 +427,9 @@ const Player = function (ctx, x, y, gameArea, color, name) {
     getHp: getHp,
     getBoundingBox: sprite.getBoundingBox,
     getXY: sprite.getXY,
+    setNameColor: setNameColor,
+    setStatusLocation: setStatusLocation,
+    getStatusLocation: getStatusLocation,
     getDmg: getDmg,
     draw: sprite.draw,
     update: update,

@@ -119,6 +119,12 @@ const Socket = (function() {
             GamePanel.updateGameScores(message.playerScore, message.player2Score);
         });
 
+        socket.on("update player status", (message) => {
+
+            message = JSON.parse(message);
+            GamePanel.setPlayer(message.x, message.y, message.status, message.name, message.onlineUsers)
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -194,6 +200,13 @@ const Socket = (function() {
         }
     }
 
+    const playerUpdate = function(data){
+        if (socket && socket.connected) {
+            socket.emit("update player status", data);
+        }
+    }
+
     return { getSocket, connect, disconnect, postMessage, playerMoveEvent, playerStopEvent, playerCheatMode,
-        playerAttackStartEvent, playerAttackStopEvent, GameStartEvent, postScores, updatePlayerScore, resetEvent, updateScoreEvent};
+        playerAttackStartEvent, playerAttackStopEvent, GameStartEvent, postScores, updatePlayerScore, resetEvent, 
+        updateScoreEvent, playerUpdate};
 })();

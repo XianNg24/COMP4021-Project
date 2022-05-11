@@ -211,6 +211,21 @@ const GamePanel = (function() {
     // This function initializes the UI
     const initialize = function() {};
 
+    const setPlayer = function(x, y, status, name, onlineUsers) {
+        const currentUser = Authentication.getUser();
+        const playerStatus = document.getElementsByClassName("player-status");
+
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                if (currentUser.username == playerStatus[0].id && name == "player2") {//isPlayer1
+                    player2.setStatusLocation(x, y, status);
+                }
+                else if (currentUser.username != playerStatus[0].id && name == "player1"){
+                    player.setStatusLocation(x, y, status);
+                }
+            }
+        }
+    }
 
     const initiatePlayerMove = function(type, onlineUsers) {
 
@@ -369,7 +384,7 @@ const GamePanel = (function() {
     };
 
     return { initialize, initiatePlayerMove, initiatePlayerStop, initiatePlayerAttackStart, resetGameEvent,
-          initiatePlayerAttackStop, checkGameStart, activateCheatMode, updateGameScores};
+          initiatePlayerAttackStop, checkGameStart, activateCheatMode, updateGameScores, setPlayer};
 })();
 
 const BoardPanel = (function() {
