@@ -310,6 +310,12 @@ io.on("connection", (socket) => {
             io.emit("reset game page", JSON.stringify(message));
         }
     });
+
+    socket.on("score event", (message) => {
+        if(socket.request.session.user){
+            io.emit("update score event", JSON.stringify(message));
+        }
+    });
 });
 
 

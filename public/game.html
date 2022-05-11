@@ -422,15 +422,15 @@
         attack: new Audio("/sound/attack.wav"),
       };
 
-      const totalGameTime = 30; // Total game time in seconds
+      const totalGameTime = 60; // Total game time in seconds
       const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
       let gameStartTime = 0; // The timestamp when the game starts
       playerScore = 0; // The number of enemies killed
       player2Score = 0;
 
       /* Enemy */
-      const MAX_SLIME = 10;
-      const MAX_SKELETON = 10;
+      const MAX_SLIME = 8;
+      const MAX_SKELETON = 8;
       let slime = new Array(MAX_SLIME);
       let skeleton = new Array(MAX_SKELETON);
 
@@ -513,7 +513,7 @@
             if(slime[i].hit(player.getDmg())){
               ++playerScore;
             }
-            sounds.attack.pause();
+            // sounds.attack.pause();
             sounds.attack.currentTime = 0;
             sounds.attack.play();
             //console.log("Player 1 score: ", playerScore);
@@ -522,7 +522,7 @@
             if(slime[i].hit(player2.getDmg())){
               ++player2Score;
             }
-            sounds.attack.pause();
+            // sounds.attack.pause();
             sounds.attack.currentTime = 0;
             sounds.attack.play();
             //console.log("Player 2 score: ", player2Score);
@@ -564,6 +564,14 @@
         /* Updates Players Scores */
         $("#playerScore").text(playerName + ": " + playerScore);
         $("#player2Score").text(player2Name + ": " + player2Score);
+
+        if(isPlayer1){
+          const message = {
+                playerScore: playerScore,
+                player2Score: player2Score
+            };
+          Socket.updateScoreEvent(message);
+        }
 
         /* TODO */
         /* Handle the game over situation here */

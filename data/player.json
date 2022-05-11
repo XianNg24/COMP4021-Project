@@ -1,8 +1,8 @@
 {
  "player1": {
-  "x": 500,
-  "y": 240,
-  "status": "idleLeft"
+  "x": 552.5,
+  "y": 152.5,
+  "status": "attackRight"
  },
  "player2": {
   "x": 600,
