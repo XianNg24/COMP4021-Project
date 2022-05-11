@@ -1,8 +1,8 @@
 {
  "player1": {
-  "x": 417.5,
-  "y": 250,
-  "status": "deadRight"
+  "x": 545,
+  "y": 150,
+  "status": 3
  },
  "player2": {
   "x": 600,

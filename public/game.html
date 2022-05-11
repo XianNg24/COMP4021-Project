@@ -208,6 +208,8 @@
             fill: rgba(72,138,20,0); stroke: rgb(229, 232, 237);
             stroke-dashoffset: 25%; stroke-dasharray: 50% 50%; stroke-width: 2;
         }
+        /* 70%  {fill: rgba(72,138,20,0); stroke: rgba(54,95,160,1); } */
+        80%  {fill: rgba(72,138,20,0); stroke: rgba(54,95,160,1); stroke-width: 3; }
         100% {
           fill: rgba(72, 138, 204, 1);
           stroke: rgba(54, 95, 160, 0);
@@ -335,6 +337,8 @@
     var resetGame;
     let isPlayer1 = false;
     let isPlayer2 = false;
+    let playerScore = 0;
+    let player2Score = 0;
     var playerReset = false;
     var player2Reset = false;
 
@@ -358,10 +362,10 @@
         attack: new Audio("/sound/attack.wav"),
       };
 
-      const totalGameTime = 5000; // Total game time in seconds
+      const totalGameTime = 20; // Total game time in seconds
       let gameStartTime = 0; // The timestamp when the game starts
-      let playerScore = 0; // The number of enemies killed
-      let player2Score = 0;
+      playerScore = 0; // The number of enemies killed
+      player2Score = 0;
 
       /* Enemy */
       const MAX_SLIME = 10;
@@ -496,8 +500,8 @@
         $("#time-remaining").text(timeRemaining);
 
         /* Updates Players Scores */
-        $("#playerScore").text(document.getElementsByClassName("player-status")[0].id + ": " + playerScore);
-        $("#player2Score").text(document.getElementsByClassName("player-status")[1].id + ": " + player2Score);
+        $("#playerScore").text(playerName + ": " + playerScore);
+        $("#player2Score").text(player2Name + ": " + player2Score);
 
         /* TODO */
         /* Handle the game over situation here */

@@ -7,7 +7,7 @@
     --field-background-hover: #eee;
     --input-background: #eee;
     --overlay-background: rgba(245, 158, 114, 0.8);
-    --overlay-caption-color: #e88923;
+    --overlay-caption-color: rgba(54,95,160,1);
     --overlay-content-background: linear-gradient(rgb(17, 16, 16), rgb(60, 59, 57));
 
     --header-background: linear-gradient(to right, #eb4a40, #f59e72);
@@ -25,8 +25,8 @@
     --warning-color: rgb(206, 59, 98);
 
     --button-color: white;
-    --button-background: #ebb434;
-    --button-background-hover: #e87110;
+    --button-background: rgba(72, 138, 204, 1);
+    --button-background-hover: rgb(109, 158, 207);
 }
 * {
     font-family: 'Games', sans-serif;
@@ -284,7 +284,8 @@ button.icon:active {
 
 #description-box {
     width: 500px;
-    height: 300px;
+    height: 400px;
+    align-items: flex-start;
     /* align-self: stretch; */
 }
 
@@ -292,5 +293,15 @@ button.icon:active {
     font-family: "Press Start 2P", sans-serif;
     color: white;
     font-size: 16px;
+}
+
+#game-start #game-start-title {
+    font-size: 300%;
+    fill: url(#title-fill);
+    stroke: black;
+    text-transform: uppercase;
+    animation: stroke2 5s infinite alternate;
+    stroke-width: 2;
+    stroke: #365fa0;
 }
 
